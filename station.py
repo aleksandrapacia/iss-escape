@@ -9,7 +9,6 @@ class ISS(pygame.sprite.Sprite):
         self.pos_x = pos_x
         self.pos_y = pos_y
         self.texture = texture
-        self.sprite = pygame.sprite.Sprite
 
     def render(self):
         self.screen.blit(self.image, self.rect)

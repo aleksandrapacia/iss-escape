@@ -33,10 +33,6 @@ while running:
         iss.pos_x += 0.15
         print('right')
     
-    if not iss.get_rect() in screen.get_rect():
-        print("error")
-
-
     screen.blit(background, (0,0))
     screen.blit(iss.texture, (iss.pos_x, iss.pos_y)) 
     pygame.display.flip()
