@@ -11,12 +11,11 @@ pygame.display.set_caption('ISS Escape')
 
 # Background 
 background = pygame.image.load('bg.jpg')
-screen.blit(background, (0,0))
 
 # Station
-iss_file = 'iss.png'
+iss_file = open('iss.png')
 texture_station = pygame.image.load(iss_file)
-iss = ISS(screen, 50, 50, texture_station)
+iss = ISS(screen, 243.5, 380, texture_station)
 
 # Main loop
 running = True
@@ -29,12 +28,15 @@ while running:
     all_keys = pygame.key.get_pressed()
     if all_keys[pygame.K_LEFT]:
         iss.pos_x -= 0.15
+        print('left')
     elif all_keys[pygame.K_RIGHT]:
         iss.pos_x += 0.15
-    elif all_keys[pygame.K_UP]:
-        iss.pos_y -= 0.15
-    elif all_keys[pygame.K_DOWN]:
-        iss.pos_y += 0.15
+        print('right')
+    
+    if not iss.get_rect() in screen.get_rect():
+        print("error")
 
-    screen.blit(iss.texture, (iss.pos_x, iss.pos_y))
+
+    screen.blit(background, (0,0))
+    screen.blit(iss.texture, (iss.pos_x, iss.pos_y)) 
     pygame.display.flip()
