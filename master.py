@@ -1,17 +1,31 @@
 import pygame
 import sys
 from station import ISS
+from pygame.sprite import Group
+from pygame.locals import *
+import pygame.mixer
+
+pygame.init()
+clock = pygame.time.Clock()
 
 # Screen settings
 (width, height) = (600, 487)
 screen = pygame.display.set_mode((width, height))
 screen_rect = screen.get_rect()
 
+# Bullets
+bullets = []
+bullet_picture = pygame.image.load('bullet.png')
+
 # Caption
 pygame.display.set_caption('ISS Escape')
 
 # Background 
 background = pygame.image.load('bg.jpg')
+
+# Shot sound 
+shot = pygame.mixer.Sound('shot.wav')
+
 
 # Station
 iss_file = open('iss.png')
@@ -25,7 +39,26 @@ while running:
     for event in all_event:
         if event.type == pygame.QUIT:
             sys.exit()
+        elif event.type == MOUSEBUTTONDOWN:
+            shot.play()
+            bullets.append([event.pos[0]-32, 500])
 
+    clock.tick(1000)
+
+    mx, my = pygame.mouse.get_pos()
+    
+    for b in range(len(bullets)):
+        bullets[b][1] -= 10
+
+    # Iterate over a slice copy if you want to mutate a list.
+    for bullet in bullets[:]:
+        if bullet[0] < 0:
+            bullets.remove(bullet)
+
+    for bullet in bullets:
+        screen.blit(bullet_picture, pygame.Rect(bullet[0], bullet[1], 0, 0))
+
+    # ISS moves
     all_keys = pygame.key.get_pressed()
     if all_keys[pygame.K_LEFT]:
         iss.pos_x -= 0.15
@@ -33,7 +66,6 @@ while running:
     elif all_keys[pygame.K_RIGHT]:
         iss.pos_x += 0.15
         print('right')
-
 
     # Keeping player on screen
     if iss.pos_x < 0:
