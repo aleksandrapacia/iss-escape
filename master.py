@@ -41,15 +41,15 @@ while running:
             sys.exit()
         elif event.type == MOUSEBUTTONDOWN:
             shot.play()
-            bullets.append([event.pos[1]-190, 400])
+            bullets.append([event.pos[1]+iss.pos_x, 390])
 
     # ISS moves
     all_keys = pygame.key.get_pressed()
     if all_keys[pygame.K_LEFT]:
-        iss.pos_x -= 0.15
+        iss.pos_x -= 0.5
         print('left')
     elif all_keys[pygame.K_RIGHT]:
-        iss.pos_x += 0.15
+        iss.pos_x += 0.5
         print('right')
 
 
@@ -74,5 +74,5 @@ while running:
     for bullet in bullets:
         screen.blit(bullet_picture, pygame.Rect(bullet[0], bullet[1], 0, 0))
     screen.blit(iss.texture, (iss.pos_x, iss.pos_y)) 
-    screen.blit(iss.texture, (my, 500))
+    screen.blit(iss.texture, (mx, 500))
     pygame.display.flip()
