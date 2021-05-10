@@ -26,7 +26,6 @@ background = pygame.image.load('bg.jpg')
 # Shot sound 
 shot = pygame.mixer.Sound('shot.wav')
 
-
 # Station
 iss_file = open('iss.png')
 texture_station = pygame.image.load(iss_file)
@@ -41,7 +40,8 @@ while running:
             sys.exit()
         elif event.type == MOUSEBUTTONDOWN:
             shot.play()
-            bullets.append([event.pos[1]+iss.pos_x, 390])
+            bullets.append([event.pos[1] + iss.pos_x, iss.pos_y])
+
 
     # ISS moves
     all_keys = pygame.key.get_pressed()
