@@ -40,7 +40,7 @@ while running:
             sys.exit()
         elif event.type == MOUSEBUTTONDOWN:
             shot.play()
-            bullets.append([event.pos[1] + iss.pos_x, iss.pos_y])
+            bullets.append([iss.pos_x+92, 390])
 
 
     # ISS moves
