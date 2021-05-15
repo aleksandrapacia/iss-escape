@@ -4,6 +4,8 @@ from station import ISS
 from pygame.sprite import Group
 from pygame.locals import *
 import pygame.mixer
+import random
+from enemies import Enemies
 
 pygame.init()
 clock = pygame.time.Clock()
@@ -16,6 +18,11 @@ screen_rect = screen.get_rect()
 # Bullets
 bullets = []
 bullet_picture = pygame.image.load('bullet.png').convert_alpha()
+
+# Enemies - basic information
+enemy_1 = Enemies(300, 0, 'stone.png')
+enemy_list = pygame.sprite.Group()
+enemy_list.add(enemy_1)
 
 # Caption
 pygame.display.set_caption('ISS Escape')
@@ -41,7 +48,6 @@ while running:
         elif event.type == MOUSEBUTTONDOWN:
             shot.play()
             bullets.append([iss.pos_x+92, 390])
-
 
     # ISS moves
     all_keys = pygame.key.get_pressed()
@@ -73,6 +79,10 @@ while running:
     screen.blit(background, (0,0))
     for bullet in bullets:
         screen.blit(bullet_picture, pygame.Rect(bullet[0], bullet[1], 0, 0))
+    
+    # Adding enemies to main loop
+    enemy_list.draw(screen)
+
     screen.blit(iss.texture, (iss.pos_x, iss.pos_y)) 
     screen.blit(iss.texture, (mx, 500))
     pygame.display.flip()
