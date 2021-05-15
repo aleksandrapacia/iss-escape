@@ -20,7 +20,7 @@ bullets = []
 bullet_picture = pygame.image.load('bullet.png').convert_alpha()
 
 # Enemies - basic information
-enemy_1 = Enemies(300, 0, 'stone.png')
+enemy_1 = Enemies(300, 0, 'stone_2.png')
 enemy_list = pygame.sprite.Group()
 enemy_list.add(enemy_1)
 
@@ -37,6 +37,7 @@ shot = pygame.mixer.Sound('shot.wav')
 iss_file = open('iss.png')
 texture_station = pygame.image.load(iss_file)
 iss = ISS(screen, 200, 380, texture_station)
+
 
 # Main loop
 running = True
