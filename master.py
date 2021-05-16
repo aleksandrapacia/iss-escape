@@ -32,7 +32,6 @@ background = pygame.image.load('bg.jpg')
 
 # Shot sound 
 shot = pygame.mixer.Sound('shot.wav')
-soundin = pygame.mixer.Sound('music.wav') # +
 
 # Station
 iss_file = open('iss.png')
