@@ -32,12 +32,12 @@ background = pygame.image.load('bg.jpg')
 
 # Shot sound 
 shot = pygame.mixer.Sound('shot.wav')
+soundin = pygame.mixer.Sound('music.wav') # +
 
 # Station
 iss_file = open('iss.png')
 texture_station = pygame.image.load(iss_file)
 iss = ISS(screen, 200, 380, texture_station)
-
 
 # Main loop
 running = True
@@ -83,6 +83,8 @@ while running:
     
     # Adding enemies to main loop
     enemy_list.draw(screen)
+    for e in enemy_list:
+        e.move()
 
     screen.blit(iss.texture, (iss.pos_x, iss.pos_y)) 
     screen.blit(iss.texture, (mx, 500))

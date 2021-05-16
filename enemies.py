@@ -1,5 +1,6 @@
 import pygame
 import os
+from pygame.sprite import Group
 
 pygame.init()
 
@@ -10,3 +11,13 @@ class Enemies(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+        self.counter = 0
+
+    def move(self):
+        distance = 500
+        speed = 1
+
+        if self.counter >= 0 and self.counter <= distance:
+            self.rect.y += speed
+
+        self.counter += 1
