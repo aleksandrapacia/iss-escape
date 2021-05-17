@@ -6,6 +6,7 @@ from pygame.locals import *
 import pygame.mixer
 import random
 from enemies import Enemies
+import random
 
 pygame.init()
 clock = pygame.time.Clock()
@@ -21,8 +22,8 @@ bullet_picture = pygame.image.load('bullet.png').convert_alpha()
 
 # Enemies
 enemy_img = pygame.image.load('stone_2.png')
-enemyX = 300
-enemyY = 0.000005
+enemyX = random.randint(0, 600)
+enemyY = random.randint(0, 200)
 enemy_change = 0
 
 def enemy(x, y):
