@@ -19,11 +19,14 @@ screen_rect = screen.get_rect()
 bullets = []
 bullet_picture = pygame.image.load('bullet.png').convert_alpha()
 
-# Enemies - basic information
-enemy_1 = Enemies(300, 0, 'stone_2.png')
-enemy_list = pygame.sprite.Group()
-enemy_list.add(enemy_1)
+# Enemies
+enemy_img = pygame.image.load('stone_2.png')
+enemyX = 300
+enemyY = 0.000005
+enemy_change = 0
 
+def enemy(x, y):
+    screen.blit(enemy_img, (x,y))
 # Caption
 pygame.display.set_caption('ISS Escape')
 
@@ -80,11 +83,8 @@ while running:
     for bullet in bullets:
         screen.blit(bullet_picture, pygame.Rect(bullet[0], bullet[1], 0, 0))
     
-    # Adding enemies to main loop
-    enemy_list.draw(screen)
-    for e in enemy_list:
-        e.move()
-
+    
+    enemy(enemyX, enemyY)
     screen.blit(iss.texture, (iss.pos_x, iss.pos_y)) 
     screen.blit(iss.texture, (mx, 500))
     pygame.display.flip()
