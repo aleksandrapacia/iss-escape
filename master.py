@@ -19,6 +19,8 @@ screen_rect = screen.get_rect()
 # Bullets
 bullets = []
 bullet_picture = pygame.image.load('bullet.png').convert_alpha()
+bulletX = 92
+bulletY = 390
 
 # Enemies
 enemy_img = pygame.image.load('stone_2.png')
@@ -51,7 +53,7 @@ while running:
             sys.exit()
         elif event.type == MOUSEBUTTONDOWN:
             shot.play()
-            bullets.append([iss.pos_x+92, 390])
+            bullets.append([bulletX+iss.pos_x, bulletY])
 
     # ISS moves
     all_keys = pygame.key.get_pressed()
