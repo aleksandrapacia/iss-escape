@@ -7,6 +7,7 @@ import pygame.mixer
 import random
 from enemies import Enemies
 import random
+import math
 
 pygame.init()
 clock = pygame.time.Clock()
@@ -26,7 +27,8 @@ bulletY = 390
 enemy_img = pygame.image.load('stone_2.png')
 enemyX = random.randint(0, 600)
 enemyY = random.randint(0, 200)
-enemy_change = 0
+enemyX_change = 0
+enemyY_change = 0.3
 
 def enemy(x, y):
     screen.blit(enemy_img, (x,y))
@@ -44,6 +46,15 @@ iss_file = open('iss.png')
 texture_station = pygame.image.load(iss_file)
 iss = ISS(screen, 200, 380, texture_station)
 
+def ITScollision(enemyX, enemyY, bulletX, bulletY):
+    distance = math.sqrt((math.pow(enemyX-bulletX, 2))+ (math.pow(enemyY-bulletY,2)))
+    if distance > 27:
+        return True
+    else:
+        return False
+
+score = 0
+
 # Main loop
 running = True
 while running:
@@ -59,10 +70,8 @@ while running:
     all_keys = pygame.key.get_pressed()
     if all_keys[pygame.K_LEFT]:
         iss.pos_x -= 0.5
-        print('left')
     elif all_keys[pygame.K_RIGHT]:
         iss.pos_x += 0.5
-        print('right')
 
 
     clock.tick(200)
@@ -82,12 +91,17 @@ while running:
     if iss.pos_x > 420:
         iss.pos_x = 420
 
+    # Enemy's movement
+    enemyY += enemyY_change
+
+    if enemyY < 0:
+        enemyY == 0
+
+    
     screen.blit(background, (0,0))
     for bullet in bullets:
         screen.blit(bullet_picture, pygame.Rect(bullet[0], bullet[1], 0, 0))
     
-    
     enemy(enemyX, enemyY)
     screen.blit(iss.texture, (iss.pos_x, iss.pos_y)) 
-    screen.blit(iss.texture, (mx, 500))
     pygame.display.flip()
