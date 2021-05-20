@@ -33,7 +33,7 @@ enemy_img = pygame.image.load('stone_2.png')
 enemyX = random.randint(0, 565)
 enemyY = random.randint(0, 200)
 enemyX_change = 0
-enemyY_change = 0.3
+enemyY_change = 0.15
 
 def enemy(x, y):
     screen.blit(enemy_img, (x,y))
@@ -47,12 +47,9 @@ background = pygame.image.load('bg.jpg')
 shot = pygame.mixer.Sound('shot.wav')
 
 
-def ITSAcollision(enemyX, enemyY, bulletX, bulletY):
+def distance_between(enemyX, enemyY, bulletX, bulletY):
     distance = math.sqrt((math.pow(enemyX-bulletX, 2)) + (math.pow(enemyY-bulletY,2)))
-    if distance == 0:
-        return True
-    else:
-        return False
+    return distance
 
 score = 0
 
@@ -95,12 +92,17 @@ while running:
     enemyY += enemyY_change
 
     if enemyY < 0:
-        enemyY == 0    
+        enemyY == 0
 
     #Collision
-    collision = ITSAcollision(enemyX, enemyY, bulletX, bulletY)
-    if collision:
-        print('collision')
+    for i in range(len(bullets)):
+        bullet = bullets[i]
+        distance = distance_between(enemyX + 17.5, enemyY - 17.5, bullet[0], bullet[1])
+        # print(distance)
+        if distance < 17:
+            score += 1
+            print(f"{score=}")
+            bullets.remove(bullets[i])
 
     screen.blit(background, (0,0))
     for bullet in bullets:
