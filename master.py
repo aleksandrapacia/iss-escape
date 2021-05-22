@@ -30,7 +30,7 @@ bulletY = 390
 
 # Enemies
 enemy_img = pygame.image.load('stone_2.png')
-enemyX = random.randint(0, 565)
+enemyX = random.randint(0, 560)
 enemyY = random.randint(0, 200)
 enemyX_change = 0
 enemyY_change = 0.15
@@ -93,6 +93,8 @@ while running:
 
     if enemyY < 0:
         enemyY == 0
+    if enemyY == 487:
+        print('the end')
 
     #Collision
     for i in range(len(bullets)):
