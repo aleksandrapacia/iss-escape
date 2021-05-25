@@ -12,6 +12,7 @@ class Enemies(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
         self.counter = 0
+        
 
     def move(self):
         distance = 500

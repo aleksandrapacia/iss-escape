@@ -29,14 +29,23 @@ bulletX = 90
 bulletY = 390
 
 # Enemies
-enemy_img = pygame.image.load('stone_2.png')
-enemyX = random.randint(0, 560)
-enemyY = random.randint(0, 200)
-enemyX_change = 0
-enemyY_change = 0.15
+enemyimg = []
+enemyX = []
+enemyY = []
+enemyX_change = []
+enemyY_change = []
+num_of_enemies = 6
 
-def enemy(x, y):
-    screen.blit(enemy_img, (x,y))
+for i in range(num_of_enemies):
+    enemyimg.append(pygame.image.load('stone_2.png'))
+    enemyX.append(random.randint(0, 560))
+    enemyY.append(random.randint(0, 200))
+    enemyX_change.append(0)
+    enemyY_change.append(0.15)
+
+def enemy(x, y, i):
+    screen.blit(enemyimg[i], (x, y))
+
 # Caption
 pygame.display.set_caption('ISS Escape')
 
@@ -89,27 +98,28 @@ while running:
         iss.pos_x = 420
 
     # Enemy's movement
-    enemyY += enemyY_change
-
-    if enemyY < 0:
-        enemyY == 0
-    if enemyY == 487:
-        print('the end')
-
-    #Collision
-    for i in range(len(bullets)):
-        bullet = bullets[i]
-        distance = distance_between(enemyX + 17.5, enemyY - 17.5, bullet[0], bullet[1])
-        # print(distance)
-        if distance < 17:
-            score += 1
-            print(f"{score=}")
-            bullets.remove(bullets[i])
-
+    for i in range(num_of_enemies):
+        enemyY[i] += enemyY_change[i]
+        
+        if enemyY[i] < 0:
+            enemyY[i] == 0
+            if enemyY[i] == 487:
+                print('the end')
+                
+        #Collision
+        for j in range(len(bullets)):
+            bullet = bullets[j]
+            distance = distance_between(enemyX[i] + 17.5, enemyY[i] - 17.5, bullet[0], bullet[1])
+            # print(distance)
+            if distance < 17:
+                score += 1
+                print(f"{score=}")
+                bullets.remove(bullets[j])
+    
+        enemy(enemyX[i], enemyY[i], i)
     screen.blit(background, (0,0))
     for bullet in bullets:
         screen.blit(bullet_picture, pygame.Rect(bullet[0], bullet[1], 0, 0))
     
-    enemy(enemyX, enemyY)
     screen.blit(iss.texture, (iss.pos_x, iss.pos_y)) 
     pygame.display.flip()
