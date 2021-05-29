@@ -38,7 +38,7 @@ num_of_enemies = 6
 
 for i in range(num_of_enemies):
     enemyimg.append(pygame.image.load('stone_2.png'))
-    enemyX.append(random.randint(0, 560))
+    enemyX.append(random.randint(0, 540))
     enemyY.append(random.randint(0, 200))
     enemyX_change.append(0)
     enemyY_change.append(0.15)
@@ -103,9 +103,8 @@ while running:
         
         if enemyY[i] < 0:
             enemyY[i] == 0
-            if enemyY[i] == 487:
-                print('the end')
-                
+        if enemyY[i] == 487:
+            print('the end')        
         #Collision
         for j in range(len(bullets)):
             bullet = bullets[j]
@@ -115,11 +114,11 @@ while running:
                 score += 1
                 print(f"{score=}")
                 bullets.remove(bullets[j])
-    
-        enemy(enemyX[i], enemyY[i], i)
+       
+        
     screen.blit(background, (0,0))
     for bullet in bullets:
         screen.blit(bullet_picture, pygame.Rect(bullet[0], bullet[1], 0, 0))
-    
+        enemy(enemyX[i], enemyY[i], i)
     screen.blit(iss.texture, (iss.pos_x, iss.pos_y)) 
     pygame.display.flip()
