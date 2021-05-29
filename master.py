@@ -38,7 +38,7 @@ num_of_enemies = 6
 
 for i in range(num_of_enemies):
     enemyimg.append(pygame.image.load('stone_2.png'))
-    enemyX.append(random.randint(0, 540))
+    enemyX.append(random.randint(0, 500))
     enemyY.append(random.randint(0, 200))
     enemyX_change.append(0)
     enemyY_change.append(0.15)
