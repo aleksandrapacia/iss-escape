@@ -119,6 +119,7 @@ while running:
     screen.blit(background, (0,0))
     for bullet in bullets:
         screen.blit(bullet_picture, pygame.Rect(bullet[0], bullet[1], 0, 0))
+    for i in range(num_of_enemies):
         enemy(enemyX[i], enemyY[i], i)
     screen.blit(iss.texture, (iss.pos_x, iss.pos_y)) 
     pygame.display.flip()
