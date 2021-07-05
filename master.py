@@ -5,7 +5,6 @@ from pygame.sprite import Group
 from pygame.locals import *
 import pygame.mixer
 import random
-from enemies import Enemies
 import random
 import math
 
@@ -59,7 +58,7 @@ shot = pygame.mixer.Sound('shot.wav')
 def distance_between(enemyX, enemyY, bulletX, bulletY):
     distance = math.sqrt((math.pow(enemyX-bulletX, 2)) + (math.pow(enemyY-bulletY,2)))
     return distance
-
+        
 score = 0
 
 # Main loop
@@ -116,7 +115,7 @@ while running:
                 bullets.remove(bullets[j])
                 explosion = pygame.mixer.Sound('explosion.wav')
                 explosion.play()
-        
+
     screen.blit(background, (0,0))
     for bullet in bullets:
         screen.blit(bullet_picture, pygame.Rect(bullet[0], bullet[1], 0, 0))
