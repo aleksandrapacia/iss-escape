@@ -26,7 +26,8 @@ iss = ISS(screen, 200, 380, texture_station)
 enemy01_file = open('stone_2.png')
 texture_enemy01 = pygame.image.load(enemy01_file)
 enemy01 = Enemy01(screen, random.randrange(0, 600), 0, texture_enemy01)
-
+enemy01_list = pygame.sprite.Group()
+enemy01_list.add(enemy01)
 # Bullets
 bullets = []
 bullet_picture = pygame.image.load('bullet.png').convert_alpha()
@@ -42,9 +43,6 @@ background = pygame.image.load('bg.jpg')
 # Shot sound 
 shot = pygame.mixer.Sound('shot.wav')
 
-# Enemies container
-all_enemies = pygame.sprite.Group()
-
 # Main loop
 running = True
 while running:
@@ -55,6 +53,10 @@ while running:
         elif event.type == MOUSEBUTTONDOWN:
             shot.play()
             bullets.append([bulletX+iss.pos_x, bulletY])
+
+    # Enemies moves
+    for e in enemy01_list:
+        e.move()
 
     # ISS moves
     all_keys = pygame.key.get_pressed()
