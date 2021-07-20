@@ -55,9 +55,6 @@ while running:
             bullets.append([bulletX+iss.pos_x, bulletY])
 
     # Enemies moves
-    for e in enemy01_list:
-        e.move()
-
     # ISS moves
     all_keys = pygame.key.get_pressed()
     if all_keys[pygame.K_LEFT]:

@@ -14,8 +14,8 @@ class Enemy01(pygame.sprite.Sprite):
     def move(self):
         self.rect = self.enemyImg.get_rect()
         '''enemies movement'''
-        distance = 487
-        speed = 1
+        distance = 7000
+        speed = 0.2
         if self.counter >= 0 and self.counter <= distance:
             self.enemyY += speed
         elif self.counter >= distance and self.counter <= distance*2:
