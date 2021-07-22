@@ -76,7 +76,7 @@ while running:
     for i in range(3):
         start_time+=1
         if start_time > 200:
-            enemy = Enemy(random.randrange(0 + i *100, 600), -30, enemy_texture, ENEMY_SPEED)
+            enemy = Enemy(random.randrange(67, 533), -30, enemy_texture, ENEMY_SPEED)
             enemies.append(enemy)
             start_time = 0
         
