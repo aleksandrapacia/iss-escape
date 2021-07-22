@@ -12,7 +12,7 @@ SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 487
 STATION_HEIGHT = 380
 BULLET_SPEED = 10
-ENEMY_SPEED = 0.1
+ENEMY_SPEED = 7
 
 # Screen settings
 (width, height) = (SCREEN_WIDTH, SCREEN_HEIGHT)
@@ -24,14 +24,15 @@ station_file = open("assets/textures/iss.png")
 station_texture = pygame.image.load(station_file)
 station = Station(200, STATION_HEIGHT, station_texture)
 
+# Time sec
+start_time = 250
+clock = pygame.time.Clock()
+
 # Enemy
 enemy_file = open("assets/textures/stone_2.png")
 enemy_texture = pygame.image.load(enemy_file)
 enemies: list[Enemy] = []
 
-for i in range(3):
-    enemy = Enemy(random.randrange(0 + i * 100, 600), -30, enemy_texture, ENEMY_SPEED)
-    enemies.append(enemy)
 
 # Bullets
 bullet_file = open("assets/textures/bullet.png")
@@ -68,14 +69,19 @@ while running:
 
     # Enemies moves
     for enemy in enemies:
-        enemy.move()
+            enemy.move()
+
+    for i in range(1):
+        if start_time > 200:
+            enemy = Enemy(random.randrange(0 + i * 100, 600), -30, enemy_texture, ENEMY_SPEED)
+            enemies.append(enemy)
 
     # Station moves
     all_keys = pygame.key.get_pressed()
     if all_keys[pygame.K_LEFT]:
-        station.pos_x -= 0.5
+        station.pos_x -= 10
     elif all_keys[pygame.K_RIGHT]:
-        station.pos_x += 0.5
+        station.pos_x += 10
 
     my, mx = pygame.mouse.get_pos()
 
@@ -103,3 +109,4 @@ while running:
         
     screen.blit(station.texture, (station.pos_x, station.pos_y))
     pygame.display.flip()
+    clock.tick(60)
