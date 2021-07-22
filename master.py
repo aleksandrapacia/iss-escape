@@ -1,47 +1,47 @@
 import pygame
 import sys
-from station import ISS
-from pygame.sprite import Group
-from pygame.locals import *
+from station import Station
+from pygame.locals import MOUSEBUTTONDOWN
 import pygame.mixer
 import random
-import math
-from enemies import Enemy01
+from enemies import Enemy
 
 pygame.init()
-clock = pygame.time.Clock()
+
+SCREEN_WIDTH = 600
+SCREEN_HEIGHT = 487
 
 # Screen settings
-(width, height) = (600, 487)
+(width, height) = (SCREEN_WIDTH, SCREEN_HEIGHT)
 screen = pygame.display.set_mode((width, height))
 screen_rect = screen.get_rect()
 
 # Station
-iss_file = open('iss.png')
-texture_station = pygame.image.load(iss_file)
-iss = ISS(screen, 200, 380, texture_station)
+station_file = open("iss.png")
+station_texture = pygame.image.load(station_file)
+station = Station(200, 380, station_texture)
 
-# Enemy01 -- specification 
-enemy01_file = open('stone_2.png')
-texture_enemy01 = pygame.image.load(enemy01_file) 
-enemy01 = Enemy01(screen, random.randrange(0, 600), 0,texture_enemy01)
-enemy01_list = pygame.sprite.Group()
-enemy01_list.add(enemy01)
+# Enemy
+enemy_file = open("stone_2.png")
+enemy_texture = pygame.image.load(enemy_file)
+enemy = Enemy(random.randrange(0, 600), 0, enemy_texture, 0.2)
+enemies: list[Enemy] = []
+enemies.append(enemy)  # type hint
 
 # Bullets
-bullets = []
-bullet_picture = pygame.image.load('bullet.png').convert_alpha()
+bullets: list[list[float]] = []
+bullet_texture = pygame.image.load("bullet.png").convert_alpha()
 bulletX = 90
 bulletY = 390
 
 # Caption
-pygame.display.set_caption('ISS Escape')
+pygame.display.set_caption("ISS Escape")
 
-# Background 
-background = pygame.image.load('bg.jpg')
+# Background
+background_texture = pygame.image.load("bg.jpg")
 
-# Shot sound 
-shot = pygame.mixer.Sound('shot.wav')
+# Shot sound
+shot_sound = pygame.mixer.Sound("shot.wav")
 
 # Main loop
 running = True
@@ -51,23 +51,22 @@ while running:
         if event.type == pygame.QUIT:
             sys.exit()
         elif event.type == MOUSEBUTTONDOWN:
-            shot.play()
-            bullets.append([bulletX+iss.pos_x, bulletY])
+            shot_sound.play()
+            bullets.append([bulletX + station.pos_x, bulletY])
 
     # Enemies moves
-    for enemy01 in enemy01_list:
-        enemy01.move()
-    # ISS moves
+    for enemy in enemies:
+        enemy.move()
+
+    # Station moves
     all_keys = pygame.key.get_pressed()
     if all_keys[pygame.K_LEFT]:
-        iss.pos_x -= 0.5
+        station.pos_x -= 0.5
     elif all_keys[pygame.K_RIGHT]:
-        iss.pos_x += 0.5
-
-    clock.tick(200)
+        station.pos_x += 0.5
 
     my, mx = pygame.mouse.get_pos()
-    
+
     for b in range(len(bullets)):
         bullets[b][1] -= 10
     # Iterate over a slice copy if you want to mutate a list.
@@ -76,14 +75,15 @@ while running:
             bullets.remove(bullet)
 
     # Keeping player on screen
-    if iss.pos_x < 0:
-        iss.pos_x = 0
-    if iss.pos_x > 420:
-        iss.pos_x = 420
+    if station.pos_x < 0:
+        station.pos_x = 0
+    if station.pos_x > 420:
+        station.pos_x = 420
 
-    screen.blit(background, (0,0))
+    screen.blit(background_texture, (0, 0))
     for bullet in bullets:
-        screen.blit(bullet_picture, pygame.Rect(bullet[0], bullet[1], 0, 0))
-    screen.blit(enemy01.texture, (enemy01.enemyX, enemy01.enemyY))
-    screen.blit(iss.texture, (iss.pos_x, iss.pos_y)) 
+        screen.blit(bullet_texture, pygame.Rect(bullet[0], bullet[1], 0, 0))
+
+    screen.blit(enemy.texture, (enemy.pos_x, enemy.pos_y))
+    screen.blit(station.texture, (station.pos_x, station.pos_y))
     pygame.display.flip()
