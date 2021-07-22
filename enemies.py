@@ -11,15 +11,5 @@ class Enemy:
         self.texture = texture
         self.speed = speed
 
-        self.counter = 0
-
     def move(self):
-        distance = 7000
-        if self.counter >= 0 and self.counter <= distance:
-            self.pos_y += self.speed
-        elif self.counter >= distance and self.counter <= distance * 2:
-            self.pos_y -= self.speed
-        else:
-            self.counter = 0
-
-        self.counter += 1
+        self.pos_y += self.speed

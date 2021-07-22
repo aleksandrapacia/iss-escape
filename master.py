@@ -24,7 +24,7 @@ station = Station(200, 380, station_texture)
 # Enemy
 enemy_file = open("assets/textures/stone_2.png")
 enemy_texture = pygame.image.load(enemy_file)
-enemy = Enemy(random.randrange(0, 600), 0, enemy_texture, 0.2)
+enemy = Enemy(random.randrange(0, 600), 0, enemy_texture, 1)
 enemies: list[Enemy] = []
 enemies.append(enemy)  # type hint
 
