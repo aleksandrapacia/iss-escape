@@ -1,25 +1,24 @@
 import pygame
 import pygame.sprite
 
-class Enemy01(pygame.sprite.Sprite):
-    def __init__(self, screen, enemyX: float, enemyY: float, texture: pygame.Surface):
-        pygame.sprite.Sprite.__init__(self)
-        self.enemyImg = pygame.image.load('stone_2.png')
-        self.rect = self.enemyImg.get_rect()
-        self.enemyX = enemyY
-        self.enemyY = enemyY
+
+class Enemy:
+    def __init__(
+        self, pos_x: float, pos_y: float, texture: pygame.Surface, speed: float
+    ):
+        self.pos_x = pos_x
+        self.pos_y = pos_y
         self.texture = texture
+        self.speed = speed
+
         self.counter = 0
 
     def move(self):
-        self.rect = self.enemyImg.get_rect()
-        '''enemies movement'''
         distance = 7000
-        speed = 0.2
         if self.counter >= 0 and self.counter <= distance:
-            self.enemyY += speed
-        elif self.counter >= distance and self.counter <= distance*2:
-            self.enemyY -= speed
+            self.pos_y += self.speed
+        elif self.counter >= distance and self.counter <= distance * 2:
+            self.pos_y -= self.speed
         else:
             self.counter = 0
 
