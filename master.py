@@ -17,12 +17,12 @@ screen = pygame.display.set_mode((width, height))
 screen_rect = screen.get_rect()
 
 # Station
-station_file = open("iss.png")
+station_file = open("assets/textures/iss.png")
 station_texture = pygame.image.load(station_file)
 station = Station(200, 380, station_texture)
 
 # Enemy
-enemy_file = open("stone_2.png")
+enemy_file = open("assets/textures/stone_2.png")
 enemy_texture = pygame.image.load(enemy_file)
 enemy = Enemy(random.randrange(0, 600), 0, enemy_texture, 0.2)
 enemies: list[Enemy] = []
@@ -30,7 +30,7 @@ enemies.append(enemy)  # type hint
 
 # Bullets
 bullets: list[list[float]] = []
-bullet_texture = pygame.image.load("bullet.png").convert_alpha()
+bullet_texture = pygame.image.load("assets/textures/bullet.png").convert_alpha()
 bulletX = 90
 bulletY = 390
 
@@ -38,10 +38,10 @@ bulletY = 390
 pygame.display.set_caption("ISS Escape")
 
 # Background
-background_texture = pygame.image.load("bg.jpg")
+background_texture = pygame.image.load("assets/textures/bg.jpg")
 
 # Shot sound
-shot_sound = pygame.mixer.Sound("shot.wav")
+shot_sound = pygame.mixer.Sound("assets/sounds/shot.wav")
 
 # Main loop
 running = True
