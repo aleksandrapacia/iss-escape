@@ -101,9 +101,8 @@ while running:
     # Keeping player on screen
     if station.pos_x < 0:
         station.pos_x = 0
-    if station.pos_x > SCREEN_WIDTH:
-        station.pos_x = SCREEN_WIDTH
-
+    if station.pos_x > 420:
+        station.pos_x = 420
     screen.blit(background_texture, (0, 0))
 
     for bullet in bullets:
