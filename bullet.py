@@ -1,8 +1,7 @@
 import pygame
-import pygame.sprite
 
 
-class Enemy:
+class Bullet:
     def __init__(
         self, pos_x: float, pos_y: float, texture: pygame.Surface, speed: float
     ):
@@ -12,4 +11,4 @@ class Enemy:
         self.speed = speed
 
     def move(self):
-        self.pos_y += self.speed
+        self.pos_y -= self.speed
