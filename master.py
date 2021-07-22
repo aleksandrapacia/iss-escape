@@ -5,7 +5,6 @@ from pygame.sprite import Group
 from pygame.locals import *
 import pygame.mixer
 import random
-import random
 import math
 from enemies import Enemy01
 
@@ -24,10 +23,11 @@ iss = ISS(screen, 200, 380, texture_station)
 
 # Enemy01 -- specification 
 enemy01_file = open('stone_2.png')
-texture_enemy01 = pygame.image.load(enemy01_file)
-enemy01 = Enemy01(screen, random.randrange(0, 600), 0, texture_enemy01)
+texture_enemy01 = pygame.image.load(enemy01_file) 
+enemy01 = Enemy01(screen, random.randrange(0, 600), 0,texture_enemy01)
 enemy01_list = pygame.sprite.Group()
 enemy01_list.add(enemy01)
+
 # Bullets
 bullets = []
 bullet_picture = pygame.image.load('bullet.png').convert_alpha()
@@ -55,6 +55,8 @@ while running:
             bullets.append([bulletX+iss.pos_x, bulletY])
 
     # Enemies moves
+    for enemy01 in enemy01_list:
+        enemy01.move()
     # ISS moves
     all_keys = pygame.key.get_pressed()
     if all_keys[pygame.K_LEFT]:

@@ -6,11 +6,11 @@ class Enemy01(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.enemyImg = pygame.image.load('stone_2.png')
         self.rect = self.enemyImg.get_rect()
-        self.enemyX = enemyX
+        self.enemyX = enemyY
         self.enemyY = enemyY
         self.texture = texture
         self.counter = 0
-    
+
     def move(self):
         self.rect = self.enemyImg.get_rect()
         '''enemies movement'''
