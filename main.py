@@ -1,17 +1,20 @@
 import pygame
 import sys
+
+from pygame.constants import WINDOWFOCUSGAINED
 from station import Station
 import pygame.mixer
 import random
 from enemy import Enemy
 from bullet import Bullet
+import math
 
 pygame.init()
 
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 487
 STATION_HEIGHT = 380
-BULLET_SPEED = 4
+BULLET_SPEED = 5
 ENEMY_SPEED = 1
 
 # Screen settings
@@ -39,7 +42,7 @@ bullet_file = open("assets/textures/bullet.png")
 bullet_texture = pygame.image.load("assets/textures/bullet.png")
 bullets: list[Bullet] = []
 bulletX = 90
-
+bulletY = 390
 # Caption
 pygame.display.set_caption("ISS Escape")
 
@@ -69,17 +72,19 @@ while running:
 
     # Enemies moves
     for enemy in enemies:
-        for i in range(3):
+        for i in range(2):
             enemy.move()
 
-    i=0
-    for i in range(3):
+    for i in range(7):
+        enemy = Enemy(random.randrange(67, 520), -30, enemy_texture, ENEMY_SPEED)
         start_time+=1
         if start_time > 200:
-            enemy = Enemy(random.randrange(67, 533), -30, enemy_texture, ENEMY_SPEED)
             enemies.append(enemy)
             start_time = 0
-        
+
+    if bulletX+station.pos_x == enemy.pos_x:
+        print('collision')
+
 
     # Station moves
     all_keys = pygame.key.get_pressed()
