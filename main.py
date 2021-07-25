@@ -35,7 +35,7 @@ clock = pygame.time.Clock()
 enemy_file = open("assets/textures/stone_2.png")
 enemy_texture = pygame.image.load(enemy_file)
 enemies: list[Enemy] = []
-
+enemy = Enemy(random.randrange(67, 520), -30, enemy_texture, ENEMY_SPEED)
 
 # Bullets
 bullet_file = open("assets/textures/bullet.png")
@@ -43,6 +43,14 @@ bullet_texture = pygame.image.load("assets/textures/bullet.png")
 bullets: list[Bullet] = []
 bulletX = 90
 bulletY = 390
+bullet = Bullet(
+                bulletX + station.pos_x,
+                STATION_HEIGHT - 5,
+                bullet_texture,
+                BULLET_SPEED,
+            )
+
+
 # Caption
 pygame.display.set_caption("ISS Escape")
 
@@ -52,6 +60,7 @@ background_texture = pygame.image.load("assets/textures/bg.jpg")
 # Shot sound
 shot_sound = pygame.mixer.Sound("assets/sounds/shot.wav")
 
+score = 0
 # Main loop
 running = True
 while running:
@@ -61,6 +70,7 @@ while running:
             sys.exit()
         elif event.type == pygame.MOUSEBUTTONDOWN:
             shot_sound.play()
+            # Bullets
             bullet = Bullet(
                 bulletX + station.pos_x,
                 STATION_HEIGHT + 10,
@@ -75,15 +85,16 @@ while running:
         for i in range(2):
             enemy.move()
 
-    for i in range(7):
+    for i in range(1):
         enemy = Enemy(random.randrange(67, 520), -30, enemy_texture, ENEMY_SPEED)
         start_time+=1
         if start_time > 200:
             enemies.append(enemy)
             start_time = 0
 
-    if bulletX+station.pos_x == enemy.pos_x:
-        print('collision')
+        # Collision
+        if enemy.pos_y == bullet.pos_y:
+            print('c')
 
 
     # Station moves
@@ -102,6 +113,9 @@ while running:
     for bullet in bullets[:]:
         if bullet.pos_x < 0:
             bullets.remove(bullet)
+
+        for i in range(len(bullets)):
+            bullet = bullets[i]
 
     # Keeping player on screen
     if station.pos_x < 0:
