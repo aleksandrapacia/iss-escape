@@ -50,6 +50,8 @@ bullet = Bullet(
                 BULLET_SPEED,
             )
 
+score = 0
+
 
 # Caption
 pygame.display.set_caption("ISS Escape")
@@ -91,12 +93,13 @@ while running:
         if start_time > 200:
             enemies.append(enemy)
             start_time = 0
-
+    for enemy in enemies:
         # Collision
         if enemy.pos_y == bullet.pos_y:
-            print('c')
-
-
+            score +=1
+            print(f'collision={score}')
+            enemies.remove(enemy)
+            
     # Station moves
     all_keys = pygame.key.get_pressed()
     if all_keys[pygame.K_LEFT]:
