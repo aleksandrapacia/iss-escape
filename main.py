@@ -61,6 +61,7 @@ background_texture = pygame.image.load("assets/textures/bg.jpg")
 
 # Shot sound
 shot_sound = pygame.mixer.Sound("assets/sounds/shot.wav")
+explosion_sound = pygame.mixer.Sound("assets/sounds/explosion.wav")
 
 score = 0
 # Main loop
@@ -93,13 +94,15 @@ while running:
         if start_time > 200:
             enemies.append(enemy)
             start_time = 0
-    for enemy in enemies:
+
         # Collision
+    for enemy in enemies:
         if enemy.pos_y == bullet.pos_y:
             score +=1
             print(f'collision={score}')
             enemies.remove(enemy)
-            
+            explosion_sound.play()
+
     # Station moves
     all_keys = pygame.key.get_pressed()
     if all_keys[pygame.K_LEFT]:
