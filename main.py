@@ -35,7 +35,6 @@ clock = pygame.time.Clock()
 enemy_file = open("assets/textures/stone_2.png")
 enemy_texture = pygame.image.load(enemy_file)
 enemies: list[Enemy] = []
-enemy = Enemy(random.randrange(67, 520), -30, enemy_texture, ENEMY_SPEED)
 
 # Bullets
 bullet_file = open("assets/textures/bullet.png")
@@ -43,12 +42,6 @@ bullet_texture = pygame.image.load("assets/textures/bullet.png")
 bullets: list[Bullet] = []
 bulletX = 90
 bulletY = 390
-bullet = Bullet(
-                bulletX + station.pos_x,
-                STATION_HEIGHT - 5,
-                bullet_texture,
-                BULLET_SPEED,
-            )
 
 score = 0
 
@@ -69,7 +62,7 @@ running = True
 while running:
     all_event = pygame.event.get()
     for event in all_event:
-        if event.type == pygame.QUIT:
+        if event. type == pygame.QUIT:
             sys.exit()
         elif event.type == pygame.MOUSEBUTTONDOWN:
             shot_sound.play()
@@ -79,30 +72,21 @@ while running:
                 STATION_HEIGHT + 10,
                 bullet_texture,
                 BULLET_SPEED,
-            )
+            )           
 
             bullets.append(bullet)
 
     # Enemies moves
     for enemy in enemies:
-        for i in range(2):
+        for i in range(3):
             enemy.move()
 
-    for i in range(1):
+    for i in range(3):
         enemy = Enemy(random.randrange(67, 520), -30, enemy_texture, ENEMY_SPEED)
         start_time+=1
         if start_time > 200:
             enemies.append(enemy)
             start_time = 0
-
-        # Collision
-    for enemy in enemies:
-        if enemy.pos_y == bullet.pos_y:
-            score +=1
-            print(f'collision={score}')
-            enemies.remove(enemy)
-            explosion_sound.play()
-
     # Station moves
     all_keys = pygame.key.get_pressed()
     if all_keys[pygame.K_LEFT]:
@@ -134,7 +118,7 @@ while running:
         screen.blit(bullet_texture, pygame.Rect(bullet.pos_x, bullet.pos_y, 0, 0))
 
     for enemy in enemies:
-        screen.blit(enemy.texture, (enemy.pos_x, enemy.pos_y))
+        screen.blit(enemy.texture, pygame.Rect(enemy.pos_x, enemy.pos_y, 0, 0))
         
     screen.blit(station.texture, (station.pos_x, station.pos_y))
     pygame.display.flip()
