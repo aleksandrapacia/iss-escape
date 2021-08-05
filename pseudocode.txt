@@ -1,0 +1,44 @@
+ISSUE: I cannot create collision
+
+# another file
+class Enemy:
+    [...]
+
+# another file 2.0
+
+class Bullet:
+    [...]
+
+#  main file 
+
+bullet = Bullet()
+enemy = Enemy()
+
+score = 0
+
+def collisionBetween():
+    [...]
+[...]
+
+    while True: # main loop
+        [...]
+
+        # bullets exist
+        
+
+        [...]
+
+        # multiple enemies
+        [...]
+        
+        # collision
+        distance = collisionBetween()
+        if distance < 17:
+            score +=1
+            print(f'collision={score}')
+
+        
+            
+        
+
+        
