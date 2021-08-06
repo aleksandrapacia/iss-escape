@@ -47,7 +47,7 @@ bullets: list[Bullet] = []
 pygame.display.set_caption("ISS Escape")
 
 # Background
-background_texture = pygame.image.load("assets/textures/bg.jpg")
+background_texture = pygame.image.load("assets/textures/bg.png")
 
 # Shot sound
 shot_sound = pygame.mixer.Sound("assets/sounds/shot.wav")
