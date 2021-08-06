@@ -14,7 +14,7 @@ pygame.init()
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 487
 STATION_HEIGHT = 380
-BULLET_SPEED = 4
+BULLET_SPEED = 1
 ENEMY_SPEED = 1.02
 
 def events():
@@ -76,8 +76,9 @@ score = 0
 running = True
 while running:
     events()
-    screen.blit(background_texture, (0, y))
-    y+=3
+    rel_y = y % background_texture.get_rect().height 
+    screen.blit(background_texture, (0, rel_y - background_texture.get_rect().height))
+    y+=1
             # Checking whether the bullet hits the enemy
              # hits = pygame.Rect.collidelist(enemies, bullets) < -- (?)
              # if hits:
