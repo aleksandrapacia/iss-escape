@@ -79,8 +79,9 @@ while running:
     events()
     rel_y = y % background_texture.get_rect().height 
     screen.blit(background_texture, (0, rel_y - background_texture.get_rect().height))
-    if rel_y > 1:
+    if rel_y > SCREEN_WIDTH:
         screen.blit(background_texture, (0, y))
+        screen.blit(background_texture, (0, rel_y - background_texture.get_rect().height))
     y-=1
     
     # C O L L I S I O N  P S E U D O  C O D E # 
