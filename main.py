@@ -17,6 +17,22 @@ STATION_HEIGHT = 380
 BULLET_SPEED = 4
 ENEMY_SPEED = 1.02
 
+def events():
+    all_event = pygame.event.get()
+    for event in all_event:
+        if event.type == pygame.QUIT:
+            sys.exit()
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            # Bullets' class
+            bullet = Bullet(
+                bulletX + station.pos_x,
+                STATION_HEIGHT + 10,
+                bullet_texture,
+                BULLET_SPEED,
+            )
+            bullets.append(bullet)
+            shot_sound.play()
+
 # Screen settings
 (width, height) = (SCREEN_WIDTH, SCREEN_HEIGHT)
 screen = pygame.display.set_mode((width, height))
@@ -47,7 +63,8 @@ bullets: list[Bullet] = []
 pygame.display.set_caption("ISS Escape")
 
 # Background
-background_texture = pygame.image.load("assets/textures/bg.png")
+background_texture = pygame.image.load("assets/textures/bg.png").convert()
+y = 0
 
 # Shot sound
 shot_sound = pygame.mixer.Sound("assets/sounds/shot.wav")
@@ -58,20 +75,9 @@ score = 0
 # Main loop
 running = True
 while running:
-    all_event = pygame.event.get()
-    for event in all_event:
-        if event.type == pygame.QUIT:
-            sys.exit()
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            # Bullets' class
-            bullet = Bullet(
-                bulletX + station.pos_x,
-                STATION_HEIGHT + 10,
-                bullet_texture,
-                BULLET_SPEED,
-            )
-            bullets.append(bullet)
-            shot_sound.play()
+    events()
+    screen.blit(background_texture, (0, y))
+    y+=3
             # Checking whether the bullet hits the enemy
              # hits = pygame.Rect.collidelist(enemies, bullets) < -- (?)
              # if hits:
@@ -110,7 +116,6 @@ while running:
         station.pos_x = 0
     if station.pos_x > 420:
         station.pos_x = 420
-    screen.blit(background_texture, (0, 0))
 
     # Displayin bullets
     for bullet in bullets:
