@@ -17,6 +17,7 @@ STATION_HEIGHT = 380
 BULLET_SPEED = 5
 ENEMY_SPEED = 1.02
 
+# Main function
 def events():
     all_event = pygame.event.get()
     for event in all_event:
@@ -82,11 +83,11 @@ while running:
         screen.blit(background_texture, (0, y))
     y-=1
     
-
-            # Checking whether the bullet hits the enemy
-             # hits = pygame.Rect.collidelist(enemies, bullets) < -- (?)
-             # if hits:
-                 #print('c')          
+    # C O L L I S I O N  P S E U D O  C O D E # 
+    # Checking whether the bullet hits the enemy
+        # hits = pygame.Rect.collidelist(enemies, bullets) < -- (?)
+        # if hits:
+            #print('c')          
 
     # Multiply enemies
     for i in range(4):
