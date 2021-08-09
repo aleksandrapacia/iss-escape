@@ -82,7 +82,15 @@ y = 0
 shot_sound = pygame.mixer.Sound("assets/sounds/shot.wav")
 explosion_sound = pygame.mixer.Sound("assets/sounds/explosion.wav")
 
+# Scores counting
 score = 0
+font = pygame.font.Font('freesansbold.ttf', 32)
+text_x = 10
+text_y = 10
+
+def show_score(x, y):
+    score_value = font.render("Score: " + str(score), True, (255, 255, 255))
+    screen.blit(score_value, (x, y))
 
 # Main loop
 running = True
@@ -117,7 +125,7 @@ while running:
                 print(f'c={score}')
                 bullets.remove(bullet)
                 enemies.remove(enemy)
-                
+
             
 
     # Station moves
@@ -150,6 +158,9 @@ while running:
     
     # Displaying stations' texture
     screen.blit(station.texture, (station.pos_x, station.pos_y))
+
+    # Score displaying 
+    show_score(text_x, text_y)
 
     pygame.display.flip()
     clock.tick(60)
