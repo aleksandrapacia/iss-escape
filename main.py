@@ -12,10 +12,12 @@ import math
 pygame.init()
 
 SCREEN_WIDTH = 600
-SCREEN_HEIGHT = 487
+SCREEN_HEIGHT = 486
 STATION_HEIGHT = 380
 BULLET_SPEED = 5
 ENEMY_SPEED = 1.02
+
+HW, HH = SCREEN_WIDTH // 2 , SCREEN_HEIGHT // 2
 
 # Main function
 def events():
@@ -26,7 +28,7 @@ def events():
         elif event.type == pygame.MOUSEBUTTONDOWN:
             # Bullets' class
             bullet = Bullet(
-                bulletX + station.pos_x,
+                bulletX + int(station.pos_x),
                 STATION_HEIGHT + 10,
                 bullet_texture,
                 BULLET_SPEED,
@@ -42,7 +44,7 @@ screen_rect = screen.get_rect()
 # Station
 station_file = open("assets/textures/iss.png")
 station_texture = pygame.image.load(station_file)
-station = Station(200, STATION_HEIGHT, station_texture)
+station = Station(200, int(STATION_HEIGHT), station_texture)
 
 # Time sec
 start_time = 0
@@ -50,14 +52,23 @@ clock = pygame.time.Clock()
 
 # Enemy
 enemy_file = open("assets/textures/stone_2.png")
-enemy_texture = pygame.image.load(enemy_file)
+enemy_texture = pygame.image.load(enemy_file).convert_alpha()
+enemy_texture_mask = pygame.mask.from_surface(enemy_texture)
+enemy_rect = enemy_texture.get_rect()
 enemies: list[Enemy] = []
 
 # Bullets
 bulletX = 90
 bulletY = 390
 bullet_file = open("assets/textures/bullet.png")
-bullet_texture = pygame.image.load("assets/textures/bullet.png")
+bullet_texture = pygame.image.load("assets/textures/bullet.png").convert_alpha()
+# Bullet mask
+bullet_texture_mask = pygame.mask.from_surface(bullet_texture)
+bullet_rect = bullet_texture.get_rect()
+ox = bulletX+station.pos_x
+oy = STATION_HEIGHT+10
+
+
 bullets: list[Bullet] = []
 
 # Caption
@@ -77,19 +88,12 @@ score = 0
 running = True
 while running:
     events()
+    # Scrolling background
     rel_y = y % background_texture.get_rect().height
     screen.blit(background_texture, (0, rel_y - background_texture.get_rect().height))
     if rel_y < 475:
         screen.blit(background_texture, (0, rel_y))
-        
-     
     y-=2
-    
-    # C O L L I S I O N  P S E U D O  C O D E # 
-    # Checking whether the bullet hits the enemy
-        # hits = pygame.Rect.collidelist(enemies, bullets) < -- (?)
-        # if hits:
-            #print('c')          
 
     # Multiply enemies
     for i in range(4):
@@ -98,12 +102,21 @@ while running:
         if start_time > 200:
             enemies.append(enemy)
             start_time = 0
-
     # Bullets' and enemies' movements
     for bullet in bullets:
         bullet.move() 
     for enemy in enemies:
         enemy.move()
+
+        # Collision
+        for bullet in bullets:
+            offset = (int(enemy.pos_x) - int(bullet.pos_x), int(enemy.pos_y) - int(bullet.pos_y))
+            result = bullet_texture_mask.overlap(enemy_texture_mask, offset)
+            if result:
+                score+=1 
+                print(f'c={score}')
+                bullets.remove(bullet)
+            
 
     # Station moves
     all_keys = pygame.key.get_pressed()
