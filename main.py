@@ -116,6 +116,8 @@ while running:
                 score+=1 
                 print(f'c={score}')
                 bullets.remove(bullet)
+                enemies.remove(enemy)
+                
             
 
     # Station moves
