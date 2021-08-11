@@ -9,6 +9,7 @@ import random
 from enemy import Enemy
 from bullet import Bullet
 import math
+from button import Button
 
 pygame.init()
 
@@ -58,19 +59,18 @@ enemy_texture_mask = pygame.mask.from_surface(enemy_texture)
 enemy_rect = enemy_texture.get_rect()
 enemies: list[Enemy] = []
 
-# Bullets
+# bullets
 bulletX = 90
 bulletY = 390
 bullet_file = open("assets/textures/bullet.png")
 bullet_texture = pygame.image.load("assets/textures/bullet.png").convert_alpha()
-# Bullet mask
+bullets: list[Bullet] = []
+
+# bullet mask
 bullet_texture_mask = pygame.mask.from_surface(bullet_texture)
 bullet_rect = bullet_texture.get_rect()
 ox = bulletX+station.pos_x
 oy = STATION_HEIGHT+10
-
-
-bullets: list[Bullet] = []
 
 # Caption
 pygame.display.set_caption("ISS Escape")
@@ -78,6 +78,10 @@ pygame.display.set_caption("ISS Escape")
 # Background
 background_texture = pygame.image.load("assets/textures/bg.png").convert()
 y = 0
+
+# button 
+start_button = pygame.image.load('assets/textures/start_button.png').convert()
+start_button = Button(100, 200, start_button, 0.8)
 
 # Shot sound
 shot_sound = pygame.mixer.Sound("assets/sounds/shot.wav")
@@ -101,6 +105,8 @@ black = (0, 0, 0)
 white = (255, 255, 255)
 menu_title = font2.render('ISS Escape', True, black)
 short_information = font.render('Click on the screen to start', True, black)
+mx, my = (10, 10)
+mouse = pygame.mouse.get_pos(mx, my)
 # # # 
 
 # Main loop
@@ -116,7 +122,8 @@ while True:
                     menu = False
         screen.fill(white)
         screen.blit(menu_title, (200, 5))
-        screen.blit(short_information, (10, 100))
+        # screen.blit(start_button, (210, 200))
+        start_button.draw(screen)
         clock.tick(30)
         pygame.display.update()
 
