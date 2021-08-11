@@ -1,6 +1,5 @@
 import pygame
 
-
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y, texture: pygame.Surface, speed: float):
         pygame.sprite.Sprite.__init__(self)

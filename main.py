@@ -1,3 +1,4 @@
+  
 import pygame
 import sys
 
@@ -82,9 +83,12 @@ y = 0
 shot_sound = pygame.mixer.Sound("assets/sounds/shot.wav")
 explosion_sound = pygame.mixer.Sound("assets/sounds/explosion.wav")
 
+# Fonts' storage
+font = pygame.font.Font('freesansbold.ttf', 32)
+font2 = pygame.font.Font('freesansbold.ttf', 50)
+
 # Scores counting
 score = 0
-font = pygame.font.Font('freesansbold.ttf', 32)
 text_x = 10
 text_y = 10
 
@@ -92,9 +96,30 @@ def show_score(x, y):
     score_value = font.render("Score: " + str(score), True, (255, 255, 255))
     screen.blit(score_value, (x, y))
 
+# # #
+black = (0, 0, 0)
+white = (255, 255, 255)
+menu_title = font2.render('ISS Escape', True, black)
+short_information = font.render('Click on the screen to start', True, black)
+# # # 
+
 # Main loop
-running = True
-while running:
+menu = True
+while True:
+    while menu:
+        all_event = pygame.event.get()
+        for event in all_event:
+            if event.type == pygame.QUIT:
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    menu = False
+        screen.fill(white)
+        screen.blit(menu_title, (200, 5))
+        screen.blit(short_information, (10, 100))
+        clock.tick(30)
+        pygame.display.update()
+
     events()
     # Scrolling background
     rel_y = y % background_texture.get_rect().height
@@ -125,8 +150,6 @@ while running:
                 print(f'c={score}')
                 bullets.remove(bullet)
                 enemies.remove(enemy)
-
-            
 
     # Station moves
     all_keys = pygame.key.get_pressed()
@@ -164,4 +187,3 @@ while running:
 
     pygame.display.flip()
     clock.tick(60)
-    
