@@ -9,6 +9,7 @@ from enemy import Enemy
 from bullet import Bullet
 import math
 from button import Button
+from quit_button import QuitButton
 
 pygame.init()
 
@@ -82,6 +83,10 @@ y = 0
 start_button = pygame.image.load('assets/textures/start_button.png').convert()
 start_button = Button(240, 200, start_button, 0.6)
 
+# quit button
+quit_button = pygame.image.load('assets/textures/quit_button.png').convert()
+quit_button = QuitButton(240, 300, quit_button, 0.6 )
+
 # Shot sound
 shot_sound = pygame.mixer.Sound("assets/sounds/shot.wav")
 explosion_sound = pygame.mixer.Sound("assets/sounds/explosion.wav")
@@ -124,10 +129,14 @@ while True:
                             print('c')
                             click_sound.play()
                             menu=False
-                            
+                    if quit_button.rect.collidepoint(x, y):
+                        if event.button == 1:
+                            sys.exit()
+                                  
         screen.fill(white)
         screen.blit(menu_title, (200, 5))
         start_button.draw(screen)
+        quit_button.draw(screen)
         clock.tick(30)
         pygame.display.update()
     events()
@@ -150,6 +159,14 @@ while True:
         bullet.move() 
     for enemy in enemies:
         enemy.move()
+
+# Moments when game is finished
+    for enemy in enemies:
+        if enemy.pos_y > SCREEN_HEIGHT:
+            print('event: show game details')
+        if enemy.pos_y == station.pos_y:
+            print('event: show game details')
+            
 
         # Collision
         for bullet in bullets:
