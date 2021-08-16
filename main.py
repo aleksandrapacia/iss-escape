@@ -114,14 +114,8 @@ def show_score(x, y):
 
 #TODO: check this function - why text isn't blited
 def play_again():
-    text = font.render('Play again?', 50, (10, 8, 14))
-    textx = SCREEN_WIDTH / 2 - text.get_width() / 2
-    texty = SCREEN_HEIGHT / 2 - text.get_height() / 2
-    textx_size = text.get_width()
-    texty_size = text.get_height()
-    pygame.draw.rect(screen, (255, 255, 255), ((textx - 5, texty - 5),
-                                               (textx_size + 10, texty_size +
-                                                10)))
+    print('play again?')
+    
 
 
 # # #
@@ -203,7 +197,7 @@ while True:
         # Collision 2.0
         for enemy in enemies:
             offset = (int(enemy.pos_x) - int(station.pos_x), int(enemy.pos_y) - int(station.pos_y))
-            result = enemy_texture_mask.overlap(station_texture_mask, offset)
+            result = station_texture_mask.overlap(enemy_texture_mask, offset)
             if result:
                 play_again()
 
