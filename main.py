@@ -1,7 +1,7 @@
 import pygame
 import sys
 
-from pygame.constants import WINDOWFOCUSGAINED
+from pygame.constants import MOUSEBUTTONDOWN, WINDOWFOCUSGAINED
 from station import Station
 import pygame.mixer
 import random
@@ -82,7 +82,6 @@ y = 0
 start_button = pygame.image.load('assets/textures/start_button.png').convert()
 start_button = Button(240, 200, start_button, 0.6)
 
-
 # Shot sound
 shot_sound = pygame.mixer.Sound("assets/sounds/shot.wav")
 explosion_sound = pygame.mixer.Sound("assets/sounds/explosion.wav")
@@ -107,26 +106,21 @@ menu_title = font2.render('ISS Escape', True, black)
 short_information = font.render('Click on the screen to start', True, black)
 mouse = pygame.mouse.get_pos()
 # # # 
-
-menu = True
-
-def button1_click(event):
-    x, y = pygame.mouse.get_pos()
-    if event.type == pygame.MOUSEBUTTONDOWN:
-        if pygame.mouse.get_pressed()[0]:
-            if start_button.rect.collidepoint(x, y):
-                print('c')
-                
+            
+menu=True
 # Main loop
-
 while True:
     while menu:
         all_event = pygame.event.get()
         for event in all_event:
             if event.type == pygame.QUIT:
                 sys.exit()
-            if button1_click(event):
-                menu = False
+            if event.type == MOUSEBUTTONDOWN:
+                x, y = pygame.mouse.get_pos()
+                if pygame.mouse.get_pressed()[0]:
+                    if start_button.rect.collidepoint(x, y):
+                        if event.button == 1:
+                            menu=False
         screen.fill(white)
         screen.blit(menu_title, (200, 5))
         start_button.draw(screen)
