@@ -112,8 +112,9 @@ def show_score(x, y):
     score_value = font.render("Score: " + str(score), True, (255, 255, 255))
     screen.blit(score_value, (x, y))
 
+#TODO: check this function - why text isn't blited
 def play_again():
-    text = font.render('Play again?', 13, (4, 5, 6))
+    text = font.render('Play again?', 50, (10, 8, 14))
     textx = SCREEN_WIDTH / 2 - text.get_width() / 2
     texty = SCREEN_HEIGHT / 2 - text.get_height() / 2
     textx_size = text.get_width()
@@ -131,7 +132,8 @@ short_information = font.render('Click on the screen to start', True, (45, 48, 1
 mouse = pygame.mouse.get_pos()
 violet = (155, 96, 214)
 # # # 
-            
+
+#TODO: pausing game after station got hit or the bullet flew off the screen        
 menu=True
 # Main loop
 while True:
