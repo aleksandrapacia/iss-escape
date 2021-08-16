@@ -15,7 +15,7 @@ pygame.init()
 
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 486
-STATION_HEIGHT = 380
+STATION_HEIGHT = 371
 BULLET_SPEED = 5
 ENEMY_SPEED = 1.02
 
@@ -47,6 +47,8 @@ screen_rect = screen.get_rect()
 station_file = open("assets/textures/iss.png")
 station_texture = pygame.image.load(station_file)
 station = Station(200, int(STATION_HEIGHT), station_texture)
+station_texture_mask = pygame.mask.from_surface(station_texture)
+station_rect = station_texture.get_rect()
 
 # Time sec
 start_time = 0
@@ -105,6 +107,17 @@ def show_score(x, y):
     score_value = font.render("Score: " + str(score), True, (255, 255, 255))
     screen.blit(score_value, (x, y))
 
+def play_again():
+    text = font.render('Play again?', 13, (4, 5, 6))
+    textx = SCREEN_WIDTH / 2 - text.get_width() / 2
+    texty = SCREEN_HEIGHT / 2 - text.get_height() / 2
+    textx_size = text.get_width()
+    texty_size = text.get_height()
+    pygame.draw.rect(screen, (255, 255, 255), ((textx - 5, texty - 5),
+                                               (textx_size + 10, texty_size +
+                                                10)))
+
+
 # # #
 black = (0, 0, 0)
 white = (255, 255, 255)
@@ -160,12 +173,12 @@ while True:
     for enemy in enemies:
         enemy.move()
 
-# Moments when game is finished
+    # Moments when game is finished
     for enemy in enemies:
         if enemy.pos_y > SCREEN_HEIGHT:
-            print('event: show game details')
+            play_again()
         if enemy.pos_y == station.pos_y:
-            print('event: show game details')
+            play_again()
             
 
         # Collision
@@ -177,6 +190,13 @@ while True:
                 print(f'c={score}')
                 bullets.remove(bullet)
                 enemies.remove(enemy)
+
+        # Collision 2.0
+        for enemy in enemies:
+            offset = (int(enemy.pos_x) - int(station.pos_x), int(enemy.pos_y) - int(station.pos_y))
+            result = enemy_texture_mask.overlap(station_texture_mask, offset)
+            if result:
+                play_again()
 
     # Station moves
     all_keys = pygame.key.get_pressed()
