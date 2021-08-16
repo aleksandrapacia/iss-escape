@@ -121,9 +121,10 @@ def play_again():
 # # #
 black = (0, 0, 0)
 white = (255, 255, 255)
-menu_title = font2.render('ISS Escape', True, black)
-short_information = font.render('Click on the screen to start', True, black)
+menu_title = font2.render('ISS Escape', True, (45, 48, 144))
+short_information = font.render('Click on the screen to start', True, (45, 48, 144))
 mouse = pygame.mouse.get_pos()
+violet = (155, 96, 214)
 # # # 
             
 menu=True
@@ -146,8 +147,8 @@ while True:
                         if event.button == 1:
                             sys.exit()
                                   
-        screen.fill(white)
-        screen.blit(menu_title, (200, 5))
+        screen.fill(violet)
+        screen.blit(menu_title, (160, 5))
         start_button.draw(screen)
         quit_button.draw(screen)
         clock.tick(30)
