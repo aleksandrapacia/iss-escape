@@ -78,13 +78,14 @@ pygame.display.set_caption("ISS Escape")
 background_texture = pygame.image.load("assets/textures/bg.png").convert()
 y = 0
 
-# button 
+# start button
 start_button = pygame.image.load('assets/textures/start_button.png').convert()
 start_button = Button(240, 200, start_button, 0.6)
 
 # Shot sound
 shot_sound = pygame.mixer.Sound("assets/sounds/shot.wav")
 explosion_sound = pygame.mixer.Sound("assets/sounds/explosion.wav")
+click_sound = pygame.mixer.Sound("assets/sounds/click.wav")
 
 # Fonts' storage
 font = pygame.font.Font('freesansbold.ttf', 32)
@@ -120,7 +121,10 @@ while True:
                 if pygame.mouse.get_pressed()[0]:
                     if start_button.rect.collidepoint(x, y):
                         if event.button == 1:
+                            print('c')
+                            click_sound.play()
                             menu=False
+                            
         screen.fill(white)
         screen.blit(menu_title, (200, 5))
         start_button.draw(screen)
