@@ -109,22 +109,23 @@ text_x = 10
 text_y = 10
 
 def show_score(x, y):
-    score_value = font.render("Score: " + str(score), True, (255, 255, 255))
+    score_value = font.render("Score: " + str(score), True, white)
     screen.blit(score_value, (x, y))
 
-#TODO: check this function - why text isn't blited
 def play_again():
+    text = font.render('Play again?', 50, (0, 0, 0))
     print('play again?')
+    textx_size = text.get_width()
+    texty_size = text.get_height()
+    pygame.draw.rect(screen, violet, (150, 50, 300, 400), 10)
     
-
-
 # # #
 black = (0, 0, 0)
 white = (255, 255, 255)
+violet = (155, 96, 214)
 menu_title = font2.render('ISS Escape', True, (45, 48, 144))
 short_information = font.render('Click on the screen to start', True, (45, 48, 144))
 mouse = pygame.mouse.get_pos()
-violet = (155, 96, 214)
 # # # 
 
 #TODO: pausing game after station got hit or the bullet flew off the screen        
