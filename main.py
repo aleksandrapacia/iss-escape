@@ -8,8 +8,10 @@ import random
 from enemy import Enemy
 from bullet import Bullet
 import math
+
 from button import Button
 from quit_button import QuitButton
+from levels_button import LevelsButton
 
 pygame.init()
 
@@ -89,6 +91,9 @@ start_button = Button(240, 200, start_button, 0.6)
 quit_button = pygame.image.load('assets/textures/quit_button.png').convert()
 quit_button = QuitButton(240, 300, quit_button, 0.6 )
 
+# levels button
+levels_button = pygame.image.load('assets/textures/levels_button.png').convert()
+levels_button = LevelsButton(240, 400, levels_button, 0.6)
 # Shot sound
 shot_sound = pygame.mixer.Sound("assets/sounds/shot.wav")
 explosion_sound = pygame.mixer.Sound("assets/sounds/explosion.wav")
@@ -151,6 +156,7 @@ while True:
         screen.blit(menu_title, (160, 5))
         start_button.draw(screen)
         quit_button.draw(screen)
+        levels_button.draw(screen)
         clock.tick(30)
         pygame.display.update()
     events()
