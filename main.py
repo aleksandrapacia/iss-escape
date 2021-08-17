@@ -106,14 +106,6 @@ font2 = pygame.font.Font('freesansbold.ttf', 50)
 text_x = 10
 text_y = 10
 
-
-def play_again():
-    text = font.render('Play again?', 50, (0, 0, 0))
-    print('play again?')
-    textx_size = text.get_width()
-    texty_size = text.get_height()
-    pygame.draw.rect(screen, violet, (150, 50, 300, 400), 10)
-    
 # # #
 black = (0, 0, 0)
 white = (255, 255, 255)
@@ -122,6 +114,12 @@ menu_title = font2.render('ISS Escape', True, (45, 48, 144))
 short_information = font.render('Click on the screen to start', True, (45, 48, 144))
 mouse = pygame.mouse.get_pos()
 # # # 
+
+def play_again():
+    pygame.draw.rect(screen, white, (145, 50, 300, 400))
+
+
+
 
 #TODO: pausing game after station got hit or the bullet flew off the screen        
 # Main loop
@@ -184,10 +182,13 @@ def main():
         # Moments when game is finished
         for enemy in enemies:
             if enemy.pos_y > SCREEN_HEIGHT:
-               play_again()
-            if enemy.pos_y == station.pos_y:
+                
                 play_again()
-            
+               # |MENU|
+            if enemy.pos_y == station.pos_y:
+
+                play_again()
+                # |MENU|
 
             # Collision
             for bullet in bullets:
@@ -242,4 +243,7 @@ def main():
         pygame.display.flip()
         clock.tick(60)
 
-main()
+
+running=True
+while running:
+    main()
