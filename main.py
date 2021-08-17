@@ -146,18 +146,16 @@ def play_again():
 
 
 # main loop
-def main():
+def game():
     # showing scores after lose
     show_score(text_x, text_y)
-    # asking user whether to play again or go to menu
-    play_again() 
     # scores counter
     # defining menu as True boolean to make menu run (if menu=False then game is True)
-    menu=True
+    game=True
     # timing game
     start_time = 0
-    while True:
-        while menu:
+    while True: # TODO: spróbuj dwa sposoby : funkcja menu() lub usunięcie tego < while True i tylko while menu
+        while game:
             all_event = pygame.event.get()
             for event in all_event:
                 if event.type == pygame.QUIT:
@@ -170,7 +168,7 @@ def main():
                         if start_button.rect.collidepoint(x, y):
                             if event.button == 1:
                                 click_sound.play()
-                                menu=False
+                                game=False
                         # quitting game
                         if quit_button.rect.collidepoint(x, y):
                             if event.button == 1:
@@ -183,7 +181,6 @@ def main():
                         if restart_button.rect.collidepoint(x, y):
                             if event.button == 1:
                                 click_sound.play()
-                                menu()
                         if menu_button.rect.collidepoint(x, y):
                             if event.button == 1:
                                 click_sound.play()
@@ -289,10 +286,11 @@ def main():
         # timing game
         clock.tick(60)
 
+
 # running main function (contains main loop)
 running=True
 while running:
-    main()
+    game()
 
 pause=True
 while pause:
