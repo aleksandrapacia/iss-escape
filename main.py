@@ -103,8 +103,8 @@ font = pygame.font.Font('freesansbold.ttf', 32)
 font2 = pygame.font.Font('freesansbold.ttf', 50)
 
 # Scores counting
-text_x = 10
-text_y = 10
+text_x = int(152)
+text_y = int(177)
 
 # # #
 black = (0, 0, 0)
@@ -115,19 +115,19 @@ short_information = font.render('Click on the screen to start', True, (45, 48, 1
 mouse = pygame.mouse.get_pos()
 # # # 
 
-def play_again():
-    pygame.draw.rect(screen, white, (145, 50, 300, 400))
-
-
-
-
 #TODO: pausing game after station got hit or the bullet flew off the screen        
 # Main loop
 def main():
-    score = 0
     def show_score(x, y):
-        score_value = font.render("Score: " + str(score), True, white)
+        score_value = font.render("Score: " + str(score), True, black)
         screen.blit(score_value, (x, y))
+    def play_again():
+        pygame.draw.rect(screen, white, (145, 50, 300, 400))
+        afterGame_info = font.render('Game finished', True, black, violet)
+        text_position = (177, 58)
+        screen.blit(afterGame_info, text_position)
+        show_score(text_x, text_y)
+    score = 0
     menu=True
     start_time = 0
     while True:
@@ -238,8 +238,6 @@ def main():
         # Displaying stations' texture
         screen.blit(station.texture, (station.pos_x, station.pos_y))
 
-        # Score displaying 
-        show_score(text_x, text_y)
         pygame.display.flip()
         clock.tick(60)
 
