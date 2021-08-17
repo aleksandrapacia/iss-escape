@@ -12,6 +12,7 @@ from button import Button
 from quit_button import QuitButton
 from levels_button import LevelsButton
 from restart_button import RestartButton
+from menu_button import MenuButton
 
 # initialazing pygame
 pygame.init()
@@ -36,7 +37,7 @@ def events():
                 bulletX + int(station.pos_x),
                 STATION_HEIGHT + 10,
                 bullet_texture,
-                BULLET_SPEED,
+                BULLET_SPEED, 0.0
             )
             bullets.append(bullet)
             shot_sound.play()
@@ -99,7 +100,10 @@ levels_button = pygame.image.load('assets/textures/levels_button.png').convert()
 levels_button = LevelsButton(240, 400, levels_button, 0.6)
 # restart's button
 restart_button = pygame.image.load('assets/textures/restart_button.png').convert()
-restart_button = RestartButton(240, 300, restart_button, 0.6)
+restart_button = RestartButton(215, 300, restart_button, 1)
+# menu's button
+menu_button = pygame.image.load('assets/textures/menu_button.png').convert()
+menu_button = MenuButton(215, 220, menu_button, 1)
 
 
 # |||sounds|||
@@ -126,24 +130,28 @@ short_information = small_boring.render('Click on the screen to start', True, (4
 
 # mouse
 mouse = pygame.mouse.get_pos()
-
-# main loop
-def main():
-    # showing scores after lose
-    def show_score(x, y):
-        score_value = small_boring.render("Score: " + str(score), True, black)
+score = Bullet.score = 0
+def show_score(x, y):
+        score_value = small_boring.render("Score: " + str(Bullet.score), True, black)
         screen.blit(score_value, (x, y))
-    # asking user whether to play again or go to menu
-    def play_again():
+
+def play_again():
         pygame.draw.rect(screen, white, (145, 50, 300, 400))
         afterGame_info = small_boring.render('Game finished', True, black, violet)
         text_position = (178, 58)
         screen.blit(afterGame_info, text_position)
         show_score(text_x, text_y)
         restart_button.draw(screen)
-        
+        menu_button.draw(screen)
+
+
+# main loop
+def main():
+    # showing scores after lose
+    show_score(text_x, text_y)
+    # asking user whether to play again or go to menu
+    play_again() 
     # scores counter
-    score = 0
     # defining menu as True boolean to make menu run (if menu=False then game is True)
     menu=True
     # timing game
@@ -172,10 +180,14 @@ def main():
                             if event.button == 1:
                                 click_sound.play()
                                 print('level1, level2, level3')
-                        if play_again():
-                            if restart_button.rect.collidepoint(x, y):
-                                if event.button ==1:
-                                    click_sound.play()
+                        if restart_button.rect.collidepoint(x, y):
+                            if event.button == 1:
+                                click_sound.play()
+                                menu()
+                        if menu_button.rect.collidepoint(x, y):
+                            if event.button == 1:
+                                click_sound.play()
+                                menu=True
             # menu's color                   
             screen.fill(violet)
             # displaying main title: 'ISS Escape'
@@ -216,10 +228,12 @@ def main():
         for enemy in enemies:
             if enemy.pos_y > SCREEN_HEIGHT:
                 play_again()
+
                # |RESTART MENU|
                # pausing game
             if enemy.pos_y == station.pos_y:
                 play_again()
+
                 # |RESTART MENU|
                 # pausing game
 
@@ -228,7 +242,7 @@ def main():
                 offset = (int(enemy.pos_x) - int(bullet.pos_x), int(enemy.pos_y) - int(bullet.pos_y))
                 result = bullet_texture_mask.overlap(enemy_texture_mask, offset)
                 if result:
-                    score+=1 
+                    Bullet.score+=1 
                     print(f'c={score}')
                     bullets.remove(bullet)
                     enemies.remove(enemy)
@@ -279,6 +293,14 @@ def main():
 running=True
 while running:
     main()
+
+pause=True
+while pause:
+    all_event = pygame.event.get()
+    for event in all_event:
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            quit()
 
 #  T O D O S
 #TODO: pausing game after station got hit or the bullet flew off the screen     
