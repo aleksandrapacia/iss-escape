@@ -11,6 +11,7 @@ from bullet import Bullet
 from button import Button
 from quit_button import QuitButton
 from levels_button import LevelsButton
+from restart_button import RestartButton
 
 # initialazing pygame
 pygame.init()
@@ -96,6 +97,10 @@ quit_button = QuitButton(240, 300, quit_button, 0.6 )
 # levels' button
 levels_button = pygame.image.load('assets/textures/levels_button.png').convert()
 levels_button = LevelsButton(240, 400, levels_button, 0.6)
+# restart's button
+restart_button = pygame.image.load('assets/textures/restart_button.png').convert()
+restart_button = RestartButton(240, 300, restart_button, 0.6)
+
 
 # |||sounds|||
 shot_sound = pygame.mixer.Sound("assets/sounds/shot.wav")
@@ -107,7 +112,7 @@ small_boring = pygame.font.Font('freesansbold.ttf', 32) #font
 big_boring = pygame.font.Font('freesansbold.ttf', 50) #font2
 
 # |||'Score:' position|||
-text_x = int(152)
+text_x = int(227)
 text_y = int(177)
 
 # |||colors|||
@@ -132,9 +137,11 @@ def main():
     def play_again():
         pygame.draw.rect(screen, white, (145, 50, 300, 400))
         afterGame_info = small_boring.render('Game finished', True, black, violet)
-        text_position = (177, 58)
+        text_position = (178, 58)
         screen.blit(afterGame_info, text_position)
         show_score(text_x, text_y)
+        restart_button.draw(screen)
+        
     # scores counter
     score = 0
     # defining menu as True boolean to make menu run (if menu=False then game is True)
@@ -165,6 +172,10 @@ def main():
                             if event.button == 1:
                                 click_sound.play()
                                 print('level1, level2, level3')
+                        if play_again():
+                            if restart_button.rect.collidepoint(x, y):
+                                if event.button ==1:
+                                    click_sound.play()
             # menu's color                   
             screen.fill(violet)
             # displaying main title: 'ISS Escape'
@@ -270,4 +281,8 @@ while running:
     main()
 
 #  T O D O S
-#TODO: pausing game after station got hit or the bullet flew off the screen       
+#TODO: pausing game after station got hit or the bullet flew off the screen     
+#TODO: add button restart  
+#TODO: change the way buttons look
+#TODO: change click sound
+#TODO: add levels
