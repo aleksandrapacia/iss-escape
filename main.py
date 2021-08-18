@@ -45,6 +45,13 @@ def events():
             )
             bullets.append(bullet)
             shot_sound.play()
+
+            x, y = pygame.mouse.get_pos()
+            if pygame.mouse.get_pressed()[0]:
+                if pause_button.rect.collidepoint(x, y):
+                    if event.button == 1:
+                        click_sound.play()
+                        # print('pause button clicked')
 # screen
 (width, height) = (SCREEN_WIDTH, SCREEN_HEIGHT)
 screen = pygame.display.set_mode((width, height))
@@ -109,7 +116,7 @@ menu_button = pygame.image.load('assets/textures/menu_button.png').convert()
 menu_button = MenuButton(215, 220, menu_button, 1)
 # pause button
 pause_button = pygame.image.load('assets/textures/pause_button.png').convert()
-pause_button = PauseButton(300, 40, pause_button, 1)
+pause_button = PauseButton(514, 2, pause_button, 0.5)
 
 # |||sounds|||
 shot_sound = pygame.mixer.Sound("assets/sounds/shot.wav")
@@ -196,6 +203,7 @@ def game():
                             if event.button == 1:
                                 click_sound.play()
                                 menu=True
+                                
                         
             # menu's color                   
             screen.fill(violet)
@@ -294,6 +302,7 @@ def game():
     
         # displaying station
         screen.blit(station.texture, (station.pos_x, station.pos_y))
+        # pause button sec
         pause_button.draw(screen)
         pygame.display.flip()
         # timing game
