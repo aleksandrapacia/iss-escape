@@ -1,3 +1,4 @@
+  
 import pygame
 import sys
 
@@ -6,6 +7,7 @@ from station import Station
 import pygame.mixer
 import random
 
+from pause_button import PauseButton
 from enemy import Enemy
 from bullet import Bullet
 from button import Button
@@ -13,6 +15,7 @@ from quit_button import QuitButton
 from levels_button import LevelsButton
 from restart_button import RestartButton
 from menu_button import MenuButton
+
 
 # initialazing pygame
 pygame.init()
@@ -104,6 +107,9 @@ restart_button = RestartButton(215, 300, restart_button, 1)
 # menu's button
 menu_button = pygame.image.load('assets/textures/menu_button.png').convert()
 menu_button = MenuButton(215, 220, menu_button, 1)
+# pause button
+pause_button = pygame.image.load('assets/textures/pause_button.png').convert()
+pause_button = PauseButton(400, 20, pause_button, 0.6)
 
 
 # |||sounds|||
@@ -135,12 +141,18 @@ def show_score(x, y):
         score_value = small_boring.render("Score: " + str(Bullet.score), True, black)
         screen.blit(score_value, (x, y))
 
+# pausing 
+pause = False
+
 def play_again():
-        pygame.draw.rect(screen, white, (145, 50, 300, 400))
+        screen.fill(white)
+        # title of the 'window'
         afterGame_info = small_boring.render('Game finished', True, black, violet)
         text_position = (178, 58)
         screen.blit(afterGame_info, text_position)
+        # shwoing scores
         show_score(text_x, text_y)
+        # drawind bottons
         restart_button.draw(screen)
         menu_button.draw(screen)
 
@@ -291,14 +303,6 @@ def game():
 running=True
 while running:
     game()
-
-pause=True
-while pause:
-    all_event = pygame.event.get()
-    for event in all_event:
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            quit()
 
 #  T O D O S
 #TODO: pausing game after station got hit or the bullet flew off the screen     
