@@ -30,6 +30,7 @@ HW, HH = SCREEN_WIDTH // 2 , SCREEN_HEIGHT // 2
 
 # events' main function
 def events():
+    # pause button
     all_event = pygame.event.get()
     for event in all_event:
         if event.type == pygame.QUIT:
@@ -44,7 +45,6 @@ def events():
             )
             bullets.append(bullet)
             shot_sound.play()
-
 # screen
 (width, height) = (SCREEN_WIDTH, SCREEN_HEIGHT)
 screen = pygame.display.set_mode((width, height))
@@ -109,8 +109,7 @@ menu_button = pygame.image.load('assets/textures/menu_button.png').convert()
 menu_button = MenuButton(215, 220, menu_button, 1)
 # pause button
 pause_button = pygame.image.load('assets/textures/pause_button.png').convert()
-pause_button = PauseButton(400, 20, pause_button, 0.6)
-
+pause_button = PauseButton(300, 40, pause_button, 1)
 
 # |||sounds|||
 shot_sound = pygame.mixer.Sound("assets/sounds/shot.wav")
@@ -144,7 +143,7 @@ def show_score(x, y):
 # pausing 
 pause = False
 
-def play_again():
+def p_again_collision():
         screen.fill(white)
         # title of the 'window'
         afterGame_info = small_boring.render('Game finished', True, black, violet)
@@ -197,6 +196,7 @@ def game():
                             if event.button == 1:
                                 click_sound.play()
                                 menu=True
+                        
             # menu's color                   
             screen.fill(violet)
             # displaying main title: 'ISS Escape'
@@ -205,6 +205,7 @@ def game():
             start_button.draw(screen)
             quit_button.draw(screen)
             levels_button.draw(screen)
+
             # timing game
             clock.tick(30)
             #updating
@@ -236,12 +237,12 @@ def game():
         # when game is finished
         for enemy in enemies:
             if enemy.pos_y > SCREEN_HEIGHT:
-                play_again()
+                p_again_collision()
 
                # |RESTART MENU|
                # pausing game
             if enemy.pos_y == station.pos_y:
-                play_again()
+                p_again_collision()
 
                 # |RESTART MENU|
                 # pausing game
@@ -261,7 +262,7 @@ def game():
                 offset = (int(enemy.pos_x) - int(station.pos_x), int(enemy.pos_y) - int(station.pos_y))
                 result = station_texture_mask.overlap(enemy_texture_mask, offset)
                 if result:
-                    play_again()
+                    p_again_collision()
 
         # station's movement
         all_keys = pygame.key.get_pressed()
@@ -293,7 +294,7 @@ def game():
     
         # displaying station
         screen.blit(station.texture, (station.pos_x, station.pos_y))
-
+        pause_button.draw(screen)
         pygame.display.flip()
         # timing game
         clock.tick(60)

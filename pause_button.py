@@ -1,6 +1,6 @@
 import pygame
 
-class PauseButton():
+class PauseButton(pygame.surface.Surface):
 	def __init__(self, x, y, image, scale):
 		width = image.get_width()
 		height = image.get_height()
