@@ -30,24 +30,6 @@ BULLET_SPEED = 5
 ENEMY_SPEED = 1.02
 HW, HH = SCREEN_WIDTH // 2 , SCREEN_HEIGHT // 2
 
-# events' main function
-def events():
-    # pause button
-    all_event = pygame.event.get()
-    for event in all_event:
-        if event.type == pygame.QUIT:
-            sys.exit()
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            # Bullets' class
-            bullet = Bullet(
-                bulletX + int(station.pos_x),
-                STATION_HEIGHT + 10,
-                bullet_texture,
-                BULLET_SPEED, 0.0
-            )
-            bullets.append(bullet)
-            shot_sound.play()
-
 # screen
 (width, height) = (SCREEN_WIDTH, SCREEN_HEIGHT)
 screen = pygame.display.set_mode((width, height))
@@ -124,8 +106,8 @@ click_sound = pygame.mixer.Sound("assets/sounds/click.wav")
 
 # fonts
 largetext = pygame.font.SysFont('Arial',80)
-smalltext = pygame.font.SysFont('freesansbold.ttf',20)
-mediumtext = pygame.font.SysFont('freesansbold.ttf',40)
+smalltext = pygame.font.SysFont('freesansbold.ttf',50)
+mediumtext = pygame.font.SysFont('freesansbold.ttf',30)
 
 # |||'Score:' position|||
 text_x = int(227)
@@ -174,8 +156,7 @@ def intro_loop():
                 if pygame.mouse.get_pressed()[0]:
                     if start_button.rect.collidepoint(a, b):
                         intro = False
-                        print('start butto clicked')
-                        # game_loop()
+                        game_loop()
                     if quit_button.rect.collidepoint(a, b):
                         sys.exit()
                     if levels_button.rect.collidepoint(a, b):
@@ -200,10 +181,10 @@ def levels():
             if event.type == pygame.QUIT:
                 sys.exit()
             if event.type == MOUSEBUTTONDOWN:
-                a, b = pygame.mouse.get_pos()
+                x, y = pygame.mouse.get_pos()
                 if pygame.mouse.get_pressed()[0]:
                     # going to intro loop
-                    if menu_button_levels.rect.collidepoint(a, b):
+                    if menu_button_levels.rect.collidepoint(x, y):
                         levels=False
                         intro_loop()
                     
@@ -215,12 +196,118 @@ def levels():
         screen.blit(levels_title, text_position)
         pygame.display.update()
 
+def game_loop():
+    y=0
+    start_time = 0
+    game=True
+    while game:
+        all_event = pygame.event.get()
+        for event in all_event:
+            if event.type == pygame.QUIT:
+                sys.exit()
+            if event.type == MOUSEBUTTONDOWN:
+                bullet = Bullet(
+                bulletX + int(station.pos_x),
+                STATION_HEIGHT + 10,
+                bullet_texture,
+                BULLET_SPEED, 0.0)
+                bullets.append(bullet)
+                shot_sound.play()
 
-# running main function (contains main loop)
+            x,y = pygame.mouse.get_pos()
+            if pygame.mouse.get_pressed()[0]:
+                # going to intro loop
+                if pause_button.rect.collidepoint(x, y):
+                    game=False
+                    # pause()
+
+        # scrolling background
+        rel_y = y % background_texture.get_rect().height
+        screen.blit(background_texture, (0, rel_y - background_texture.get_rect().height))
+        if rel_y < 475:
+            screen.blit(background_texture, (0, rel_y))
+            y-=2
+        
+        # creating multiple enemies'
+        for i in range(4):
+            enemy = Enemy(random.randrange(67, 520), -20, enemy_texture, ENEMY_SPEED)
+            start_time+=1
+            if start_time > 200:
+                enemies.append(enemy)
+                start_time = 0
+
+        # enemies' and bullets' movements
+        for bullet in bullets:
+            bullet.move() 
+        for enemy in enemies:
+            enemy.move()
+
+        # when game is finished (when collision)
+        for enemy in enemies:
+            if enemy.pos_y > SCREEN_HEIGHT:
+                print('collision')
+            if enemy.pos_y == station.pos_y:
+                print('collision')
+
+
+            # collision between bullet and enemy
+            for bullet in bullets:
+                offset = (int(enemy.pos_x) - int(bullet.pos_x), int(enemy.pos_y) - int(bullet.pos_y))
+                result = bullet_texture_mask.overlap(enemy_texture_mask, offset)
+                if result:
+                    Bullet.score+=1 
+                    print(f'c={score}')
+                    bullets.remove(bullet)
+                    enemies.remove(enemy)
+            
+        # showing scores
+        show_score = smalltext.render(f'Scores: {Bullet.score}', True, white)
+        show_score_position = (5, 5)
+        screen.blit(show_score, show_score_position)
+            
+
+        # collision between station and enemies
+        for enemy in enemies:
+            offset = (int(enemy.pos_x) - int(station.pos_x), int(enemy.pos_y) - int(station.pos_y))
+            result = station_texture_mask.overlap(enemy_texture_mask, offset)
+            if result:
+                p_again_collision()
+
+        # station's movement
+        all_keys = pygame.key.get_pressed()
+        if all_keys[pygame.K_LEFT]:
+            station.pos_x -= 4
+        elif all_keys[pygame.K_RIGHT]:
+            station.pos_x += 4
+
+        # removing enemy if it goes off screen
+        for bullet in bullets[:]:
+            if bullet.pos_x < 0:
+                bullets.remove(bullet)
+        for i in range(len(bullets)):
+            bullet = bullets[i]
+
+        # keeping player on screen
+        if station.pos_x < 0:
+            station.pos_x = 0
+        if station.pos_x > 420:
+            station.pos_x = 420
+
+        # displaying bullets
+        for bullet in bullets:
+            screen.blit(bullet_texture, pygame.Rect(bullet.pos_x, bullet.pos_y, 0, 0))
+    
+        # displaying enemies
+        for enemy in enemies:
+            screen.blit(enemy.texture, pygame.Rect(enemy.pos_x, enemy.pos_y, 0, 0))
+    
+        # displaying station
+        screen.blit(station.texture, (station.pos_x, station.pos_y))
+        # pause button sec
+        pause_button.draw(screen)
+        pygame.display.update()
+        # timing game
+        clock.tick(60)
+
 intro_loop()
-#  T O D O S
-#TODO: pausing game after station got hit or the bullet flew off the screen     
-#TODO: add button restart  
-#TODO: change the way buttons look
-#TODO: change click sound
-#TODO: add levels
+pygame.display.update()
