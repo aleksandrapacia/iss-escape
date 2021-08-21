@@ -128,17 +128,58 @@ def show_score(x, y):
         score_value = mediumtext.render("Score: " + str(Bullet.score), True, black)
         screen.blit(score_value, (x, y))
 
-def p_again_collision():
-        screen.fill(white)
-        # title of the 'window'
-        afterGame_info = mediumtext.render('Game finished', True, black, violet)
-        text_position = (178, 58)
-        screen.blit(afterGame_info, text_position)
-        # shwoing scores
-        show_score(text_x, text_y)
-        # drawind bottons
+
+def pause_button_clicked():
+    pause=True
+    while pause:
+        all_event = pygame.event.get()
+        for event in all_event:
+            if event.type == pygame.QUIT:
+                sys.exit()
+            if event.type == MOUSEBUTTONDOWN:
+                x, y = pygame.mouse.get_pos()
+                if pygame.mouse.get_pressed()[0]:
+                    if restart_button.rect.collidepoint(x, y):
+                        pause=False
+                        game_loop()
+                    if menu_button.rect.collidepoint(x, y):
+                        pause=False
+                        intro_loop()
+
+        screen.blit(intro_background, (0,0))
+        pause_title = largetext.render('Paused', True, white)
+        pause_title_position = (190, 4)
+        screen.blit(pause_title, pause_title_position)
         restart_button.draw(screen)
         menu_button.draw(screen)
+        pygame.display.update()
+
+
+def after_collision():
+    pause=True
+    while pause:
+        all_event = pygame.event.get()
+        for event in all_event:
+            if event.type == pygame.QUIT:
+                sys.exit()
+            if event.type == MOUSEBUTTONDOWN:
+                x, y = pygame.mouse.get_pos()
+                if pygame.mouse.get_pressed()[0]:
+                    if menu_button.rect.collidepoint(x, y):
+                        pause=False
+                        intro_loop()
+                        pygame.display.update()
+
+        screen.blit(intro_background, (0,0))
+        pause_title = largetext.render('Loss', True, white)
+        pause_title_position = (230, 4)
+        screen.blit(pause_title, pause_title_position)
+
+        score_text = mediumtext.render(f'Scores gained in this round: {Bullet.score}', True, white)
+        scoretext_position = (160, 100)
+        screen.blit(score_text, scoretext_position)
+        menu_button.draw(screen)
+        pygame.display.update()
 
 
 # main loop
@@ -152,14 +193,14 @@ def intro_loop():
             if event.type == pygame.QUIT:
                 sys.exit()
             if event.type == MOUSEBUTTONDOWN:
-                a, b = pygame.mouse.get_pos()
+                x, y = pygame.mouse.get_pos()
                 if pygame.mouse.get_pressed()[0]:
-                    if start_button.rect.collidepoint(a, b):
+                    if start_button.rect.collidepoint(x, y):
                         intro = False
                         game_loop()
-                    if quit_button.rect.collidepoint(a, b):
+                    if quit_button.rect.collidepoint(x, y):
                         sys.exit()
-                    if levels_button.rect.collidepoint(a, b):
+                    if levels_button.rect.collidepoint(x, y):
                         intro=False
                         levels()
 
@@ -201,6 +242,7 @@ def game_loop():
     start_time = 0
     game=True
     while game:
+        screen.blit(background_texture, (0,0))
         all_event = pygame.event.get()
         for event in all_event:
             if event.type == pygame.QUIT:
@@ -218,15 +260,8 @@ def game_loop():
             if pygame.mouse.get_pressed()[0]:
                 # going to intro loop
                 if pause_button.rect.collidepoint(x, y):
+                    pause_button_clicked()
                     game=False
-                    # pause()
-
-        # scrolling background
-        rel_y = y % background_texture.get_rect().height
-        screen.blit(background_texture, (0, rel_y - background_texture.get_rect().height))
-        if rel_y < 475:
-            screen.blit(background_texture, (0, rel_y))
-            y-=2
         
         # creating multiple enemies'
         for i in range(4):
@@ -245,10 +280,13 @@ def game_loop():
         # when game is finished (when collision)
         for enemy in enemies:
             if enemy.pos_y > SCREEN_HEIGHT:
-                print('collision')
+                game=False
+                after_collision()
+                pygame.display.update()
             if enemy.pos_y == station.pos_y:
-                print('collision')
-
+                game=False
+                after_collision()
+                pygame.display.update()
 
             # collision between bullet and enemy
             for bullet in bullets:
@@ -271,7 +309,9 @@ def game_loop():
             offset = (int(enemy.pos_x) - int(station.pos_x), int(enemy.pos_y) - int(station.pos_y))
             result = station_texture_mask.overlap(enemy_texture_mask, offset)
             if result:
-                p_again_collision()
+                game=False
+                after_collision()
+                pygame.display.update()
 
         # station's movement
         all_keys = pygame.key.get_pressed()
@@ -303,8 +343,10 @@ def game_loop():
     
         # displaying station
         screen.blit(station.texture, (station.pos_x, station.pos_y))
+
         # pause button sec
         pause_button.draw(screen)
+
         pygame.display.update()
         # timing game
         clock.tick(60)
