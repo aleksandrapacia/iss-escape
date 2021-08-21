@@ -20,6 +20,8 @@ from menu_button import MenuButton
 # initialazing pygame
 pygame.init()
 
+pygame.font.init()
+
 # constants
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 486
@@ -95,13 +97,13 @@ background_texture = pygame.image.load("assets/textures/bg.png").convert()
 # |||buttons|||
 # start button
 start_button = pygame.image.load('assets/textures/start_button.png').convert()
-start_button = Button(240, 200, start_button, 0.6)
+start_button = Button(230, 200, start_button, 0.9)
 # quit button
 quit_button = pygame.image.load('assets/textures/quit_button.png').convert()
-quit_button = QuitButton(240, 300, quit_button, 0.6 )
+quit_button = QuitButton(230, 300, quit_button, 0.9 )
 # levels' button
 levels_button = pygame.image.load('assets/textures/levels_button.png').convert()
-levels_button = LevelsButton(240, 400, levels_button, 0.6)
+levels_button = LevelsButton(230, 400, levels_button, 0.9)
 # restart's button
 restart_button = pygame.image.load('assets/textures/restart_button.png').convert()
 restart_button = RestartButton(215, 300, restart_button, 1)
@@ -120,10 +122,11 @@ shot_sound = pygame.mixer.Sound("assets/sounds/shot.wav")
 explosion_sound = pygame.mixer.Sound("assets/sounds/explosion.wav")
 click_sound = pygame.mixer.Sound("assets/sounds/click.wav")
 
-# |||fonts|||
-largetext = pygame.font.Font('freesansbold.ttf',80)
-smalltext = pygame.font.Font('freesansbold.ttf',20)
-mediumtext = pygame.font.Font('freesansbold.ttf',40)
+# fonts
+largetext = pygame.font.SysFont('Arial',80)
+smalltext = pygame.font.SysFont('freesansbold.ttf',20)
+mediumtext = pygame.font.SysFont('freesansbold.ttf',40)
+
 # |||'Score:' position|||
 text_x = int(227)
 text_y = int(177)
@@ -180,6 +183,9 @@ def intro_loop():
                         levels()
 
         screen.blit(intro_background, (0,0))
+        intro_title = largetext.render('ISS Escape', True, white)
+        text_position = (134, 4)
+        screen.blit(intro_title, text_position)
         start_button.draw(screen)
         quit_button.draw(screen)
         levels_button.draw(screen)
@@ -196,8 +202,11 @@ def levels():
             if event.type == MOUSEBUTTONDOWN:
                 a, b = pygame.mouse.get_pos()
                 if pygame.mouse.get_pressed()[0]:
-                    if menu_button.rect.collidepoint(a, b):
-                        intro_loop().run()
+                    # going to intro loop
+                    if menu_button_levels.rect.collidepoint(a, b):
+                        levels=False
+                        intro_loop()
+                    
 
         screen.blit(intro_background, (0,0))
         menu_button_levels.draw(screen)
