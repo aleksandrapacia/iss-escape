@@ -16,10 +16,8 @@ from levels_button import LevelsButton
 from restart_button import RestartButton
 from menu_button import MenuButton
 
-
 # initialazing pygame
 pygame.init()
-
 pygame.font.init()
 
 # constants
@@ -35,6 +33,7 @@ HW, HH = SCREEN_WIDTH // 2 , SCREEN_HEIGHT // 2
 screen = pygame.display.set_mode((width, height))
 screen_rect = screen.get_rect()
 intro_background = pygame.image.load('assets/textures/intro.png')
+
 # caption
 pygame.display.set_caption("ISS Escape")
 
@@ -69,14 +68,9 @@ oy = STATION_HEIGHT+10
 # time
 clock = pygame.time.Clock()
 
-#   ////|||||||||||\\\\
-#  ///s t o r a g e \\\\
-#  \\\\|||||||||||||////
-
 # background
 background_texture = pygame.image.load("assets/textures/bg.png").convert()
 
-# |||buttons|||
 # start button
 start_button = pygame.image.load('assets/textures/start_button.png').convert()
 start_button = Button(230, 200, start_button, 0.9)
@@ -99,7 +93,7 @@ menu_button_levels = MenuButton(514, 2, menu_button_levels, 0.5)
 pause_button = pygame.image.load('assets/textures/pause_button.png').convert()
 pause_button = PauseButton(514, 2, pause_button, 0.5)
 
-# |||sounds|||
+# sounds
 shot_sound = pygame.mixer.Sound("assets/sounds/shot.wav")
 explosion_sound = pygame.mixer.Sound("assets/sounds/explosion.wav")
 click_sound = pygame.mixer.Sound("assets/sounds/click.wav")
@@ -109,11 +103,11 @@ largetext = pygame.font.SysFont('Arial',80)
 smalltext = pygame.font.SysFont('freesansbold.ttf',50)
 mediumtext = pygame.font.SysFont('freesansbold.ttf',30)
 
-# |||'Score:' position|||
+# text's position (score)
 text_x = int(227)
 text_y = int(177)
 
-# |||colors|||
+# colors
 black = (0, 0, 0)
 white = (255, 255, 255)
 violet = (155, 96, 214)
@@ -124,11 +118,15 @@ menu_title = largetext.render('ISS Escape', True, (45, 48, 144))
 # mouse
 mouse = pygame.mouse.get_pos()
 score = Bullet.score = 0
+
+# functions part
+
+# showing scores during game
 def show_score(x, y):
         score_value = mediumtext.render("Score: " + str(Bullet.score), True, black)
         screen.blit(score_value, (x, y))
 
-
+# what happens when user decides to pause a game
 def pause_button_clicked():
     pause=True
     while pause:
@@ -154,7 +152,8 @@ def pause_button_clicked():
         menu_button.draw(screen)
         pygame.display.update()
 
-
+# what happens after collision: between enemy and station, enemy and the enge
+# of the screen
 def after_collision():
     pause=True
     while pause:
@@ -182,7 +181,7 @@ def after_collision():
         pygame.display.update()
 
 
-# main loop
+# menu (intro)
 def intro_loop():
     '''starts intro, first called function'''
     intro=True
@@ -213,7 +212,7 @@ def intro_loop():
         levels_button.draw(screen)
         pygame.display.update()
 
-
+# all levels, levels' features
 def levels():
     levels=True
     while levels:
@@ -237,6 +236,7 @@ def levels():
         screen.blit(levels_title, text_position)
         pygame.display.update()
 
+# main loop of the game
 def game_loop():
     y=0
     start_time = 0
@@ -297,12 +297,7 @@ def game_loop():
                     print(f'c={score}')
                     bullets.remove(bullet)
                     enemies.remove(enemy)
-            
-        # showing scores
-        show_score = smalltext.render(f'Scores: {Bullet.score}', True, white)
-        show_score_position = (5, 5)
-        screen.blit(show_score, show_score_position)
-            
+
 
         # collision between station and enemies
         for enemy in enemies:
