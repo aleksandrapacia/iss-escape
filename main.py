@@ -15,6 +15,7 @@ from quit_button import QuitButton
 from levels_button import LevelsButton
 from restart_button import RestartButton
 from menu_button import MenuButton
+from retry_button import RetryButton
 
 # initialazing pygame
 pygame.init()
@@ -92,6 +93,9 @@ menu_button_levels = MenuButton(514, 2, menu_button_levels, 0.5)
 # pause button
 pause_button = pygame.image.load('assets/textures/pause_button.png').convert()
 pause_button = PauseButton(514, 2, pause_button, 0.5)
+#retry button
+retry_button = pygame.image.load('assets/textures/retry_button.png').convert()
+retry_button = RetryButton(215, 320, retry_button, 1)
 
 # sounds
 shot_sound = pygame.mixer.Sound("assets/sounds/shot.wav")
@@ -171,7 +175,11 @@ def after_collision():
                         pausec=False
                         intro_loop()
                         pygame.display.update()
-
+                    if restart_button.rect.collidepoint(x, y):
+                        click_sound.play()
+                        pausec=False
+                        game_loop()
+                        pygame.display.update()
         screen.blit(intro_background, (0,0))
         pause_title = largetext.render('Loss', True, white)
         pause_title_position = (230, 4)
@@ -180,7 +188,10 @@ def after_collision():
         score_text = mediumtext.render(f'Scores gained in this round: {Bullet.score}', True, white)
         scoretext_position = (160, 100)
         screen.blit(score_text, scoretext_position)
+
         menu_button.draw(screen)
+        retry_button.draw(screen)
+
         pygame.display.update()
 
 
@@ -298,7 +309,6 @@ def game_loop():
             if enemy.pos_y > SCREEN_HEIGHT:
                 game=False
                 after_collision()
-                pygame.display.update()
                 Bullet.score==0
             if enemy.pos_y == station.pos_y:
                 game=False
