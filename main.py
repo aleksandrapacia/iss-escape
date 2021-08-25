@@ -33,7 +33,7 @@ HW, HH = SCREEN_WIDTH // 2 , SCREEN_HEIGHT // 2
 (width, height) = (SCREEN_WIDTH, SCREEN_HEIGHT)
 screen = pygame.display.set_mode((width, height))
 screen_rect = screen.get_rect()
-intro_background = pygame.image.load('assets/textures/intro.png')
+intro_background = pygame.image.load('assets/textures/intro.png').convert()
 
 # caption
 pygame.display.set_caption("ISS Escape")
@@ -68,9 +68,6 @@ oy = STATION_HEIGHT+10
 
 # time setup
 clock = pygame.time.Clock()
-
-# background
-background_texture = pygame.image.load("assets/textures/bg.png").convert()
 
 # start button
 start_button = pygame.image.load('assets/textures/start_button.png').convert()
@@ -130,6 +127,7 @@ def show_score(x, y):
         score_value = mediumtext.render("Score: " + str(Bullet.score), True, white)
         screen.blit(score_value, (x, y))
 
+
 # what happens when user decides to pause a game
 def pause_button_clicked():
     pause=True
@@ -174,12 +172,7 @@ def after_collision():
                         click_sound.play()
                         pausec=False
                         intro_loop()
-                        pygame.display.update()
-                    if restart_button.rect.collidepoint(x, y):
-                        click_sound.play()
-                        pausec=False
-                        game_loop()
-                        pygame.display.update()
+
         screen.blit(intro_background, (0,0))
         pause_title = largetext.render('Loss', True, white)
         pause_title_position = (230, 4)
@@ -260,13 +253,18 @@ def levels():
         screen.blit(levels_title, text_position)
         pygame.display.update()
 
+bg = pygame.image.load('assets/textures/bg.png').convert()
+yy=0
+game = True
 # main loop of the game
 def game_loop():
-    y=0
+    yy=0
     start_time = 0
-    game=True
+    global game
     while game:
-        screen.blit(background_texture, (0,0))
+        rel_y = yy % bg.get_rect().height
+        screen.blit(bg, (0 , rel_y - bg.get_rect().height))
+        yy-=1
         # showing scores
         show_score(5, 5)
         all_event = pygame.event.get()
@@ -291,7 +289,7 @@ def game_loop():
                     game=False
         
         # creating multiple enemies'
-        for i in range(4):
+        for i in range(10):
             enemy = Enemy(random.randrange(67, 520), -20, enemy_texture, ENEMY_SPEED)
             start_time+=1
             if start_time > 200:
