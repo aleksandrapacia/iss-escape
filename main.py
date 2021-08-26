@@ -6,7 +6,6 @@ from pygame.constants import MOUSEBUTTONDOWN
 from station import Station
 import pygame.mixer
 import random
-import pickle
 
 from pause_button import PauseButton
 from enemy import Enemy
@@ -18,6 +17,7 @@ from restart_button import RestartButton
 from menu_button import MenuButton
 from retry_button import RetryButton
 from levels_light import LevelsLight
+from start_light import StartLight
 
 # initialazing pygame
 pygame.init()
@@ -72,14 +72,22 @@ clock = pygame.time.Clock()
 # start button
 start_button = pygame.image.load('assets/textures/start_button.png').convert()
 start_button = Button(230, 200, start_button, 0.9)
+# light start's button
+start_light = pygame.image.load('assets/textures/start_light.png').convert()
+start_light = StartLight(230, 200, start_light, 0.9)
+
 # quit button
 quit_button = pygame.image.load('assets/textures/quit_button.png').convert()
 quit_button = QuitButton(230, 300, quit_button, 0.9 )
+# light quit's button
+quit_light = pygame.image.load('assets/textures/quit_light.png').convert()
+quit_light = QuitButton(230, 300, quit_light, 0.9)
+
 # levels' button
 levels_button = pygame.image.load('assets/textures/levels_button.png').convert()
 levels_button = LevelsButton(230, 400, levels_button, 0.9)
 # light level's button
-levels_light = pygame.image.load('assets/textures/levels_light.png').convert()
+levels_light = pygame.image.load('assets/textures/levels_light(2).png').convert()
 levels_light = LevelsLight(230, 400, levels_light, 0.9)
 # restart's button
 restart_button = pygame.image.load('assets/textures/restart_button.png').convert()
@@ -229,10 +237,14 @@ def intro_loop():
         levels_button.draw(screen)
 
         mouse = pygame.mouse.get_pos()
-        print(mouse)
-        # changing levels' appearance
+        # changing button's appearance
         if levels_button.rect.collidepoint(mouse):
             levels_light.draw(screen)
+        if start_button.rect.collidepoint(mouse):
+            start_light.draw(screen)
+        if quit_button.rect.collidepoint(mouse):
+            quit_light.draw(screen)
+        
         pygame.display.update()
 
 # all levels, levels' features
