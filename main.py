@@ -93,11 +93,14 @@ levels_light = LevelsLight(230, 400, levels_light, 0.9)
 restart_button = pygame.image.load('assets/textures/restart_button.png').convert()
 restart_button = RestartButton(215, 300, restart_button, 1)
 # menu's button
+menu_button_light = pygame.image.load('assets/textures/light_menu.png').convert()
 menu_button = pygame.image.load('assets/textures/menu_button.png').convert()
 menu_button = MenuButton(215, 220, menu_button, 1)
+menu_button_light_levels = MenuButton(514, 2, menu_button_light, 0.5)
 
 menu_button_levels = pygame.image.load('assets/textures/menu_button.png').convert()
 menu_button_levels = MenuButton(514, 2, menu_button_levels, 0.5)
+
 # pause button
 pause_button = pygame.image.load('assets/textures/pause_button.png').convert()
 pause_button = PauseButton(514, 2, pause_button, 0.5)
@@ -269,6 +272,10 @@ def levels():
 
         menu_button_levels.draw(screen)
         levels_title = largetext.render('Levels', True, white)
+
+        mouse = pygame.mouse.get_pos()
+        if menu_button_levels.rect.collidepoint(mouse):
+            menu_button_light_levels.draw(screen)
         text_position = (178, 4)
         screen.blit(levels_title, text_position)
         pygame.display.update()
