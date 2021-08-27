@@ -94,9 +94,13 @@ restart_button = pygame.image.load('assets/textures/restart_button.png').convert
 restart_button = RestartButton(215, 300, restart_button, 1)
 # menu's button
 menu_button_light = pygame.image.load('assets/textures/light_menu.png').convert()
+
 menu_button = pygame.image.load('assets/textures/menu_button.png').convert()
 menu_button = MenuButton(215, 220, menu_button, 1)
+
 menu_button_light_levels = MenuButton(514, 2, menu_button_light, 0.5)
+
+menu_button_light = MenuButton(215, 220, menu_button_light, 1)
 
 menu_button_levels = pygame.image.load('assets/textures/menu_button.png').convert()
 menu_button_levels = MenuButton(514, 2, menu_button_levels, 0.5)
@@ -166,6 +170,9 @@ def pause_button_clicked():
         screen.blit(pause_title, pause_title_position)
         restart_button.draw(screen)
         menu_button.draw(screen)
+        mouse = pygame.mouse.get_pos()
+        if menu_button.rect.collidepoint(mouse):
+            menu_button_light.draw(screen)
         pygame.display.update()
 
 # what happens after collision: between enemy and station, enemy and the enge
@@ -200,6 +207,11 @@ def pause_after_collision():
 
         menu_button.draw(screen)
         retry_button.draw(screen)
+
+        mouse = pygame.mouse.get_pos()
+        if menu_button.rect.collidepoint(mouse):
+            menu_button_light.draw(screen)
+            print('test')
 
         pygame.display.update()
 
