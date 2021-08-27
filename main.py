@@ -108,6 +108,9 @@ menu_button_levels = MenuButton(514, 2, menu_button_levels, 0.5)
 # pause button
 pause_button = pygame.image.load('assets/textures/pause_button.png').convert()
 pause_button = PauseButton(514, 2, pause_button, 0.5)
+
+pause_light = pygame.image.load('assets/textures/pause_light.png').convert()
+pause_light = PauseButton(514, 2, pause_light, 0.5) 
 #retry button
 retry_button = pygame.image.load('assets/textures/retry_button.png').convert()
 retry_button = RetryButton(215, 320, retry_button, 1)
@@ -170,6 +173,7 @@ def pause_button_clicked():
         screen.blit(pause_title, pause_title_position)
         restart_button.draw(screen)
         menu_button.draw(screen)
+
         mouse = pygame.mouse.get_pos()
         if menu_button.rect.collidepoint(mouse):
             menu_button_light.draw(screen)
@@ -259,7 +263,6 @@ def intro_loop():
             start_light.draw(screen)
         if quit_button.rect.collidepoint(mouse):
             quit_light.draw(screen)
-        
         pygame.display.update()
 
 # all levels, levels' features
@@ -408,7 +411,10 @@ def game_loop():
         screen.blit(station.texture, (station.pos_x, station.pos_y))
 
         # pause button sec
+        mouse = pygame.mouse.get_pos()
         pause_button.draw(screen)
+        if pause_button.rect.collidepoint(mouse):
+            pause_light.draw(screen)
 
         pygame.display.update()
         # timing game
