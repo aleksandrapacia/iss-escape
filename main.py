@@ -1,4 +1,3 @@
-from levels_light import LevelsLight
 import pygame
 import sys
 
@@ -7,21 +6,13 @@ from station import Station
 import pygame.mixer
 import random
 
-from pause_button import PauseButton
 from enemy import Enemy
 from bullet import Bullet
 from button import Button
-from quit_button import QuitButton
-from levels_button import LevelsButton
-from restart_button import RestartButton
-from menu_button import MenuButton
-from retry_button import RetryButton
-from levels_light import LevelsLight
-from start_light import StartLight
+
 
 # initialazing pygame
 pygame.init()
-pygame.font.init()
 
 # constants
 SCREEN_WIDTH = 600
@@ -56,7 +47,6 @@ enemies: list[Enemy] = []
 
 # bullets
 bulletX = 90
-bulletY = 390
 bullet_file = open("assets/textures/bullet.png")
 bullet_texture = pygame.image.load("assets/textures/bullet.png").convert_alpha()
 bullets: list[Bullet] = []
@@ -72,48 +62,51 @@ clock = pygame.time.Clock()
 # start button
 start_button = pygame.image.load('assets/textures/start_button.png').convert()
 start_button = Button(230, 200, start_button, 0.9)
-# light start's button
+# light start button
 start_light = pygame.image.load('assets/textures/start_light.png').convert()
-start_light = StartLight(230, 200, start_light, 0.9)
+start_light = Button(230, 200, start_light, 0.9)
 
 # quit button
 quit_button = pygame.image.load('assets/textures/quit_button.png').convert()
-quit_button = QuitButton(230, 300, quit_button, 0.9 )
-# light quit's button
+quit_button = Button(230, 300, quit_button, 0.9 )
+# light quit button
 quit_light = pygame.image.load('assets/textures/quit_light.png').convert()
-quit_light = QuitButton(230, 300, quit_light, 0.9)
+quit_light = Button(230, 300, quit_light, 0.9)
 
-# levels' button
+# levels button
 levels_button = pygame.image.load('assets/textures/levels_button.png').convert()
-levels_button = LevelsButton(230, 400, levels_button, 0.9)
-# light level's button
+levels_button = Button(230, 400, levels_button, 0.9)
+# light levels' button
 levels_light = pygame.image.load('assets/textures/levels_light(2).png').convert()
-levels_light = LevelsLight(230, 400, levels_light, 0.9)
-# restart's button
+levels_light = Button(230, 400, levels_light, 0.9)
+
+# restart button
 restart_button = pygame.image.load('assets/textures/restart_button.png').convert()
-restart_button = RestartButton(215, 300, restart_button, 1)
-# menu's button
-menu_button_light = pygame.image.load('assets/textures/light_menu.png').convert()
+restart_button = Button(215, 300, restart_button, 1)
+# light restart button
+restart_light = pygame.image.load('assets/textures/restart_light.png').convert()
+restart_light = Button(215, 300, restart_light, 1 )
 
+# menu button
 menu_button = pygame.image.load('assets/textures/menu_button.png').convert()
-menu_button = MenuButton(215, 220, menu_button, 1)
-
-menu_button_light_levels = MenuButton(514, 2, menu_button_light, 0.5)
-
-menu_button_light = MenuButton(215, 220, menu_button_light, 1)
-
+menu_button = Button(215, 220, menu_button, 1)
+# light menu buttons
+menu_button_light = pygame.image.load('assets/textures/light_menu.png').convert()
+menu_button_light_levels = Button(514, 2, menu_button_light, 0.5)
+menu_button_light = Button(215, 220, menu_button_light, 1)
 menu_button_levels = pygame.image.load('assets/textures/menu_button.png').convert()
-menu_button_levels = MenuButton(514, 2, menu_button_levels, 0.5)
+menu_button_levels = Button(514, 2, menu_button_levels, 0.5)
 
 # pause button
 pause_button = pygame.image.load('assets/textures/pause_button.png').convert()
-pause_button = PauseButton(514, 2, pause_button, 0.5)
-
+pause_button = Button(514, 2, pause_button, 0.5)
+# light pause button
 pause_light = pygame.image.load('assets/textures/pause_light.png').convert()
-pause_light = PauseButton(514, 2, pause_light, 0.5) 
+pause_light = Button(514, 2, pause_light, 0.5) 
+
 #retry button
 retry_button = pygame.image.load('assets/textures/retry_button.png').convert()
-retry_button = RetryButton(215, 320, retry_button, 1)
+retry_button = Button(215, 320, retry_button, 1)
 
 # sounds
 shot_sound = pygame.mixer.Sound("assets/sounds/shot.wav")
@@ -143,13 +136,13 @@ score = Bullet.score = 0
 
 #######################################################################################################
 
-# showing scores during game
+# showing scores 
 def show_score(x, y):
         score_value = mediumtext.render("Score: " + str(Bullet.score), True, white)
         screen.blit(score_value, (x, y))
 
 
-# what happens when user decides to pause a game
+# what happens when user decides to pause a game ...
 def pause_button_clicked():
     pause=True
     while pause:
@@ -159,6 +152,7 @@ def pause_button_clicked():
                 sys.exit()
             if event.type == MOUSEBUTTONDOWN:
                 x, y = pygame.mouse.get_pos()
+                # clicking on the buttons
                 if pygame.mouse.get_pressed()[0]:
                     if restart_button.rect.collidepoint(x, y):
                         click_sound.play()
@@ -175,15 +169,17 @@ def pause_button_clicked():
         menu_button.draw(screen)
 
         mouse = pygame.mouse.get_pos()
+        # changing buttons' colors after cursor touches them
         if menu_button.rect.collidepoint(mouse):
             menu_button_light.draw(screen)
+        if restart_button.rect.collidepoint(mouse):
+            restart_light.draw(screen)
+
         pygame.display.update()
 
-# what happens after collision: between enemy and station, enemy and the enge
+# what happens after collision: between enemy and station, enemy and the edge
 # of the screen
-
 def pause_after_collision():
-    # pausec = pause after collision
     pause_after_collision=True
     while pause_after_collision:
         print(Bullet.score)
@@ -193,6 +189,7 @@ def pause_after_collision():
                 sys.exit()
             if event.type == MOUSEBUTTONDOWN:
                 x, y = pygame.mouse.get_pos()
+                # clicking on the buttons
                 if pygame.mouse.get_pressed()[0]:
                     if menu_button.rect.collidepoint(x, y):
                         click_sound.play()
@@ -213,9 +210,10 @@ def pause_after_collision():
         retry_button.draw(screen)
 
         mouse = pygame.mouse.get_pos()
+
+        # changing buttons' colors after cursor touches them
         if menu_button.rect.collidepoint(mouse):
             menu_button_light.draw(screen)
-            print('test')
 
         pygame.display.update()
 
@@ -230,18 +228,14 @@ def intro_loop():
                 sys.exit()
             if event.type == MOUSEBUTTONDOWN:
                 x, y = pygame.mouse.get_pos()
-                
-                
+                # clicking buttons
                 if pygame.mouse.get_pressed()[0]:
                     if start_button.rect.collidepoint(x, y):
                         click_sound.play()
                         game_loop()
-                    
-                    # quit button
                     if quit_button.rect.collidepoint(x, y):
                         click_sound.play()
                         sys.exit()
-                    # levels button
                     if levels_button.rect.collidepoint(x, y):
                         click_sound.play()
                         levels()
@@ -256,7 +250,7 @@ def intro_loop():
         levels_button.draw(screen)
 
         mouse = pygame.mouse.get_pos()
-        # changing button's appearance
+        # changing buttons' colors after cursor touches them
         if levels_button.rect.collidepoint(mouse):
             levels_light.draw(screen)
         if start_button.rect.collidepoint(mouse):
@@ -265,7 +259,7 @@ def intro_loop():
             quit_light.draw(screen)
         pygame.display.update()
 
-# all levels, levels' features
+# information about levels and list of them 
 def levels():
     levels=True
     while levels:
@@ -275,20 +269,19 @@ def levels():
                 sys.exit()
             if event.type == MOUSEBUTTONDOWN:
                 x, y = pygame.mouse.get_pos()
+                # clicking buttons
                 if pygame.mouse.get_pressed()[0]:
-
                     # going to intro loop
                     if menu_button_levels.rect.collidepoint(x, y):
-                        
                         click_sound.play()
                         intro_loop()
                     
         screen.blit(intro_background, (0,0))
-
         menu_button_levels.draw(screen)
         levels_title = largetext.render('Levels', True, white)
 
         mouse = pygame.mouse.get_pos()
+        # changing buttons' colors after cursor touches them
         if menu_button_levels.rect.collidepoint(mouse):
             menu_button_light_levels.draw(screen)
         text_position = (178, 4)
@@ -313,7 +306,7 @@ def game_loop():
         screen.blit(bg, (0 , rel_y - bg.get_rect().height))
         y_axis-=1
 
-        # showing scores
+
         show_score(5, 5)
 
         all_event = pygame.event.get()
@@ -331,7 +324,7 @@ def game_loop():
 
             x,y = pygame.mouse.get_pos()
             if pygame.mouse.get_pressed()[0]:
-                # going to intro loop
+                # clicking pause button
                 if pause_button.rect.collidepoint(x, y):
                     click_sound.play()
                     pause_button_clicked()
@@ -350,7 +343,7 @@ def game_loop():
         for enemy in enemies:
             enemy.move()
 
-        # when game is finished (when collision)
+        # when game is finished (after collision)
         for enemy in enemies:
             if enemy.pos_y > SCREEN_HEIGHT:
                 game=False
@@ -386,7 +379,7 @@ def game_loop():
         elif all_keys[pygame.K_RIGHT]:
             station.pos_x += 4
 
-        # removing enemy if it goes off screen
+        # removing enemy when it goes off screen
         for bullet in bullets[:]:
             if bullet.pos_x < 0:
                 bullets.remove(bullet)
@@ -410,39 +403,18 @@ def game_loop():
         # displaying station
         screen.blit(station.texture, (station.pos_x, station.pos_y))
 
-        # pause button sec
+        # drawing pause button on screen
         mouse = pygame.mouse.get_pos()
         pause_button.draw(screen)
         if pause_button.rect.collidepoint(mouse):
             pause_light.draw(screen)
 
         pygame.display.update()
+
         # timing game
         clock.tick(60)
     
-def main():
-    while True:
-        intro_loop()
-        game_loop()
-        all_event = pygame.event.get()
-        for event in all_event:
-            if event.type == pygame.QUIT:
-                sys.exit()
-            if event.type == MOUSEBUTTONDOWN:
-                x, y = pygame.mouse.get_pos()
-                if pygame.mouse.get_pressed()[0]:
-
-                    # going to intro loop
-                    if start_button.rect.collidepoint(x, y):
-                        while True:
-                            game_loop()
-
-                            pygame.display.update()
-
 while True:
-    main()
-
-
-    
+    intro_loop()
 
     
