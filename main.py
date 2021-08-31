@@ -150,6 +150,7 @@ class Status(object):
         self.pause_after_collision = False
         self.levels = False
         self.intro = False
+        self.update = False
 
     def pause_button_clicked(self, pause, game, intro):
         self.pause=True
@@ -168,9 +169,11 @@ class Status(object):
                             pause=False
                             st.game_loop(game=True, pause_after_collision=False, pause=False)
                         if menu_button.rect.collidepoint(x, y):
+                            st.update_screen()
                             click_sound.play()
                             intro=True
                             game=False
+                            Bullet.score=0
                             st.intro_loop(game=False, intro=True, pause_after_collision=False)
                         
             screen.blit(intro_background, (0,0))
@@ -191,9 +194,10 @@ class Status(object):
     # what happens after collision: between enemy and station, enemy and the edge
     # of the screen
     def pause_after_collision_loop(self):
+        st.update_screen()
         pause_after_collision=True
         while pause_after_collision:
-            print(Bullet.score)
+            st.update_screen()
             all_event = pygame.event.get()
             for event in all_event:
                 if event.type == pygame.QUIT:
@@ -206,6 +210,7 @@ class Status(object):
                             intro=True
                             pause_after_collision=False
                             click_sound.play()
+                            Bullet.score=0
                             st.intro_loop(game=False, intro=True, pause_after_collision=False)
 
             screen.blit(intro_background, (0,0))
@@ -354,11 +359,13 @@ class Status(object):
                     game=False
                     pause_after_collision=True
                     st.pause_after_collision_loop()
+                    st.update_screen()
 
                 if enemy.pos_y == station.pos_y:
                    game=False
                    pause_after_collision
                    st.pause_after_collision_loop()
+                   st.update_screen()
 
                 # collision between bullet and enemy
                 for bullet in bullets:
@@ -366,7 +373,6 @@ class Status(object):
                     result = bullet_texture_mask.overlap(enemy_texture_mask, offset)
                     if result:
                         Bullet.score+=1 
-                        print(f'c={score}')
                         bullets.remove(bullet)
                         enemies.remove(enemy)
 
@@ -378,6 +384,7 @@ class Status(object):
                         game=False
                         pause_after_collision=True
                         st.pause_after_collision_loop()
+                        st.update_screen()
 
             # station's movement
             all_keys = pygame.key.get_pressed()
@@ -421,12 +428,39 @@ class Status(object):
             # timing game
             clock.tick(60)
     
-    def x(self, intro, pause_after_collision):
-        if intro==True:
-            pause_after_collision=False
+    def update_screen(self):
+        bg = pygame.image.load('assets/textures/bg.png').convert()
+        y_axis=0
+        # displaying bullets
+        for bullet in bullets:
+            Bullet.pos_y=bulletX + int(station.pos_x)
+            bullets.remove(bullet)
+            screen.blit(bullet_texture, pygame.Rect(bullet.pos_x, bullet.pos_y, 0, 0))
+    
+        # displaying enemies
+        for enemy in enemies:
+            enemies.remove(enemy)
+            num_of_e = len(enemies)
+            print(num_of_e)
+            num_of_e-=num_of_e
+            Enemy.pos_y = -20
+            screen.blit(enemy.texture, pygame.Rect(enemy.pos_x, enemy.pos_y, 0, 0))
+    
+        # displaying station
+        station.pos_x=200
+        screen.blit(station.texture, (station.pos_x, station.pos_y))
+
+        rel_y = y_axis % bg.get_rect().height
+        screen.blit(bg, (0 , rel_y - bg.get_rect().height))
+        y_axis-=1
+
+        show_score(5, 5)
+
+
+
+
 
 st = Status()
 while True:
     st.intro_loop(game=True, intro=True, pause_after_collision=False)
-    st.x()
     pygame.display.update()
