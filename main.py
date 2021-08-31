@@ -155,6 +155,10 @@ class Status(object):
     def pause_button_clicked(self, pause, game, intro):
         self.pause=True
         while self.pause:
+            mouse = pygame.mouse.get_pos()
+            if self.pause == True:
+                if menu_button.rect.collidepoint(mouse):
+                    st.update_screen()
             all_event = pygame.event.get()
             for event in all_event:
                 if event.type == pygame.QUIT:
@@ -169,13 +173,12 @@ class Status(object):
                             pause=False
                             st.game_loop(game=True, pause_after_collision=False, pause=False)
                         if menu_button.rect.collidepoint(x, y):
-                            st.update_screen()
                             click_sound.play()
                             intro=True
                             game=False
                             Bullet.score=0
+                            st.update_screen()
                             st.intro_loop(game=False, intro=True, pause_after_collision=False)
-                        
             screen.blit(intro_background, (0,0))
             pause_title = largetext.render('Paused', True, white)
             pause_title_position = (190, 4)
@@ -211,6 +214,7 @@ class Status(object):
                             pause_after_collision=False
                             click_sound.play()
                             Bullet.score=0
+                            st.update_screen()
                             st.intro_loop(game=False, intro=True, pause_after_collision=False)
 
             screen.blit(intro_background, (0,0))
@@ -443,8 +447,9 @@ class Status(object):
             num_of_e = len(enemies)
             print(num_of_e)
             num_of_e-=num_of_e
-            Enemy.pos_y = -20
+            Enemy.pos_y = -40
             screen.blit(enemy.texture, pygame.Rect(enemy.pos_x, enemy.pos_y, 0, 0))
+
     
         # displaying station
         station.pos_x=200
