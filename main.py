@@ -26,8 +26,9 @@ HW, HH = SCREEN_WIDTH // 2 , SCREEN_HEIGHT // 2
 (width, height) = (SCREEN_WIDTH, SCREEN_HEIGHT)
 screen = pygame.display.set_mode((width, height))
 screen_rect = screen.get_rect()
-intro_background = pygame.image.load('assets/textures/intro.png').convert()
+intro_background = pygame.image.load('assets/textures/intro_bg.jpg').convert()
 pygame.display.set_caption("ISS Escape")
+win_after_pausing = pygame.image.load('assets/textures/window.png')
 
 # station
 station_file = open("assets/textures/iss.png")
@@ -60,7 +61,7 @@ oy = STATION_HEIGHT+10
 clock = pygame.time.Clock()
 
 # start button
-start_button = pygame.image.load('assets/textures/start_button.png').convert()
+start_button = pygame.image.load('assets/textures/start_button.png').convert() 
 start_button = Button(230, 200, start_button, 0.9)
 # light start button
 start_light = pygame.image.load('assets/textures/start_light.png').convert()
@@ -77,21 +78,21 @@ quit_light = Button(230, 300, quit_light, 0.9)
 levels_button = pygame.image.load('assets/textures/levels_button.png').convert()
 levels_button = Button(230, 400, levels_button, 0.9)
 # light levels' button
-levels_light = pygame.image.load('assets/textures/levels_light(2).png').convert()
+levels_light = pygame.image.load('assets/textures/levels_light.png').convert()
 levels_light = Button(230, 400, levels_light, 0.9)
 
 # restart button
-restart_button = pygame.image.load('assets/textures/restart_light.png').convert()
+restart_button = pygame.image.load('assets/textures/resume_button.png').convert()
 restart_button = Button(215, 300, restart_button, 1)
 # light restart button
-restart_light = pygame.image.load('assets/textures/restart_light.png').convert()
+restart_light = pygame.image.load('assets/textures/resume_light.png').convert()
 restart_light = Button(215, 300, restart_light, 1 )
 
 # menu button
 menu_button = pygame.image.load('assets/textures/menu_button.png').convert()
 menu_button = Button(215, 220, menu_button, 1)
 # light menu buttons
-menu_button_light = pygame.image.load('assets/textures/light_menu.png').convert()
+menu_button_light = pygame.image.load('assets/textures/menu_light.png').convert()
 menu_button_light_levels = Button(514, 2, menu_button_light, 0.5)
 menu_button_light = Button(215, 220, menu_button_light, 1)
 menu_button_levels = pygame.image.load('assets/textures/menu_button.png').convert()
@@ -107,6 +108,9 @@ pause_light = Button(514, 2, pause_light, 0.5)
 #retry button
 retry_button = pygame.image.load('assets/textures/retry_button.png').convert()
 retry_button = Button(215, 320, retry_button, 1)
+# light retry button
+retry_light = pygame.image.load('assets/textures/retry_light.png').convert()
+retry_light = Button(215, 320, retry_light, 1)
 
 # sounds
 shot_sound = pygame.mixer.Sound("assets/sounds/shot.wav")
@@ -137,7 +141,6 @@ score = Bullet.score = 0
 # background setup
 bg = pygame.image.load('assets/textures/bg.png').convert()
 y_axis=0
-
 
 def show_score(x, y):
         score_value = mediumtext.render("Score: " + str(Bullet.score), True, white)
@@ -179,7 +182,12 @@ class Status(object):
                             Enemy.pos_y= -100
                             st.update_screen()
                             st.intro_loop()
-            screen.blit(intro_background, (0,0))
+                        mouse = pygame.mouse.get_pos()
+                        if pygame.mouse.get_pressed()[0]:
+                            if self.pause == True:
+                                if menu_button.rect.collidepoint(mouse):
+                                    st.update_screen()
+            screen.blit(win_after_pausing, (0,0))
             pause_title = largetext.render('Paused', True, white)
             pause_title_position = (190, 4)
             screen.blit(pause_title, pause_title_position)
@@ -231,7 +239,7 @@ class Status(object):
                             Bullet.score=0
                             st.game_loop()
 
-            screen.blit(intro_background, (0,0))
+            screen.blit(win_after_pausing, (0,0))
             pause_title = largetext.render('Loss', True, white)
             pause_title_position = (230, 4)
             screen.blit(pause_title, pause_title_position)
@@ -245,6 +253,8 @@ class Status(object):
             # changing buttons' colors after cursor touches them
             if menu_button.rect.collidepoint(mouse):
                 menu_button_light.draw(screen)
+            if retry_button.rect.collidepoint(mouse):
+                retry_light.draw(screen)
             pygame.display.update(screen_rect)
 
 
