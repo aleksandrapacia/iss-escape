@@ -28,6 +28,7 @@ screen = pygame.display.set_mode((width, height))
 screen_rect = screen.get_rect()
 intro_background = pygame.image.load('assets/textures/intro_bg.jpg').convert()
 pygame.display.set_caption("ISS Escape")
+# an image of the window after PAUSE BUTTON is clicked or after player's loss
 win_after_pausing = pygame.image.load('assets/textures/window.png')
 
 # station
@@ -47,14 +48,14 @@ enemy_rect = enemy_texture.get_rect()
 enemies: list[Enemy] = []
 
 # bullets
-bulletX = 90
+bullet_x = 90
 bullet_file = open("assets/textures/bullet.png")
 bullet_texture = pygame.image.load("assets/textures/bullet.png").convert_alpha()
 bullets: list[Bullet] = []
 # bullet's mask
 bullet_texture_mask = pygame.mask.from_surface(bullet_texture)
 bullet_rect = bullet_texture.get_rect()
-ox = (bulletX+station.pos_x)
+ox = (bullet_x+station.pos_x)
 oy = STATION_HEIGHT+10
 
 # time setup
@@ -146,7 +147,7 @@ def show_score(x, y):
         score_value = mediumtext.render("Score: " + str(Bullet.score), True, white)
         screen.blit(score_value, (x, y))
 
-class Status(object):
+class State(object):
     def __init__(self):
         self.game = False
         self.pause = False
@@ -154,8 +155,10 @@ class Status(object):
         self.levels = False
         self.intro = False
         self.update = False
+        self.e_issue = False
 
     def pause_button_clicked(self):
+        '''displaying pause window after pause button is clicked'''
         self.pause=True
         while self.pause:
             all_event = pygame.event.get()
@@ -172,15 +175,14 @@ class Status(object):
                             self.pause=False
                             st.game_loop()
                         if menu_button.rect.collidepoint(x, y):
-                            Enemy.pos_x=-100
+                            self.issue=True
                             st.update_screen()
                             click_sound.play()
                             self.intro=True
                             self.game=False
                             self.update=True
                             Bullet.score=0
-                            Enemy.pos_y= -100
-                            st.update_screen()
+                            st.update_screen_after_pause()
                             st.intro_loop()
                         mouse = pygame.mouse.get_pos()
                         if pygame.mouse.get_pressed()[0]:
@@ -211,6 +213,7 @@ class Status(object):
     # what happens after collision: between enemy and station, enemy and the edge
     # of the screen
     def pause_after_collision_loop(self):
+        '''displaying loss window after player looses'''
         st.update_screen()
         pause_after_collision=True
         while pause_after_collision:
@@ -228,7 +231,7 @@ class Status(object):
                             self.pause_after_collision=False
                             click_sound.play()
                             Bullet.score=0
-                            Enemy.pos_y = -40
+                            Enemy.pos_y = -100
                             st.update_screen()
                             st.intro_loop()
                         if retry_button.rect.collidepoint(x, y):
@@ -239,7 +242,7 @@ class Status(object):
                             Bullet.score=0
                             st.game_loop()
 
-            screen.blit(win_after_pausing, (0,0))
+            screen.blit(intro_background, (0,0))
             pause_title = largetext.render('Loss', True, white)
             pause_title_position = (230, 4)
             screen.blit(pause_title, pause_title_position)
@@ -260,6 +263,7 @@ class Status(object):
 
     # menu (intro)
     def intro_loop(self):
+        """displaying game's menu"""
         intro=True
         while intro:
             all_event = pygame.event.get()
@@ -306,6 +310,7 @@ class Status(object):
 
     # information about levels and list of them 
     def levels_loop(self):
+        '''displaying list of levels'''
         self.levels=True
         while self.levels:
             all_event = pygame.event.get()
@@ -338,6 +343,7 @@ class Status(object):
 
     # main loop of the game
     def game_loop(self):
+        """game's loop"""
         y_axis=0
         start_time = 0
         while self.game:
@@ -352,7 +358,7 @@ class Status(object):
                     sys.exit()
                 if event.type == MOUSEBUTTONDOWN:
                     bullet = Bullet(
-                    bulletX + int(station.pos_x),
+                    bullet_x + int(station.pos_x),
                     STATION_HEIGHT + 10,
                     bullet_texture,
                     BULLET_SPEED, 0.0)
@@ -457,15 +463,22 @@ class Status(object):
             clock.tick(60)
     
     def update_screen(self):
+        '''updating screen after player's loss'''
+
+        # scrolling background
         bg = pygame.image.load('assets/textures/bg.png').convert()
         y_axis=0
-        # displaying bullets
+        rel_y = y_axis % bg.get_rect().height
+        screen.blit(bg, (0 , rel_y - bg.get_rect().height))
+        y_axis-=1
+
+        # removing old bullets and displaying new ones
         for bullet in bullets:
-            Bullet.pos_y=bulletX + int(station.pos_x)
+            Bullet.pos_y=bullet_x + int(station.pos_x)
             bullets.remove(bullet)
             screen.blit(bullet_texture, pygame.Rect(bullet.pos_x, bullet.pos_y, 0, 0))
     
-        # displaying enemies
+        # removing old enemies and displaying new ones
         for enemy in enemies:
             enemies.remove(enemy)
             num_of_e = len(enemies)
@@ -473,22 +486,47 @@ class Status(object):
             num_of_e-=num_of_e
             screen.blit(enemy.texture, pygame.Rect(enemy.pos_x, enemy.pos_y, 0, 0))
 
-    
-        # displaying station
+        # restarting station's position
         station.pos_x=200
         screen.blit(station.texture, (station.pos_x, station.pos_y))
 
+        show_score(5, 5)
+
+    def update_screen_after_pause(self):
+        '''updating screen after clicking pause button'''
+
+        # scrolling background
+        bg = pygame.image.load('assets/textures/bg.png').convert()
+        y_axis=0
         rel_y = y_axis % bg.get_rect().height
         screen.blit(bg, (0 , rel_y - bg.get_rect().height))
         y_axis-=1
 
+        # removing old bullets and displaying new ones
+        for bullet in bullets:
+            Bullet.pos_y=bullet_x + int(station.pos_x)
+            bullets.remove(bullet)
+            screen.blit(bullet_texture, pygame.Rect(bullet.pos_x, bullet.pos_y, 0, 0))
+    
+        # removing old enemies and displaying new ones
+        for enemy in enemies:
+            enemies.remove(enemy)
+            num_of_e = len(enemies)
+            print(num_of_e)
+            num_of_e-=num_of_e
+            screen.blit(enemy.texture, pygame.Rect(enemy.pos_x, enemy.pos_y, 0, 0))
+
+        # restarting station's position
+        station.pos_x=200
+        screen.blit(station.texture, (station.pos_x, station.pos_y))
+
         show_score(5, 5)
 
+        pygame.display.flip()
 
 
-
-
-st = Status()
+st = State()
+# main loop
 while True:
     st.intro_loop()
     pygame.display.update()
