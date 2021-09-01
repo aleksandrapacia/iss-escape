@@ -18,7 +18,7 @@ pygame.init()
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 486
 STATION_HEIGHT = 371
-BULLET_SPEED = 5
+BULLET_SPEED = 3
 ENEMY_SPEED = 1.02
 HW, HH = SCREEN_WIDTH // 2 , SCREEN_HEIGHT // 2
 
@@ -346,6 +346,7 @@ class State(object):
         """game's loop"""
         y_axis=0
         start_time = 0
+        s_t=0
         while self.game:
             # scrolling screen
             rel_y = y_axis % bg.get_rect().height
@@ -353,17 +354,22 @@ class State(object):
             y_axis-=1
             show_score(5, 5)
             all_event = pygame.event.get()
-            for event in all_event:
+            for event in all_event:        
                 if event.type == pygame.QUIT:
                     sys.exit()
                 if event.type == MOUSEBUTTONDOWN:
-                    bullet = Bullet(
-                    bullet_x + int(station.pos_x),
-                    STATION_HEIGHT + 10,
-                    bullet_texture,
-                    BULLET_SPEED, 0.0)
-                    bullets.append(bullet)
-                    shot_sound.play()
+                    s_t+=1
+
+                    if s_t % 2 == 0:
+
+                        bullet = Bullet(
+                        bullet_x + int(station.pos_x),
+                        STATION_HEIGHT + 10,
+                        bullet_texture,
+                        BULLET_SPEED, 0.0)
+                    
+                        bullets.append(bullet)
+                        shot_sound.play()
 
                 x,y = pygame.mouse.get_pos()
                 if pygame.mouse.get_pressed()[0]:
@@ -374,7 +380,7 @@ class State(object):
                         st.pause_button_clicked()
         
             # creating multiple enemies'
-            for i in range(10):
+            for i in range(2):
                 enemy = Enemy(random.randrange(67, 520), -20, enemy_texture, ENEMY_SPEED)
                 start_time+=1
                 if start_time > 200:
