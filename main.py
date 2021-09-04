@@ -18,8 +18,8 @@ pygame.init()
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 486
 STATION_HEIGHT = 371
-BULLET_SPEED = 3
-ENEMY_SPEED = 1.02
+BULLET_SPEED = 2
+ENEMY_SPEED = 0.4
 HW, HH = SCREEN_WIDTH // 2 , SCREEN_HEIGHT // 2
 
 # screen
@@ -346,7 +346,6 @@ class State(object):
         """game's loop"""
         y_axis=0
         start_time = 0
-        s_t=0
         while self.game:
             # scrolling screen
             rel_y = y_axis % bg.get_rect().height
@@ -358,16 +357,11 @@ class State(object):
                 if event.type == pygame.QUIT:
                     sys.exit()
                 if event.type == MOUSEBUTTONDOWN:
-                    s_t+=1
-
-                    if s_t % 2 == 0:
-
                         bullet = Bullet(
                         bullet_x + int(station.pos_x),
                         STATION_HEIGHT + 10,
                         bullet_texture,
                         BULLET_SPEED, 0.0)
-                    
                         bullets.append(bullet)
                         shot_sound.play()
 
@@ -466,7 +460,7 @@ class State(object):
             pygame.display.update(screen_rect)
 
             # timing game
-            clock.tick(60)
+            clock.tick(100)
     
     def update_screen(self):
         '''updating screen after player's loss'''
@@ -524,7 +518,6 @@ class State(object):
 
         # restarting station's position
         station.pos_x=200
-        screen.blit(station.texture, (station.pos_x, station.pos_y))
 
         show_score(5, 5)
 
