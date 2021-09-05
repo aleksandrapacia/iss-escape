@@ -355,17 +355,17 @@ class State(object):
             show_score(5, 5)
             
             all_event = pygame.event.get()
-            for event in all_event:        
+            for event in all_event:   
+                bullet = Bullet(
+                bullet_x + int(station.pos_x),
+                STATION_HEIGHT + 10,
+                bullet_texture,
+                BULLET_SPEED, 0.0)
+                bullets.append(bullet)
+                shot_sound.play()     
                 if event.type == pygame.QUIT:
                     sys.exit()
                 if event.type == MOUSEBUTTONDOWN:
-                    bullet = Bullet(
-                    bullet_x + int(station.pos_x),
-                    STATION_HEIGHT + 10,
-                    bullet_texture,
-                    BULLET_SPEED, 0.0)
-                    bullets.append(bullet)
-                    shot_sound.play()
 
                     x,y = pygame.mouse.get_pos()
                     if pygame.mouse.get_pressed()[0]:
@@ -374,6 +374,7 @@ class State(object):
                             click_sound.play()
                             self.pause=True
                             st.pause_button_clicked()
+
 
             # creating multiple enemies'
             for i in range(2):
