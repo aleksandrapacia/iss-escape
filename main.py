@@ -155,7 +155,7 @@ class State(object):
         self.levels = False
         self.intro = False
         self.update = False
-        self.e_issue = False
+        self.y_axis=0
 
     def pause_button_clicked(self):
         '''displaying pause window after pause button is clicked'''
@@ -182,7 +182,7 @@ class State(object):
                             self.game=False
                             self.update=True
                             Bullet.score=0
-                            st.update_screen_after_pause()
+                            st.update_screen()
                             st.intro_loop()
                         mouse = pygame.mouse.get_pos()
                         if pygame.mouse.get_pressed()[0]:
@@ -344,14 +344,16 @@ class State(object):
     # main loop of the game
     def game_loop(self):
         """game's loop"""
-        y_axis=0
         start_time = 0
         while self.game:
             # scrolling screen
-            rel_y = y_axis % bg.get_rect().height
+            rel_y = self.y_axis % bg.get_rect().height
             screen.blit(bg, (0 , rel_y - bg.get_rect().height))
-            y_axis-=1
+            if rel_y<486:
+                screen.blit(bg, (0, rel_y))
+            self.y_axis-=1
             show_score(5, 5)
+            
             all_event = pygame.event.get()
             for event in all_event:        
                 if event.type == pygame.QUIT:
@@ -467,16 +469,16 @@ class State(object):
 
         # scrolling background
         bg = pygame.image.load('assets/textures/bg.png').convert()
-        y_axis=0
-        rel_y = y_axis % bg.get_rect().height
+        rel_y = self.y_axis % bg.get_rect().height
         screen.blit(bg, (0 , rel_y - bg.get_rect().height))
-        y_axis-=1
+        if rel_y<486:
+            screen.blit(bg, (0, rel_y))
+        self.y_axis-=1
 
         # removing old bullets and displaying new ones
         for bullet in bullets:
             Bullet.pos_y=bullet_x + int(station.pos_x)
             bullets.remove(bullet)
-            screen.blit(bullet_texture, pygame.Rect(bullet.pos_x, bullet.pos_y, 0, 0))
     
         # removing old enemies and displaying new ones
         for enemy in enemies:
@@ -484,44 +486,11 @@ class State(object):
             num_of_e = len(enemies)
             print(num_of_e)
             num_of_e-=num_of_e
-            screen.blit(enemy.texture, pygame.Rect(enemy.pos_x, enemy.pos_y, 0, 0))
-
-        # restarting station's position
-        station.pos_x=200
-        screen.blit(station.texture, (station.pos_x, station.pos_y))
-
-        show_score(5, 5)
-
-    def update_screen_after_pause(self):
-        '''updating screen after clicking pause button'''
-
-        # scrolling background
-        bg = pygame.image.load('assets/textures/bg.png').convert()
-        y_axis=0
-        rel_y = y_axis % bg.get_rect().height
-        screen.blit(bg, (0 , rel_y - bg.get_rect().height))
-        y_axis-=1
-
-        # removing old bullets and displaying new ones
-        for bullet in bullets:
-            Bullet.pos_y=bullet_x + int(station.pos_x)
-            bullets.remove(bullet)
-            screen.blit(bullet_texture, pygame.Rect(bullet.pos_x, bullet.pos_y, 0, 0))
-    
-        # removing old enemies and displaying new ones
-        for enemy in enemies:
-            enemies.remove(enemy)
-            num_of_e = len(enemies)
-            print(num_of_e)
-            num_of_e-=num_of_e
-            screen.blit(enemy.texture, pygame.Rect(enemy.pos_x, enemy.pos_y, 0, 0))
 
         # restarting station's position
         station.pos_x=200
 
-        show_score(5, 5)
-
-        pygame.display.flip()
+        self.y_axis=0
 
 
 st = State()
@@ -529,3 +498,5 @@ st = State()
 while True:
     st.intro_loop()
     pygame.display.update()
+
+#TODO: Scrolling bgckd issue
