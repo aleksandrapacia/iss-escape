@@ -5,6 +5,7 @@ from pygame.constants import MOUSEBUTTONDOWN
 from station import Station
 import pygame.mixer
 import random
+import time
 
 from enemy import Enemy
 from bullet import Bullet
@@ -18,7 +19,7 @@ pygame.init()
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 486
 STATION_HEIGHT = 371
-BULLET_SPEED = 2
+BULLET_SPEED = 0.5
 ENEMY_SPEED = 0.4
 HW, HH = SCREEN_WIDTH // 2 , SCREEN_HEIGHT // 2
 
@@ -156,6 +157,7 @@ class State(object):
         self.intro = False
         self.update = False
         self.y_axis=0
+        self.shot=False
 
     def pause_button_clicked(self):
         '''displaying pause window after pause button is clicked'''
@@ -343,6 +345,7 @@ class State(object):
 
     # main loop of the game
     def game_loop(self):
+    
         """game's loop"""
         start_time = 0
         while self.game:
@@ -352,21 +355,30 @@ class State(object):
             if rel_y<486:
                 screen.blit(bg, (0, rel_y))
             self.y_axis-=1
+            #showing score
             show_score(5, 5)
-            
+
+            SHOOTEVENT=pygame.USEREVENT+1
+            pygame.time.set_timer(SHOOTEVENT, 2500)
+
             all_event = pygame.event.get()
-            for event in all_event:   
-                bullet = Bullet(
-                bullet_x + int(station.pos_x),
-                STATION_HEIGHT + 10,
-                bullet_texture,
-                BULLET_SPEED, 0.0)
-                bullets.append(bullet)
-                shot_sound.play()     
+            for event in all_event:     
                 if event.type == pygame.QUIT:
                     sys.exit()
-                if event.type == MOUSEBUTTONDOWN:
+                if event.type == SHOOTEVENT:
+            
+                    bullet = Bullet(
+                    bullet_x + int(station.pos_x),
+                    STATION_HEIGHT + 10,
+                    bullet_texture,
+                    BULLET_SPEED, 0.0)
+                    bullet.move()
 
+                    bullets.append(bullet)
+                    shot_sound.play()
+        
+
+                if event.type == MOUSEBUTTONDOWN:
                     x,y = pygame.mouse.get_pos()
                     if pygame.mouse.get_pressed()[0]:
                         # clicking pause button
@@ -383,6 +395,7 @@ class State(object):
                 if start_time > 200:
                    enemies.append(enemy)
                    start_time = 0
+
 
             # enemies' and bullets' movements
             for bullet in bullets:
@@ -442,17 +455,17 @@ class State(object):
                 station.pos_x = 0
             if station.pos_x > 420:
                 station.pos_x = 420
-
-            # displaying bullets
-            for bullet in bullets:
-                screen.blit(bullet_texture, pygame.Rect(bullet.pos_x, bullet.pos_y, 0, 0))
+       
     
             # displaying enemies
             for enemy in enemies:
                 screen.blit(enemy.texture, pygame.Rect(enemy.pos_x, enemy.pos_y, 0, 0))
-    
+
             # displaying station
             screen.blit(station.texture, (station.pos_x, station.pos_y))
+
+            for bullet in bullets:
+                screen.blit(bullet_texture, pygame.Rect(bullet.pos_x, bullet.pos_y, 0, 0))
 
             # drawing pause button on screen
             mouse = pygame.mouse.get_pos()
@@ -461,8 +474,6 @@ class State(object):
                 pause_light.draw(screen)
 
             pygame.display.update(screen_rect)
-
-            # timing game
             clock.tick(100)
     
     def update_screen(self):
@@ -499,5 +510,3 @@ st = State()
 while True:
     st.intro_loop()
     pygame.display.update()
-
-#TODO: Scrolling bgckd issue
