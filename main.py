@@ -262,7 +262,6 @@ class State(object):
                 retry_light.draw(screen)
             pygame.display.update(screen_rect)
 
-
     # menu (intro)
     def intro_loop(self):
         """displaying game's menu"""
@@ -330,7 +329,6 @@ class State(object):
                             self.leves=False
                             st.intro_loop()
                             
-                    
             screen.blit(intro_background, (0,0))
             menu_button_levels.draw(screen)
             levels_title = largetext.render('Levels', True, white)
@@ -357,26 +355,28 @@ class State(object):
             self.y_axis-=1
             #showing score
             show_score(5, 5)
-
+            # creating an event
             SHOOTEVENT=pygame.USEREVENT+1
+            # creating timer (every 2.5 second sth happen)
             pygame.time.set_timer(SHOOTEVENT, 2500)
 
             all_event = pygame.event.get()
             for event in all_event:     
                 if event.type == pygame.QUIT:
                     sys.exit()
+                # id SHOOTEVENT bullet shows up
                 if event.type == SHOOTEVENT:
-            
-                    bullet = Bullet(
-                    bullet_x + int(station.pos_x),
-                    STATION_HEIGHT + 10,
-                    bullet_texture,
-                    BULLET_SPEED, 0.0)
-                    bullet.move()
-
-                    bullets.append(bullet)
-                    shot_sound.play()
-        
+                    for bullet in range(1):
+                        bullet = Bullet(-
+                        bullet_x + int(station.pos_x),
+                        STATION_HEIGHT + 10,
+                        bullet_texture,
+                        BULLET_SPEED, 0.0)
+                        #moving the bullet
+                        bullet.move()
+                        # playing the shoot sound
+                        shot_sound.play()
+                        bullets.append(bullet)
 
                 if event.type == MOUSEBUTTONDOWN:
                     x,y = pygame.mouse.get_pos()
@@ -387,7 +387,6 @@ class State(object):
                             self.pause=True
                             st.pause_button_clicked()
 
-
             # creating multiple enemies'
             for i in range(2):
                 enemy = Enemy(random.randrange(67, 515), -20, enemy_texture, ENEMY_SPEED)
@@ -395,7 +394,6 @@ class State(object):
                 if start_time > 200:
                    enemies.append(enemy)
                    start_time = 0
-
 
             # enemies' and bullets' movements
             for bullet in bullets:
@@ -456,7 +454,6 @@ class State(object):
             if station.pos_x > 420:
                 station.pos_x = 420
        
-    
             # displaying enemies
             for enemy in enemies:
                 screen.blit(enemy.texture, pygame.Rect(enemy.pos_x, enemy.pos_y, 0, 0))
@@ -503,7 +500,6 @@ class State(object):
         station.pos_x=200
 
         self.y_axis=0
-
 
 st = State()
 # main loop
