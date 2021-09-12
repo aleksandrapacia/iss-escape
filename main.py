@@ -157,7 +157,7 @@ class State(object):
         self.intro = False
         self.update = False
         self.y_axis=0
-        self.shot=False
+
 
     def pause_button_clicked(self):
         '''displaying pause window after pause button is clicked'''
