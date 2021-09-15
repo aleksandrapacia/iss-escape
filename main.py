@@ -50,8 +50,8 @@ enemies: list[Enemy] = []
 
 # bullets
 bullet_x = 90
-bullet_file = open("assets/textures/bullet.png")
-bullet_texture = pygame.image.load("assets/textures/bullet.png").convert_alpha()
+bullet_file = open("assets/textures/bullet2.png")
+bullet_texture = pygame.image.load("assets/textures/bullet2.png").convert_alpha()
 bullets: list[Bullet] = []
 # bullet's mask
 bullet_texture_mask = pygame.mask.from_surface(bullet_texture)
@@ -373,7 +373,7 @@ class State(object):
             # creating timer (every 2.5 second sth happen)
 
             shootTime+=1
-            if shootTime==20:
+            if shootTime==200:
                 st.shoot()
                 shootTime=0
 
