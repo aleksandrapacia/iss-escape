@@ -341,8 +341,22 @@ class State(object):
                 menu_button_light_levels.draw(screen)
             pygame.display.update(screen_rect)
 
+    def shoot(self):
+        for bullet in range(1):
+            bullet = Bullet(
+            bullet_x + int(station.pos_x),
+            STATION_HEIGHT + 10,
+            bullet_texture,
+            BULLET_SPEED, 0.0)
+            #moving the bullet
+            bullets.append(bullet)
+            bullet.move()
+            # playing the shoot sound
+            shot_sound.play()
+
     # main loop of the game
     def game_loop(self):
+        shootTime=0
     
         """game's loop"""
         start_time = 0
@@ -356,27 +370,19 @@ class State(object):
             #showing score
             show_score(5, 5)
             # creating an event
-            SHOOTEVENT=pygame.USEREVENT+1
             # creating timer (every 2.5 second sth happen)
-            pygame.time.set_timer(SHOOTEVENT, 2500)
+
+            shootTime+=1
+            if shootTime==20:
+                st.shoot()
+                shootTime=0
+
 
             all_event = pygame.event.get()
             for event in all_event:     
                 if event.type == pygame.QUIT:
                     sys.exit()
                 # id SHOOTEVENT bullet shows up
-                if event.type == SHOOTEVENT:
-                    for bullet in range(1):
-                        bullet = Bullet(-
-                        bullet_x + int(station.pos_x),
-                        STATION_HEIGHT + 10,
-                        bullet_texture,
-                        BULLET_SPEED, 0.0)
-                        #moving the bullet
-                        bullet.move()
-                        # playing the shoot sound
-                        shot_sound.play()
-                        bullets.append(bullet)
 
                 if event.type == MOUSEBUTTONDOWN:
                     x,y = pygame.mouse.get_pos()
