@@ -153,10 +153,12 @@ class Level1():
     def __init__(self):
         self.level = 0
         self.achieve_score = 60
+        self.window = False
 
     def level_change(achieve_score):
         if lvl1.achieve_score==Bullet.score:
             print('Next level - 1')
+            # lvl1.level_completed() --> what happens after level is completed
             lvl1.level=1
 
 def show_level(x, y):
