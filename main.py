@@ -1,5 +1,6 @@
 import pygame
 import sys
+from pygame import display
 
 from pygame.constants import MOUSEBUTTONDOWN
 from station import Station
@@ -148,6 +149,21 @@ def show_score(x, y):
         score_value = mediumtext.render("Score: " + str(Bullet.score), True, white)
         screen.blit(score_value, (x, y))
 
+class Level1():
+    def __init__(self):
+        self.level = 0
+        self.achieve_score = 5
+
+    def level_change(achieve_score):
+        if achieve_score==Bullet.score:
+            print('Next level - 1')
+            lvl1.level=1
+
+def show_level(x, y):
+        levelo=lvl1.level
+        level_value = mediumtext.render("Level: " +str(levelo), True, white)
+        screen.blit(level_value, (x,y))
+
 class State(object):
     def __init__(self):
         self.game = False
@@ -157,7 +173,6 @@ class State(object):
         self.intro = False
         self.update = False
         self.y_axis=0
-
 
     def pause_button_clicked(self):
         '''displaying pause window after pause button is clicked'''
@@ -361,6 +376,8 @@ class State(object):
         """game's loop"""
         start_time = 0
         while self.game:
+            # changing level to level 1
+
             # scrolling screen
             rel_y = self.y_axis % bg.get_rect().height
             screen.blit(bg, (0 , rel_y - bg.get_rect().height))
@@ -369,11 +386,13 @@ class State(object):
             self.y_axis-=1
             #showing score
             show_score(5, 5)
+            show_level(5, 24)
+            lvl1.level_change()
             # creating an event
             # creating timer (every 2.5 second sth happen)
 
             shootTime+=1
-            if shootTime==100:
+            if shootTime==60: # 100 - beginning
                 st.shoot()
                 shootTime=0
 
@@ -507,6 +526,7 @@ class State(object):
 
         self.y_axis=0
 
+lvl1 = Level1()
 st = State()
 # main loop
 while True:

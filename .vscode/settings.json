@@ -1,4 +1,13 @@
 {
     "python.linting.enabled": false,
-    "python.pythonPath": "C:\\Users\\olapa\\AppData\\Local\\Microsoft\\WindowsApps\\python3.9.exe"
+    "python.pythonPath": "C:\\Users\\olapa\\AppData\\Local\\Microsoft\\WindowsApps\\python3.9.exe",
+    "python.testing.unittestArgs": [
+        "-v",
+        "-s",
+        "./__pycache__",
+        "-p",
+        "*test.py"
+    ],
+    "python.testing.pytestEnabled": false,
+    "python.testing.unittestEnabled": true
 }
