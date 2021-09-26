@@ -152,10 +152,10 @@ def show_score(x, y):
 class Level1():
     def __init__(self):
         self.level = 0
-        self.achieve_score = 5
+        self.achieve_score = 60
 
     def level_change(achieve_score):
-        if achieve_score==Bullet.score:
+        if lvl1.achieve_score==Bullet.score:
             print('Next level - 1')
             lvl1.level=1
 
@@ -372,11 +372,9 @@ class State(object):
     # main loop of the game
     def game_loop(self):
         shootTime=0
-    
         """game's loop"""
         start_time = 0
         while self.game:
-            # changing level to level 1
 
             # scrolling screen
             rel_y = self.y_axis % bg.get_rect().height
@@ -384,19 +382,19 @@ class State(object):
             if rel_y<486:
                 screen.blit(bg, (0, rel_y))
             self.y_axis-=1
-            #showing score
-            show_score(5, 5)
-            show_level(5, 24)
-            lvl1.level_change()
-            # creating an event
-            # creating timer (every 2.5 second sth happen)
 
+            # displaying scores
+            show_score(5, 5)
+            # displaying the level
+            lvl1.level_change()
+            show_level(5, 24)
+
+            # controlling shooting
             shootTime+=1
             if shootTime==60: # 100 - beginning
                 st.shoot()
                 shootTime=0
-
-
+            
             all_event = pygame.event.get()
             for event in all_event:     
                 if event.type == pygame.QUIT:
