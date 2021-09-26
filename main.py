@@ -373,7 +373,7 @@ class State(object):
             # creating timer (every 2.5 second sth happen)
 
             shootTime+=1
-            if shootTime==200:
+            if shootTime==100:
                 st.shoot()
                 shootTime=0
 
