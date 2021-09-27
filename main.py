@@ -146,23 +146,9 @@ bg = pygame.image.load('assets/textures/bg.png').convert()
 y_axis=0
 
 def show_score(x, y):
-        score_value = mediumtext.render("Score: " + str(Bullet.score), True, white)
-        screen.blit(score_value, (x, y))
-
-win=True
-def when_completed_level():
-    while win:
-        screen.blit(win_after_pausing, (0,0))
-
-        all_event = pygame.event.get()
-        for event in all_event:
-            if event.type == pygame.QUIT:
-                sys.exit()
-
-        level_window_1_title = largetext.render('Level 1 completed!', True, white)
-        window_position1 = (28, 4)
-        screen.blit(level_window_1_title, window_position1)
-        pygame.display.update()
+    '''shows the whole amount of scores during the game'''
+    score_value = mediumtext.render("Score: " + str(Bullet.score), True, white)
+    screen.blit(score_value, (x, y))
 
 class Level1():
     def __init__(self):
@@ -173,10 +159,10 @@ class Level1():
     def level_change(self):
         if lvl1.achieve_score==Bullet.score:
             lvl1.level=1
-            when_completed_level()
+            st.when_completed_level()
             pygame.display.update()
         
-def show_level( x, y):
+def show_level(x, y):
         levelo=lvl1.level
         level_value = mediumtext.render("Level: " +str(levelo), True, white)
         screen.blit(level_value, (x,y))
@@ -190,6 +176,38 @@ class State(object):
         self.intro = False
         self.update = False
         self.y_axis=0
+        self.win = False
+
+    def when_completed_level(self):
+        '''this function displays menu after 1st level is finished'''
+        self.win=True
+        while self.win:
+            screen.blit(win_after_pausing, (0,0))
+            all_event = pygame.event.get()
+            for event in all_event:
+                if event.type == pygame.QUIT:
+                    sys.exit()
+                if event.type == MOUSEBUTTONDOWN:
+                    x, y = pygame.mouse.get_pos()
+                    if pygame.mouse.get_pressed()[0]:
+                        if menu_button.rect.collidepoint(x, y):
+                            self.issue=True
+                            st.update_screen()
+                            click_sound.play()
+                            self.intro=True
+                            self.game=False
+                            self.update=True
+                            Bullet.score=0
+                            st.intro_loop()
+
+            level_window_1_title = largetext.render('Level 1 completed!', True, white)
+            window_position1 = (28, 4)
+            screen.blit(level_window_1_title, window_position1)
+            menu_button.draw(screen)
+            mouse = pygame.mouse.get_pos()
+            if menu_button.rect.collidepoint(mouse):
+                menu_button_light.draw(screen)
+            pygame.display.update()
 
     def pause_button_clicked(self):
         '''displaying pause window after pause button is clicked'''
