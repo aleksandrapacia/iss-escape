@@ -159,8 +159,8 @@ def when_completed_level():
             if event.type == pygame.QUIT:
                 sys.exit()
 
-        level_window_1_title = largetext.render('Paused', True, white)
-        window_position1 = (190, 4)
+        level_window_1_title = largetext.render('Level 1 completed!', True, white)
+        window_position1 = (28, 4)
         screen.blit(level_window_1_title, window_position1)
         pygame.display.update()
 
