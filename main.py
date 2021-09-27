@@ -150,6 +150,7 @@ def show_score(x, y):
     score_value = mediumtext.render("Score: " + str(Bullet.score), True, white)
     screen.blit(score_value, (x, y))
 
+#TODO: create from this class an universal class for all levels
 class Level1():
     def __init__(self):
         self.level = 0
@@ -565,3 +566,6 @@ st = State()
 while True:
     st.intro_loop()
     pygame.display.update()
+
+#TODO: add other enemies
+#TODO: longer game = faster and faster
