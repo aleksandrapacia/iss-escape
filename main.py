@@ -149,19 +149,34 @@ def show_score(x, y):
         score_value = mediumtext.render("Score: " + str(Bullet.score), True, white)
         screen.blit(score_value, (x, y))
 
+win=True
+def when_completed_level():
+    while win:
+        screen.blit(win_after_pausing, (0,0))
+
+        all_event = pygame.event.get()
+        for event in all_event:
+            if event.type == pygame.QUIT:
+                sys.exit()
+
+        level_window_1_title = largetext.render('Paused', True, white)
+        window_position1 = (190, 4)
+        screen.blit(level_window_1_title, window_position1)
+        pygame.display.update()
+
 class Level1():
     def __init__(self):
         self.level = 0
-        self.achieve_score = 60
-        self.window = False
+        self.achieve_score = 2
+        self.window=False
 
-    def level_change(achieve_score):
+    def level_change(self):
         if lvl1.achieve_score==Bullet.score:
-            print('Next level - 1')
-            # lvl1.level_completed() --> what happens after level is completed
             lvl1.level=1
-
-def show_level(x, y):
+            when_completed_level()
+            pygame.display.update()
+        
+def show_level( x, y):
         levelo=lvl1.level
         level_value = mediumtext.render("Level: " +str(levelo), True, white)
         screen.blit(level_value, (x,y))
