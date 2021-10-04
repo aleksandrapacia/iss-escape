@@ -183,6 +183,7 @@ class State(object):
         '''this function displays menu after 1st level is finished'''
         self.win=True
         while self.win:
+            st.update_screen()
             screen.blit(win_after_pausing, (0,0))
             all_event = pygame.event.get()
             for event in all_event:
@@ -193,7 +194,6 @@ class State(object):
                     if pygame.mouse.get_pressed()[0]:
                         if menu_button.rect.collidepoint(x, y):
                             self.issue=True
-                            st.update_screen()
                             click_sound.play()
                             self.intro=True
                             self.game=False
