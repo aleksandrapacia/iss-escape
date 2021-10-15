@@ -151,18 +151,40 @@ def show_score(x, y):
     screen.blit(score_value, (x, y))
 
 #TODO: create from this class an universal class for all levels
-class Level1():
+class LevelState():
     def __init__(self):
         self.level = 0
-        self.achieve_score = 2
+        self.achieve_score_for_l1 = 2
+        self.achieve_score_for_l2 = 5
+        self.achieve_score_for_l3 = 7
+        self.achieve_score_for_l4 = 9
         self.window=False
 
     def level_change(self):
-        if lvl1.achieve_score==Bullet.score:
+        if lvl1.achieve_score_for_l1==Bullet.score:
             lvl1.level=1
             st.when_completed_level()
             pygame.display.update()
-        
+
+    def level_change2(self):
+        if lvl1.achieve_score_for_l2==Bullet.score:
+            lvl1.level=2
+            st.when_completed_level()
+            pygame.display.update()
+    
+    def level_change3(self):
+        if lvl1.achieve_score_for_l3==Bullet.score:
+            lvl1.level=3
+            st.when_completed_level()
+            pygame.display.update()
+
+    def level_change4(self):
+        if lvl1.achieve_score_for_l4==Bullet.score:
+            lvl1.level=4
+            st.when_completed_level()
+            pygame.display.update()
+                    
+
 def show_level(x, y):
         levelo=lvl1.level
         level_value = mediumtext.render("Level: " +str(levelo), True, white)
@@ -422,7 +444,17 @@ class State(object):
             # displaying scores
             show_score(5, 5)
             # displaying the level
-            lvl1.level_change()
+            if lvl1.level==0:
+                lvl1.level_change()
+            if lvl1.level==1:
+                lvl1.level_change2()
+            if lvl1.level==2:
+                lvl1.level_change3()
+            if lvl1.level==3:
+                lvl1.level_change4()
+            if lvl1.level==4:
+                lvl1.level_change5()
+
             show_level(5, 24)
 
             # controlling shooting
@@ -560,7 +592,7 @@ class State(object):
 
         self.y_axis=0
 
-lvl1 = Level1()
+lvl1 = LevelState()
 st = State()
 # main loop
 while True:
