@@ -158,6 +158,7 @@ class LevelState():
         self.achieve_score_for_l2 = 5
         self.achieve_score_for_l3 = 7
         self.achieve_score_for_l4 = 9
+        self.achieve_score_for_l5 = 11
         self.window=False
 
     def level_change(self):
@@ -171,7 +172,7 @@ class LevelState():
             lvl1.level=2
             st.when_completed_level()
             pygame.display.update()
-    
+
     def level_change3(self):
         if lvl1.achieve_score_for_l3==Bullet.score:
             lvl1.level=3
@@ -183,6 +184,13 @@ class LevelState():
             lvl1.level=4
             st.when_completed_level()
             pygame.display.update()
+
+    def level_change5(self):
+        if lvl1.achieve_score_for_l5==Bullet.score:
+            lvl1.level=5
+            st.when_completed_level()
+            pygame.display.update()
+                    
                     
 
 def show_level(x, y):
@@ -453,7 +461,7 @@ class State(object):
             if lvl1.level==3:
                 lvl1.level_change4()
             if lvl1.level==4:
-                lvl1.level_change5()
+                lvl1.level_change5
 
             show_level(5, 24)
 
