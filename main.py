@@ -159,6 +159,9 @@ class LevelState():
         self.window=False
         self.bullet_speed = 0
         self.enemy_speed = 0
+        self.enemy_num = 0
+        self.shoot_again = 0
+        self.station_speed = 0
 
     def level_change(self):
         if lvl1.achieve_score_for_l1==Bullet.score:
@@ -449,21 +452,35 @@ class State(object):
             # displaying the level
             if lvl1.level==0:
                 lvl1.bullet_speed = 2
-                lvl1.enemy_speed = 1
+                lvl1.enemy_speed = 0.4
+                lvl1.enemy_num = 1
+                lvl1.shoot_again = 0.5
+                lvl1.station_speed = 2
                 lvl1.level_change()
             if lvl1.level==1:
+                lvl1.bullet_speed = 2
+                lvl1.enemy_speed = 0.4
+                lvl1.enemy_num = 2
+                lvl1.station_speed = 2
                 lvl1.level_change2()
             if lvl1.level==2:
+                lvl1.bullet_speed = 6
+                lvl1.enemy_speed = 0.6
+                lvl1.enemy_num = 3
                 lvl1.level_change3()
             if lvl1.level==3:
+                lvl1.bullet_speed = 7
+                lvl1.enemy_speed = 0.7
                 lvl1.level_change4()
             if lvl1.level==4:
+                lvl1.bullet_speed = 8
+                lvl1.enemy_speed = 0.8
                 lvl1.level_change5
 
             show_level(5, 24)
 
             # controlling shooting
-            shootTime+=1
+            shootTime+=lvl1.shoot_again
             if shootTime==60: # 100 - beginning
                 st.shoot()
                 shootTime=0
@@ -484,7 +501,7 @@ class State(object):
                             st.pause_button_clicked()
 
             # creating multiple enemies'
-            for i in range(2):
+            for i in range(lvl1.enemy_num):
                 enemy = Enemy(random.randrange(67, 515), -20, enemy_texture, lvl1.enemy_speed)
                 start_time+=1
                 if start_time > 200:
@@ -533,9 +550,9 @@ class State(object):
             # station's movement
             all_keys = pygame.key.get_pressed()
             if all_keys[pygame.K_LEFT]:
-                station.pos_x -= 4
+                station.pos_x -= lvl1.station_speed
             elif all_keys[pygame.K_RIGHT]:
-                station.pos_x += 4
+                station.pos_x += lvl1.station_speed
 
             # removing enemy when it goes off screen
             for bullet in bullets[:]:
