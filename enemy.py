@@ -1,7 +1,7 @@
 import pygame
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self, pos_x, pos_y, texture: pygame.Surface, speed: float):
+    def __init__(self, pos_x, pos_y, texture: pygame.Surface, speed):
         pygame.sprite.Sprite.__init__(self)
         self.pos_x = pos_x
         self.pos_y = pos_y

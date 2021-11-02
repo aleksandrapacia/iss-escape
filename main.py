@@ -1,6 +1,5 @@
 import pygame
 import sys
-from pygame import display
 
 from pygame.constants import MOUSEBUTTONDOWN
 from station import Station
@@ -20,8 +19,6 @@ pygame.init()
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 486
 STATION_HEIGHT = 371
-BULLET_SPEED = 4
-ENEMY_SPEED = 0.4
 HW, HH = SCREEN_WIDTH // 2 , SCREEN_HEIGHT // 2
 
 # screen
@@ -160,6 +157,8 @@ class LevelState():
         self.achieve_score_for_l4 = 9
         self.achieve_score_for_l5 = 11
         self.window=False
+        self.bullet_speed = 0
+        self.enemy_speed = 0
 
     def level_change(self):
         if lvl1.achieve_score_for_l1==Bullet.score:
@@ -189,13 +188,10 @@ class LevelState():
         if lvl1.achieve_score_for_l5==Bullet.score:
             lvl1.level=5
             st.when_completed_level()
-            pygame.display.update()
-                    
-                    
-
+            pygame.display.update()              
+                
 def show_level(x, y):
-        levelo=lvl1.level
-        level_value = mediumtext.render("Level: " +str(levelo), True, white)
+        level_value = mediumtext.render("Level: "+str(lvl1.level), True, white)
         screen.blit(level_value, (x,y))
 
 class State(object):
@@ -231,7 +227,7 @@ class State(object):
                             Bullet.score=0
                             st.intro_loop()
 
-            level_window_1_title = largetext.render('Level 1 completed!', True, white)
+            level_window_1_title = largetext.render('Level'+ ' '+str(lvl1.level)+' ' +'completed!', True, white)
             window_position1 = (28, 4)
             screen.blit(level_window_1_title, window_position1)
             menu_button.draw(screen)
@@ -427,8 +423,7 @@ class State(object):
             bullet = Bullet(
             bullet_x + int(station.pos_x),
             STATION_HEIGHT + 10,
-            bullet_texture,
-            BULLET_SPEED, 0.0)
+            bullet_texture, lvl1.bullet_speed, 0.0)
             #moving the bullet
             bullets.append(bullet)
             bullet.move()
@@ -453,6 +448,8 @@ class State(object):
             show_score(5, 5)
             # displaying the level
             if lvl1.level==0:
+                lvl1.bullet_speed = 2
+                lvl1.enemy_speed = 1
                 lvl1.level_change()
             if lvl1.level==1:
                 lvl1.level_change2()
@@ -475,7 +472,7 @@ class State(object):
             for event in all_event:     
                 if event.type == pygame.QUIT:
                     sys.exit()
-                # id SHOOTEVENT bullet shows up
+                # if SHOOTEVENT bullet shows up
 
                 if event.type == MOUSEBUTTONDOWN:
                     x,y = pygame.mouse.get_pos()
@@ -488,7 +485,7 @@ class State(object):
 
             # creating multiple enemies'
             for i in range(2):
-                enemy = Enemy(random.randrange(67, 515), -20, enemy_texture, ENEMY_SPEED)
+                enemy = Enemy(random.randrange(67, 515), -20, enemy_texture, lvl1.enemy_speed)
                 start_time+=1
                 if start_time > 200:
                    enemies.append(enemy)
