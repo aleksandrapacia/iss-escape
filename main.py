@@ -151,7 +151,7 @@ def show_score(x, y):
 class LevelState():
     def __init__(self):
         self.level = 0
-        self.achieve_score_for_l1 = 2
+        self.achieve_score_for_l1 = 60 # 60 points
         self.achieve_score_for_l2 = 5
         self.achieve_score_for_l3 = 7
         self.achieve_score_for_l4 = 9
@@ -162,6 +162,15 @@ class LevelState():
         self.enemy_num = 0
         self.shoot_again = 0
         self.station_speed = 0
+        # 60 ms = 1 s
+        self.rise_speed_1 = 60
+        # 600 ms = 10 s
+        self.rise_speed_10 = 600
+        # 2400 ms = 40 s
+        self.rise_speed_40 = 2400
+        # 3600 ms = 60 s
+        self.rise_speed_60 = 3600
+
 
     def level_change(self):
         if lvl1.achieve_score_for_l1==Bullet.score:
@@ -436,7 +445,8 @@ class State(object):
     # main loop of the game
     def game_loop(self):
         shootTime=0
-        """game's loop"""
+        speeding_time=0
+        '''game's loop'''
         start_time = 0
         while self.game:
 
@@ -451,33 +461,44 @@ class State(object):
             show_score(5, 5)
             # displaying the level
             if lvl1.level==0:
-                lvl1.bullet_speed = 2
-                lvl1.enemy_speed = 0.4
-                lvl1.enemy_num = 1
-                lvl1.shoot_again = 0.5
-                lvl1.station_speed = 2
                 lvl1.level_change()
             if lvl1.level==1:
-                lvl1.bullet_speed = 2
-                lvl1.enemy_speed = 0.4
-                lvl1.enemy_num = 2
-                lvl1.station_speed = 2
                 lvl1.level_change2()
             if lvl1.level==2:
-                lvl1.bullet_speed = 6
-                lvl1.enemy_speed = 0.6
-                lvl1.enemy_num = 3
                 lvl1.level_change3()
             if lvl1.level==3:
-                lvl1.bullet_speed = 7
-                lvl1.enemy_speed = 0.7
                 lvl1.level_change4()
             if lvl1.level==4:
-                lvl1.bullet_speed = 8
-                lvl1.enemy_speed = 0.8
                 lvl1.level_change5
 
             show_level(5, 24)
+  
+            speeding_time+=1
+            print(f"speeding_time={speeding_time}, points={Bullet.score}")
+            if speeding_time<=lvl1.rise_speed_1:
+                lvl1.bullet_speed = 2
+                lvl1.enemy_speed = 0.3
+                lvl1.enemy_num = 1
+                lvl1.shoot_again = 1
+                lvl1.station_speed = 2
+            if speeding_time==lvl1.rise_speed_1:
+                lvl1.bullet_speed = 3
+                lvl1.enemy_speed = 0.5
+                lvl1.enemy_num = 2
+                lvl1.shoot_again = 1
+                lvl1.station_speed = 2
+            if speeding_time==lvl1.rise_speed_10:
+                lvl1.bullet_speed = 4
+                lvl1.enemy_speed = 0.4
+                lvl1.enemy_num = 2
+                lvl1.shoot_again = 1
+                lvl1.station_speed = 3
+            if speeding_time==lvl1.rise_speed_40:
+                lvl1.bullet_speed = 5
+                lvl1.enemy_speed = 0.5
+                lvl1.enemy_num = 3
+                lvl1.shoot_again = 2
+                lvl1.station_speed = 4
 
             # controlling shooting
             shootTime+=lvl1.shoot_again
@@ -524,7 +545,6 @@ class State(object):
 
                 if enemy.pos_y == station.pos_y:
                    self.game=False
-                   pause_after_collision
                    st.pause_after_collision_loop()
                    st.update_screen()
 
