@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "iss_escape"
+version = "0.1.0"
+description = "ISS top-down shooter game"
+authors = ["Ola Pacia <olusiaOP05@gmail.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pygame = "2.1.0"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
