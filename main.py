@@ -94,8 +94,8 @@ menu_button = Button(215, 220, menu_button, 1)
 menu_button_light = pygame.image.load("assets/textures/menu_light.png").convert()
 menu_button_light_levels = Button(514, 2, menu_button_light, 0.5)
 menu_button_light = Button(215, 220, menu_button_light, 1)
-menu_button_levels = pygame.image.load("assets/textures/menu_button.png").convert()
-menu_button_levels = Button(514, 2, menu_button_levels, 0.5)
+menu_button_levels_surface = pygame.image.load("assets/textures/menu_button.png").convert()
+menu_button_levels = Button(514, 2, menu_button_levels_surface, 0.5)
 
 # pause button
 pause_button = pygame.image.load("assets/textures/pause_button.png").convert()
@@ -142,7 +142,7 @@ bg = pygame.image.load("assets/textures/bg.png").convert()
 y_axis = 0
 
 
-def show_score(x, y):
+def show_score(x: int, y: int):
     """shows the whole amount of scores during the game"""
     score_value = mediumtext.render("Score: " + str(Bullet.score), True, white)
     screen.blit(score_value, (x, y))
@@ -207,7 +207,7 @@ class LevelState:
             pygame.display.update()
 
 
-def show_level(x, y):
+def show_level(x: int, y: int):
     level_value = mediumtext.render("Level: " + str(lvl1.level), True, white)
     screen.blit(level_value, (x, y))
 
