@@ -5,7 +5,6 @@ from pygame.constants import MOUSEBUTTONDOWN
 from station import Station
 import pygame.mixer
 import random
-import time
 
 from enemy import Enemy
 from bullet import Bullet
@@ -162,44 +161,48 @@ class LevelState():
         self.enemy_num = 0
         self.shoot_again = 0
         self.station_speed = 0
-        # 60 ms = 1 s
-        self.rise_speed_1 = 60
-        # 600 ms = 10 s
-        self.rise_speed_10 = 600
-        # 2400 ms = 40 s
-        self.rise_speed_40 = 2400
-        # 3600 ms = 60 s
-        self.rise_speed_60 = 3600
+        # rise_speed_n = confirmed points
+        self.rise_speed_a = 9
+        self.rise_speed_b = 7
+        self.rise_speed_c = 15
+        self.rise_speed_d = 20
+        self.rise_speed_e = 28
+        self.rise_speed_f = 35
+        self.rise_speed_g = 40
+        self.rise_speed_h = 45
+        self.rise_speed_i = 50
+        self.rise_speed_j = 54
+        self.rise_speed_k = 56
 
 
     def level_change(self):
         if lvl1.achieve_score_for_l1==Bullet.score:
             lvl1.level=1
-            st.when_completed_level()
+            state.when_completed_level()
             pygame.display.update()
 
     def level_change2(self):
         if lvl1.achieve_score_for_l2==Bullet.score:
             lvl1.level=2
-            st.when_completed_level()
+            state.when_completed_level()
             pygame.display.update()
 
     def level_change3(self):
         if lvl1.achieve_score_for_l3==Bullet.score:
             lvl1.level=3
-            st.when_completed_level()
+            state.when_completed_level()
             pygame.display.update()
 
     def level_change4(self):
         if lvl1.achieve_score_for_l4==Bullet.score:
             lvl1.level=4
-            st.when_completed_level()
+            state.when_completed_level()
             pygame.display.update()
 
     def level_change5(self):
         if lvl1.achieve_score_for_l5==Bullet.score:
             lvl1.level=5
-            st.when_completed_level()
+            state.when_completed_level()
             pygame.display.update()              
                 
 def show_level(x, y):
@@ -221,7 +224,7 @@ class State(object):
         '''this function displays menu after 1st level is finished'''
         self.win=True
         while self.win:
-            st.update_screen()
+            state.update_screen()
             screen.blit(win_after_pausing, (0,0))
             all_event = pygame.event.get()
             for event in all_event:
@@ -237,7 +240,7 @@ class State(object):
                             self.game=False
                             self.update=True
                             Bullet.score=0
-                            st.intro_loop()
+                            state.intro_loop()
 
             level_window_1_title = largetext.render('Level'+ ' '+str(lvl1.level)+' ' +'completed!', True, white)
             window_position1 = (28, 4)
@@ -264,22 +267,22 @@ class State(object):
                             click_sound.play()
                             self.game=True
                             self.pause=False
-                            st.game_loop()
+                            state.game_loop()
                         if menu_button.rect.collidepoint(x, y):
                             self.issue=True
-                            st.update_screen()
+                            state.update_screen()
                             click_sound.play()
                             self.intro=True
                             self.game=False
                             self.update=True
                             Bullet.score=0
-                            st.update_screen()
-                            st.intro_loop()
+                            state.update_screen()
+                            state.intro_loop()
                         mouse = pygame.mouse.get_pos()
                         if pygame.mouse.get_pressed()[0]:
                             if self.pause == True:
                                 if menu_button.rect.collidepoint(mouse):
-                                    st.update_screen()
+                                    state.update_screen()
             screen.blit(win_after_pausing, (0,0))
             pause_title = largetext.render('Paused', True, white)
             pause_title_position = (190, 4)
@@ -291,7 +294,7 @@ class State(object):
             if pygame.mouse.get_pressed()[0]:
                 if self.pause == True:
                     if menu_button.rect.collidepoint(mouse):
-                        st.update_screen()
+                        state.update_screen()
 
             mouse = pygame.mouse.get_pos()
             # changing buttons' colors after cursor touches them
@@ -305,10 +308,10 @@ class State(object):
     # of the screen
     def pause_after_collision_loop(self):
         '''displaying loss window after player looses'''
-        st.update_screen()
+        state.update_screen()
         pause_after_collision=True
         while pause_after_collision:
-            st.update_screen()
+            state.update_screen()
             all_event = pygame.event.get()
             for event in all_event:
                 if event.type == pygame.QUIT:
@@ -323,15 +326,15 @@ class State(object):
                             click_sound.play()
                             Bullet.score=0
                             Enemy.pos_y = -100
-                            st.update_screen()
-                            st.intro_loop()
+                            state.update_screen()
+                            state.intro_loop()
                         if retry_button.rect.collidepoint(x, y):
                             self.game=True
                             self.pause_after_collision=False
                             click_sound.play()
-                            st.update_screen()
+                            state.update_screen()
                             Bullet.score=0
-                            st.game_loop()
+                            state.game_loop()
 
             screen.blit(intro_background, (0,0))
             pause_title = largetext.render('Loss', True, white)
@@ -369,7 +372,7 @@ class State(object):
                             self.game=True
                             self.intro=False
                             self.pause_after_collision=False
-                            st.game_loop()
+                            state.game_loop()
                         if quit_button.rect.collidepoint(x, y):
                             click_sound.play()
                             sys.exit()
@@ -377,7 +380,7 @@ class State(object):
                             click_sound.play()
                             self.levels=True
                             self.intro=False
-                            st.levels_loop()
+                            state.levels_loop()
 
             screen.blit(intro_background, (0,0))
 
@@ -416,7 +419,7 @@ class State(object):
                             click_sound.play()
                             self.intro=True
                             self.leves=False
-                            st.intro_loop()
+                            state.intro_loop()
                             
             screen.blit(intro_background, (0,0))
             menu_button_levels.draw(screen)
@@ -473,37 +476,43 @@ class State(object):
 
             show_level(5, 24)
   
-            speeding_time+=1
             print(f"speeding_time={speeding_time}, points={Bullet.score}")
-            if speeding_time<=lvl1.rise_speed_1:
-                lvl1.bullet_speed = 2
-                lvl1.enemy_speed = 0.3
+            if Bullet.score<=lvl1.rise_speed_a:
+                lvl1.bullet_speed = 1.96
+                lvl1.enemy_speed = 0.2
                 lvl1.enemy_num = 1
                 lvl1.shoot_again = 1
                 lvl1.station_speed = 2
-            if speeding_time==lvl1.rise_speed_1:
-                lvl1.bullet_speed = 3
-                lvl1.enemy_speed = 0.5
-                lvl1.enemy_num = 2
+            if Bullet.score==lvl1.rise_speed_b:
+                lvl1.bullet_speed = 2.4
+                lvl1.enemy_speed = 1.96
+                lvl1.enemy_num = 1
                 lvl1.shoot_again = 1
                 lvl1.station_speed = 2
-            if speeding_time==lvl1.rise_speed_10:
-                lvl1.bullet_speed = 4
+            if Bullet.score==lvl1.rise_speed_c:
+                lvl1.bullet_speed = 2.6
                 lvl1.enemy_speed = 0.4
                 lvl1.enemy_num = 2
                 lvl1.shoot_again = 1
                 lvl1.station_speed = 3
-            if speeding_time==lvl1.rise_speed_40:
-                lvl1.bullet_speed = 5
+            if Bullet.score==lvl1.rise_speed_d:
+                lvl1.bullet_speed = 3
                 lvl1.enemy_speed = 0.5
                 lvl1.enemy_num = 3
                 lvl1.shoot_again = 2
-                lvl1.station_speed = 4
+                lvl1.station_speed = 3
+            if Bullet.score==lvl1.rise_speed_e:
+                lvl1.bullet_speed = 3
+                lvl1.enemy_speed = 0.7
+                lvl1.enemy_num = 4
+                lvl1.shoot_again = 2
+                lvl1.station_speed = 3
+
 
             # controlling shooting
             shootTime+=lvl1.shoot_again
             if shootTime==60: # 100 - beginning
-                st.shoot()
+                state.shoot()
                 shootTime=0
             
             all_event = pygame.event.get()
@@ -519,7 +528,7 @@ class State(object):
                         if pause_button.rect.collidepoint(x, y):
                             click_sound.play()
                             self.pause=True
-                            st.pause_button_clicked()
+                            state.pause_button_clicked()
 
             # creating multiple enemies'
             for i in range(lvl1.enemy_num):
@@ -540,13 +549,13 @@ class State(object):
                 if enemy.pos_y > SCREEN_HEIGHT:
                     self.game=False
                     pause_after_collision=True
-                    st.pause_after_collision_loop()
-                    st.update_screen()
+                    state.pause_after_collision_loop()
+                    state.update_screen()
 
                 if enemy.pos_y == station.pos_y:
                    self.game=False
-                   st.pause_after_collision_loop()
-                   st.update_screen()
+                   state.pause_after_collision_loop()
+                   state.update_screen()
 
                 # collision between bullet and enemy
                 for bullet in bullets:
@@ -564,8 +573,8 @@ class State(object):
                     if result:
                         self.game=False
                         pause_after_collision=True
-                        st.pause_after_collision_loop()
-                        st.update_screen()
+                        state.pause_after_collision_loop()
+                        state.update_screen()
 
             # station's movement
             all_keys = pygame.key.get_pressed()
@@ -635,11 +644,12 @@ class State(object):
         self.y_axis=0
 
 lvl1 = LevelState()
-st = State()
+state = State()
 # main loop
 while True:
-    st.intro_loop()
+    state.intro_loop()
     pygame.display.update()
 
 #TODO: add other enemies
 #TODO: longer game = faster and faster
+
