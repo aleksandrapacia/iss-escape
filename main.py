@@ -1,5 +1,6 @@
 import pygame
 import sys
+import json
 
 from pygame.constants import MOUSEBUTTONDOWN
 from station import Station
@@ -141,22 +142,20 @@ score = Bullet.score = 0
 bg = pygame.image.load("assets/textures/bg.png").convert()
 y_axis = 0
 
-
 def show_score(x: int, y: int):
     """shows the whole amount of scores during the game"""
     score_value = mediumtext.render("Score: " + str(Bullet.score), True, white)
     screen.blit(score_value, (x, y))
 
-
-# TODO: create from this class an universal class for all levels
 class LevelState:
     def __init__(self):
         self.level = 0
-        self.achieve_score_for_l1 = 60  # 60 points
-        self.achieve_score_for_l2 = 5
-        self.achieve_score_for_l3 = 7
-        self.achieve_score_for_l4 = 9
-        self.achieve_score_for_l5 = 11
+        # how many points you have to achieve to score one level up
+        self.achieve_score_for_l1 = 30  
+        self.achieve_score_for_l2 = 60
+        self.achieve_score_for_l3 = 120
+        self.achieve_score_for_l4 = 140
+        self.achieve_score_for_l5 = 160
         self.window = False
         self.bullet_speed = 0
         self.enemy_speed = 0
@@ -177,40 +176,30 @@ class LevelState:
         self.rise_speed_k = 56
 
     def level_change(self):
-        if lvl1.achieve_score_for_l1 == Bullet.score:
-            lvl1.level = 1
+        if lvl.achieve_score_for_l1 == Bullet.score:
+            lvl.level = 1
             state.when_completed_level()
             pygame.display.update()
-
-    def level_change2(self):
-        if lvl1.achieve_score_for_l2 == Bullet.score:
-            lvl1.level = 2
+        if lvl.achieve_score_for_l2 == Bullet.score:
+            lvl.level = 2
             state.when_completed_level()
             pygame.display.update()
-
-    def level_change3(self):
-        if lvl1.achieve_score_for_l3 == Bullet.score:
-            lvl1.level = 3
+        if lvl.achieve_score_for_l3 == Bullet.score:
+            lvl.level = 3
             state.when_completed_level()
             pygame.display.update()
-
-    def level_change4(self):
-        if lvl1.achieve_score_for_l4 == Bullet.score:
-            lvl1.level = 4
+        if lvl.achieve_score_for_l4 == Bullet.score:
+            lvl.level = 4
             state.when_completed_level()
             pygame.display.update()
-
-    def level_change5(self):
-        if lvl1.achieve_score_for_l5 == Bullet.score:
-            lvl1.level = 5
+        if lvl.achieve_score_for_l5 == Bullet.score:
+            lvl.level = 5
             state.when_completed_level()
             pygame.display.update()
-
 
 def show_level(x: int, y: int):
-    level_value = mediumtext.render("Level: " + str(lvl1.level), True, white)
+    level_value = mediumtext.render('Level: ' + str(lvl.level), True, white)
     screen.blit(level_value, (x, y))
-
 
 class State(object):
     def __init__(self):
@@ -224,7 +213,7 @@ class State(object):
         self.win = False
 
     def when_completed_level(self):
-        """this function displays menu after 1st level is finished"""
+        '''window displas when a level is completed'''
         self.win = True
         while self.win:
             state.update_screen()
@@ -246,7 +235,7 @@ class State(object):
                             state.intro_loop()
 
             level_window_1_title = largetext.render(
-                "Level" + " " + str(lvl1.level) + " " + "completed!", True, white
+                'Level' + ' '  + str(lvl.level) + ' ' + 'completed!', True, white
             )
             window_position1 = (28, 4)
             screen.blit(level_window_1_title, window_position1)
@@ -257,7 +246,7 @@ class State(object):
             pygame.display.update()
 
     def pause_button_clicked(self):
-        """displaying pause window after pause button is clicked"""
+        'window displayed when you click on the pause button'
         self.pause = True
         while self.pause:
             all_event = pygame.event.get()
@@ -284,12 +273,9 @@ class State(object):
                             state.update_screen()
                             state.intro_loop()
                         mouse = pygame.mouse.get_pos()
-                        if pygame.mouse.get_pressed()[0]:
-                            if self.pause == True:
-                                if menu_button.rect.collidepoint(mouse):
-                                    state.update_screen()
+
             screen.blit(win_after_pausing, (0, 0))
-            pause_title = largetext.render("Paused", True, white)
+            pause_title = largetext.render('Paused', True, white)
             pause_title_position = (190, 4)
             screen.blit(pause_title, pause_title_position)
             restart_button.draw(screen)
@@ -312,7 +298,7 @@ class State(object):
     # what happens after collision: between enemy and station, enemy and the edge
     # of the screen
     def pause_after_collision_loop(self):
-        """displaying loss window after player looses"""
+        '''displaying loss window after player looses'''
         state.update_screen()
         pause_after_collision = True
         while pause_after_collision:
@@ -329,8 +315,6 @@ class State(object):
                             self.intro = True
                             self.pause_after_collision = False
                             click_sound.play()
-                            Bullet.score = 0
-                            Enemy.pos_y = -100
                             state.update_screen()
                             state.intro_loop()
                         if retry_button.rect.collidepoint(x, y):
@@ -363,7 +347,7 @@ class State(object):
 
     # menu (intro)
     def intro_loop(self):
-        """displaying game's menu"""
+        '''the game's menu shows up'''
         intro = True
         while intro:
             all_event = pygame.event.get()
@@ -372,7 +356,7 @@ class State(object):
                     sys.exit()
                 if event.type == MOUSEBUTTONDOWN:
                     x, y = pygame.mouse.get_pos()
-                    # clicking buttons
+                    # what happens when you click on the specific button
                     if pygame.mouse.get_pressed()[0]:
                         if start_button.rect.collidepoint(x, y):
                             click_sound.play()
@@ -391,7 +375,7 @@ class State(object):
 
             screen.blit(intro_background, (0, 0))
 
-            intro_title = largetext.render("ISS Escape", True, white)
+            intro_title = largetext.render('ISS Escape', True, white)
             text_position = (134, 4)
             screen.blit(intro_title, text_position)
             start_button.draw(screen)
@@ -410,7 +394,7 @@ class State(object):
 
     # information about levels and list of them
     def levels_loop(self):
-        """displaying list of levels"""
+        '''displaying list of levels'''
         self.levels = True
         while self.levels:
             all_event = pygame.event.get()
@@ -446,7 +430,7 @@ class State(object):
                 bullet_x + int(station.pos_x),
                 STATION_HEIGHT + 10,
                 bullet_texture,
-                lvl1.bullet_speed,
+                lvl.bullet_speed,
                 0.0,
             )
             # moving the bullet
@@ -458,9 +442,12 @@ class State(object):
     # main loop of the game
     def game_loop(self):
         shootTime = 0
-        speeding_time = 0
         start_time = 0
         while self.game:
+            all_event = pygame.event.get()
+            for event in all_event:
+                if event.type == pygame.QUIT:
+                    sys.exit()
 
             # scrolling screen
             rel_y = self.y_axis % bg.get_rect().height
@@ -472,95 +459,88 @@ class State(object):
             # displaying scores
             show_score(5, 5)
             # displaying the level
-            if lvl1.level == 0:
-                lvl1.level_change()
-            if lvl1.level == 1:
-                lvl1.level_change2()
-            if lvl1.level == 2:
-                lvl1.level_change3()
-            if lvl1.level == 3:
-                lvl1.level_change4()
-            if lvl1.level == 4:
-                lvl1.level_change5
+            if lvl.level == 0:
+                lvl.level_change()
+            if lvl.level == 1:
+                lvl.level_change2()
+            if lvl.level == 2:
+                lvl.level_change3()
+            if lvl.level == 3:
+                lvl.level_change4()
+            if lvl.level == 4:
+                lvl.level_change5
 
             show_level(5, 24)
 
-            if Bullet.score <= lvl1.rise_speed_a:
-                lvl1.bullet_speed = 1.5
-                lvl1.enemy_speed = 0.2
-                lvl1.enemy_num = 1
-                lvl1.shoot_again = 1
-                lvl1.station_speed = 1
-            if Bullet.score == lvl1.rise_speed_b:
-                lvl1.bullet_speed = 2.4
-                lvl1.enemy_speed = 0.3
-                lvl1.enemy_num = 1
-                lvl1.shoot_again = 1
-                lvl1.station_speed = 2
-            if Bullet.score == lvl1.rise_speed_c:
-                lvl1.bullet_speed = 2.6
-                lvl1.enemy_speed = 0.4
-                lvl1.enemy_num = 2
-                lvl1.shoot_again = 1
-                lvl1.station_speed = 3
-            if Bullet.score == lvl1.rise_speed_d:
-                lvl1.bullet_speed = 2.8
-                lvl1.enemy_speed = 0.5
-                lvl1.enemy_num = 3
-                lvl1.shoot_again = 1
-                lvl1.station_speed = 3
-            if Bullet.score == lvl1.rise_speed_e:
-                lvl1.bullet_speed = 3
-                lvl1.enemy_speed = 0.7
-                lvl1.enemy_num = 4
-                lvl1.shoot_again = 1
-                lvl1.station_speed = 3
-            if Bullet.score == lvl1.rise_speed_f:
-                lvl1.bullet_speed = 3.2
-                lvl1.enemy_speed = 0.8
-                lvl1.enemy_num = 4
-                lvl1.shoot_again = 1
-                lvl1.station_speed = 1
-            if Bullet.score == lvl1.rise_speed_g:
-                lvl1.bullet_speed = 3.2
-                lvl1.enemy_speed = 0.9
-                lvl1.enemy_num = 4
-                lvl1.shoot_again = 1
-                lvl1.station_speed = 3
-            if Bullet.score == lvl1.rise_speed_h:
-                lvl1.bullet_speed = 3.2
-                lvl1.enemy_speed = 0.9
-                lvl1.enemy_num = 4
-                lvl1.shoot_again = 1
-                lvl1.station_speed = 4
-            if Bullet.score == lvl1.rise_speed_i:
-                lvl1.bullet_speed = 3.2
-                lvl1.enemy_speed = 0.9
-                lvl1.enemy_num = 4
-                lvl1.shoot_again = 1
-                lvl1.station_speed = 4
-            if Bullet.score == lvl1.rise_speed_j:
-                lvl1.bullet_speed = 3.3
-                lvl1.enemy_speed = 0.9
-                lvl1.enemy_num = 4
-                lvl1.shoot_again = 1
-                lvl1.station_speed = 4
-            if Bullet.score == lvl1.rise_speed_k:
-                lvl1.bullet_speed = 3.3
-                lvl1.enemy_speed = 0.10
-                lvl1.enemy_num = 4
-                lvl1.shoot_again = 1
-                lvl1.station_speed = 4
-
-
-
-
-
-
-        
+            if Bullet.score <= lvl.rise_speed_a:
+                lvl.bullet_speed = 1.5
+                lvl.enemy_speed = 0.2
+                lvl.enemy_num = 1
+                lvl.shoot_again = 1
+                lvl.station_speed = 1
+            if Bullet.score == lvl.rise_speed_b:
+                lvl.bullet_speed = 2.4
+                lvl.enemy_speed = 0.3
+                lvl.enemy_num = 1
+                lvl.shoot_again = 1
+                lvl.station_speed = 2
+            if Bullet.score == lvl.rise_speed_c:
+                lvl.bullet_speed = 2.6
+                lvl.enemy_speed = 0.4
+                lvl.enemy_num = 2
+                lvl.shoot_again = 1
+                lvl.station_speed = 3
+            if Bullet.score == lvl.rise_speed_d:
+                lvl.bullet_speed = 2.8
+                lvl.enemy_speed = 0.5
+                lvl.enemy_num = 3
+                lvl.shoot_again = 1
+                lvl.station_speed = 3
+            if Bullet.score == lvl.rise_speed_e:
+                lvl.bullet_speed = 3
+                lvl.enemy_speed = 0.7
+                lvl.enemy_num = 4
+                lvl.shoot_again = 1
+                lvl.station_speed = 3
+            if Bullet.score == lvl.rise_speed_f:
+                lvl.bullet_speed = 3.2
+                lvl.enemy_speed = 0.8
+                lvl.enemy_num = 4
+                lvl.shoot_again = 1
+                lvl.station_speed = 1
+            if Bullet.score == lvl.rise_speed_g:
+                lvl.bullet_speed = 3.2
+                lvl.enemy_speed = 0.9
+                lvl.enemy_num = 4
+                lvl.shoot_again = 1
+                lvl.station_speed = 3
+            if Bullet.score == lvl.rise_speed_h:
+                lvl.bullet_speed = 3.2
+                lvl.enemy_speed = 0.9
+                lvl.enemy_num = 4
+                lvl.shoot_again = 1
+                lvl.station_speed = 4
+            if Bullet.score == lvl.rise_speed_i:
+                lvl.bullet_speed = 3.2
+                lvl.enemy_speed = 0.9
+                lvl.enemy_num = 4
+                lvl.shoot_again = 1
+                lvl.station_speed = 4
+            if Bullet.score == lvl.rise_speed_j:
+                lvl.bullet_speed = 3.3
+                lvl.enemy_speed = 0.9
+                lvl.enemy_num = 4
+                lvl.shoot_again = 1
+                lvl.station_speed = 4
+            if Bullet.score == lvl.rise_speed_k:
+                lvl.bullet_speed = 3.3
+                lvl.enemy_speed = 0.10
+                lvl.enemy_num = 4
+                lvl.shoot_again = 1
+                lvl.station_speed = 4
 
             # controlling shooting
-            shootTime += lvl1.shoot_again
+            shootTime += lvl.shoot_again
             if shootTime == 60:  # 100 - beginning
                 state.shoot()
                 shootTime = 0
@@ -581,9 +561,9 @@ class State(object):
                             state.pause_button_clicked()
 
             # creating multiple enemies'
-            for i in range(lvl1.enemy_num):
+            for i in range(lvl.enemy_num):
                 enemy = Enemy(
-                    random.randrange(67, 515), -20, enemy_texture, lvl1.enemy_speed
+                    random.randrange(67, 515), -20, enemy_texture, lvl.enemy_speed
                 )
                 start_time += 1
                 if start_time > 200:
@@ -630,16 +610,15 @@ class State(object):
                     result = station_texture_mask.overlap(enemy_texture_mask, offset)
                     if result:
                         self.game = False
-                        pause_after_collision = True
                         state.pause_after_collision_loop()
                         state.update_screen()
 
             # station's movement
             all_keys = pygame.key.get_pressed()
             if all_keys[pygame.K_LEFT]:
-                station.pos_x -= lvl1.station_speed
+                station.pos_x -= lvl.station_speed
             elif all_keys[pygame.K_RIGHT]:
-                station.pos_x += lvl1.station_speed
+                station.pos_x += lvl.station_speed
 
             # removing enemy when it goes off screen
             for bullet in bullets[:]:
@@ -672,11 +651,23 @@ class State(object):
             if pause_button.rect.collidepoint(mouse):
                 pause_light.draw(screen)
 
-            pygame.display.update(screen_rect)
+            x, y = pygame.mouse.get_pos()
+            # what happens when pause button is cklicked
+            if pygame.mouse.get_pressed()[0]:
+                if pause_button.rect.collidepoint(x, y):
+                    click_sound.play()
+                    self.game = False
+                    self.pause_after_collision = False
+                    self.pause = True
+                    state.pause_button_clicked()
+
             clock.tick(100)
+
+            pygame.display.update(screen_rect)
 
     def update_screen(self):
         """updating screen after player's loss"""
+        Bullet.score=0
 
         # scrolling background
         bg = pygame.image.load("assets/textures/bg.png").convert()
@@ -688,8 +679,8 @@ class State(object):
 
         # removing old bullets and displaying new ones
         for bullet in bullets:
-            Bullet.pos_y = bullet_x + int(station.pos_x)
             bullets.remove(bullet)
+            Bullet.pos_y = bullet_x + int(station.pos_x)
 
         # removing old enemies and displaying new ones
         for enemy in enemies:
@@ -703,8 +694,10 @@ class State(object):
 
         self.y_axis = 0
 
+        pygame.display.update(screen_rect)
 
-lvl1 = LevelState()
+
+lvl = LevelState()
 state = State()
 # main loop
 while True:
@@ -712,4 +705,4 @@ while True:
     pygame.display.update()
 
 # TODO: add other enemies
-# TODO: longer game = faster and faster
+
