@@ -142,16 +142,25 @@ score = Bullet.score = 0
 bg = pygame.image.load("assets/textures/bg.png").convert()
 y_axis = 0
 
+data = {
+    'level': 0
+}
+try:
+    with open('database.txt') as data_file:
+        data = json.load(data_file)
+except:
+    print('no file created yet')
+
 def show_score(x: int, y: int):
-    """shows the whole amount of scores during the game"""
+    '''shows the whole amount of scores during the game'''
     score_value = mediumtext.render("Score: " + str(Bullet.score), True, white)
     screen.blit(score_value, (x, y))
 
 class LevelState:
     def __init__(self):
-        self.level = 0
+        self.level = data['level']
         # how many points you have to achieve to score one level up
-        self.achieve_score_for_l1 = 30  
+        self.achieve_score_for_l1 = 5  # 30
         self.achieve_score_for_l2 = 60
         self.achieve_score_for_l3 = 120
         self.achieve_score_for_l4 = 140
@@ -177,28 +186,28 @@ class LevelState:
 
     def level_change(self):
         if lvl.achieve_score_for_l1 == Bullet.score:
-            lvl.level = 1
+            data['level'] = 1
             state.when_completed_level()
             pygame.display.update()
         if lvl.achieve_score_for_l2 == Bullet.score:
-            lvl.level = 2
+            data['level'] = 2
             state.when_completed_level()
             pygame.display.update()
         if lvl.achieve_score_for_l3 == Bullet.score:
-            lvl.level = 3
+            data['level'] = 3
             state.when_completed_level()
             pygame.display.update()
         if lvl.achieve_score_for_l4 == Bullet.score:
-            lvl.level = 4
+            data['level'] = 4
             state.when_completed_level()
             pygame.display.update()
         if lvl.achieve_score_for_l5 == Bullet.score:
-            lvl.level = 5
+            data['level'] = 5
             state.when_completed_level()
             pygame.display.update()
 
 def show_level(x: int, y: int):
-    level_value = mediumtext.render('Level: ' + str(lvl.level), True, white)
+    level_value = mediumtext.render('Level: ' + str(data['level']), True, white)
     screen.blit(level_value, (x, y))
 
 class State(object):
@@ -221,7 +230,11 @@ class State(object):
             all_event = pygame.event.get()
             for event in all_event:
                 if event.type == pygame.QUIT:
-                    sys.exit()
+                    with open('saving/database.txt', 'w') as data_file:
+                        json.dump(data, data_file)
+                        pygame.quit()
+                        sys.exit()
+
                 if event.type == MOUSEBUTTONDOWN:
                     x, y = pygame.mouse.get_pos()
                     if pygame.mouse.get_pressed()[0]:
@@ -317,12 +330,12 @@ class State(object):
                             click_sound.play()
                             state.update_screen()
                             state.intro_loop()
+                        # TODO: add retry button
                         if retry_button.rect.collidepoint(x, y):
                             self.game = True
                             self.pause_after_collision = False
                             click_sound.play()
                             state.update_screen()
-                            Bullet.score = 0
                             state.game_loop()
 
             screen.blit(intro_background, (0, 0))
@@ -462,11 +475,11 @@ class State(object):
             if lvl.level == 0:
                 lvl.level_change()
             if lvl.level == 1:
-                lvl.level_change2()
+                lvl.level_change()
             if lvl.level == 2:
-                lvl.level_change3()
+                lvl.level_change()
             if lvl.level == 3:
-                lvl.level_change4()
+                lvl.level_change()
             if lvl.level == 4:
                 lvl.level_change5
 
@@ -680,14 +693,16 @@ class State(object):
         # removing old bullets and displaying new ones
         for bullet in bullets:
             bullets.remove(bullet)
-            Bullet.pos_y = bullet_x + int(station.pos_x)
+            num_of_b = len(bullets)
+            num_of_b-=num_of_b
+            Bullet.pos_y = 2 + int(station.pos_x)
 
         # removing old enemies and displaying new ones
         for enemy in enemies:
             enemies.remove(enemy)
             num_of_e = len(enemies)
             print(num_of_e)
-            num_of_e -= num_of_e
+            num_of_e-=num_of_e
 
         # restarting station's position
         station.pos_x = 200
@@ -702,6 +717,11 @@ state = State()
 # main loop
 while True:
     state.intro_loop()
+    all_event = pygame.event.get()
+    for event in all_event:
+        if event.type == pygame.QUIT:
+            print("XD")
+            pygame.exit()
     pygame.display.update()
 
 # TODO: add other enemies
