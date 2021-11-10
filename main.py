@@ -459,7 +459,6 @@ class State(object):
     def game_loop(self):
         shootTime = 0
         speeding_time = 0
-        """game's loop"""
         start_time = 0
         while self.game:
 
@@ -486,16 +485,15 @@ class State(object):
 
             show_level(5, 24)
 
-            print(f"speeding_time={speeding_time}, points={Bullet.score}")
             if Bullet.score <= lvl1.rise_speed_a:
-                lvl1.bullet_speed = 1.96
+                lvl1.bullet_speed = 1.5
                 lvl1.enemy_speed = 0.2
                 lvl1.enemy_num = 1
                 lvl1.shoot_again = 1
-                lvl1.station_speed = 2
+                lvl1.station_speed = 1
             if Bullet.score == lvl1.rise_speed_b:
                 lvl1.bullet_speed = 2.4
-                lvl1.enemy_speed = 1.96
+                lvl1.enemy_speed = 0.3
                 lvl1.enemy_num = 1
                 lvl1.shoot_again = 1
                 lvl1.station_speed = 2
@@ -506,17 +504,60 @@ class State(object):
                 lvl1.shoot_again = 1
                 lvl1.station_speed = 3
             if Bullet.score == lvl1.rise_speed_d:
-                lvl1.bullet_speed = 3
+                lvl1.bullet_speed = 2.8
                 lvl1.enemy_speed = 0.5
                 lvl1.enemy_num = 3
-                lvl1.shoot_again = 2
+                lvl1.shoot_again = 1
                 lvl1.station_speed = 3
             if Bullet.score == lvl1.rise_speed_e:
                 lvl1.bullet_speed = 3
                 lvl1.enemy_speed = 0.7
                 lvl1.enemy_num = 4
-                lvl1.shoot_again = 2
+                lvl1.shoot_again = 1
                 lvl1.station_speed = 3
+            if Bullet.score == lvl1.rise_speed_f:
+                lvl1.bullet_speed = 3.2
+                lvl1.enemy_speed = 0.8
+                lvl1.enemy_num = 4
+                lvl1.shoot_again = 1
+                lvl1.station_speed = 1
+            if Bullet.score == lvl1.rise_speed_g:
+                lvl1.bullet_speed = 3.2
+                lvl1.enemy_speed = 0.9
+                lvl1.enemy_num = 4
+                lvl1.shoot_again = 1
+                lvl1.station_speed = 3
+            if Bullet.score == lvl1.rise_speed_h:
+                lvl1.bullet_speed = 3.2
+                lvl1.enemy_speed = 0.9
+                lvl1.enemy_num = 4
+                lvl1.shoot_again = 1
+                lvl1.station_speed = 4
+            if Bullet.score == lvl1.rise_speed_i:
+                lvl1.bullet_speed = 3.2
+                lvl1.enemy_speed = 0.9
+                lvl1.enemy_num = 4
+                lvl1.shoot_again = 1
+                lvl1.station_speed = 4
+            if Bullet.score == lvl1.rise_speed_j:
+                lvl1.bullet_speed = 3.3
+                lvl1.enemy_speed = 0.9
+                lvl1.enemy_num = 4
+                lvl1.shoot_again = 1
+                lvl1.station_speed = 4
+            if Bullet.score == lvl1.rise_speed_k:
+                lvl1.bullet_speed = 3.3
+                lvl1.enemy_speed = 0.10
+                lvl1.enemy_num = 4
+                lvl1.shoot_again = 1
+                lvl1.station_speed = 4
+
+
+
+
+
+
+        
 
             # controlling shooting
             shootTime += lvl1.shoot_again
