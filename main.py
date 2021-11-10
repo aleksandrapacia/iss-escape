@@ -161,7 +161,7 @@ class LevelState:
         self.level = data['level']
         # how many points you have to achieve to score one level up
         self.achieve_score_for_l1 = 5  # 30
-        self.achieve_score_for_l2 = 60
+        self.achieve_score_for_l2 = 7 # 60
         self.achieve_score_for_l3 = 120
         self.achieve_score_for_l4 = 140
         self.achieve_score_for_l5 = 160
@@ -186,25 +186,30 @@ class LevelState:
 
     def level_change(self):
         if lvl.achieve_score_for_l1 == Bullet.score:
-            data['level'] = 1
+            data['level'] +=1
             state.when_completed_level()
             pygame.display.update()
-        if lvl.achieve_score_for_l2 == Bullet.score:
-            data['level'] = 2
+        elif data['level'] == 1 and lvl.achieve_score_for_l1 == Bullet.score:
+            lvl.achieve_score_for_l1 = lvl.achieve_score_for_l1
+        elif data['level'] == 2 and lvl.achieve_score_for_l2 == Bullet.score:
+            lvl.achieve_score_for_l1 = lvl.achieve_score_for_l2
+'''
+        if data['level']==1 and lvl.achieve_score_for_l2 == Bullet.score:
+            data['level'] += 1
             state.when_completed_level()
             pygame.display.update()
-        if lvl.achieve_score_for_l3 == Bullet.score:
-            data['level'] = 3
+        if data['level']==2 and lvl.achieve_score_for_l3 == Bullet.score:
+            data['level'] += 1
             state.when_completed_level()
             pygame.display.update()
         if lvl.achieve_score_for_l4 == Bullet.score:
-            data['level'] = 4
+            data['level'] += 1
             state.when_completed_level()
             pygame.display.update()
         if lvl.achieve_score_for_l5 == Bullet.score:
-            data['level'] = 5
+            data['level'] += 1
             state.when_completed_level()
-            pygame.display.update()
+            pygame.display.update()'''
 
 def show_level(x: int, y: int):
     level_value = mediumtext.render('Level: ' + str(data['level']), True, white)
@@ -230,7 +235,7 @@ class State(object):
             all_event = pygame.event.get()
             for event in all_event:
                 if event.type == pygame.QUIT:
-                    with open('saving/database.txt', 'w') as data_file:
+                    with open('database.txt', 'w') as data_file:
                         json.dump(data, data_file)
                         pygame.quit()
                         sys.exit()
@@ -248,7 +253,7 @@ class State(object):
                             state.intro_loop()
 
             level_window_1_title = largetext.render(
-                'Level' + ' '  + str(lvl.level) + ' ' + 'completed!', True, white
+                'Level' + ' '  + str(data['level']) + ' ' + 'completed!', True, white
             )
             window_position1 = (28, 4)
             screen.blit(level_window_1_title, window_position1)
@@ -265,7 +270,10 @@ class State(object):
             all_event = pygame.event.get()
             for event in all_event:
                 if event.type == pygame.QUIT:
-                    sys.exit()
+                    with open('database.txt', 'w') as data_file:
+                        json.dump(data, data_file)
+                        pygame.quit()
+                        sys.exit()
                 if event.type == MOUSEBUTTONDOWN:
                     x, y = pygame.mouse.get_pos()
                     # clicking on the buttons
@@ -319,7 +327,10 @@ class State(object):
             all_event = pygame.event.get()
             for event in all_event:
                 if event.type == pygame.QUIT:
-                    sys.exit()
+                    with open('database.txt', 'w') as data_file:
+                        json.dump(data, data_file)
+                        pygame.quit()
+                        sys.exit()
                 if event.type == MOUSEBUTTONDOWN:
                     x, y = pygame.mouse.get_pos()
                     # clicking on the buttons
@@ -366,7 +377,10 @@ class State(object):
             all_event = pygame.event.get()
             for event in all_event:
                 if event.type == pygame.QUIT:
-                    sys.exit()
+                    with open('database.txt', 'w') as data_file:
+                        json.dump(data, data_file)
+                        pygame.quit()
+                        sys.exit()
                 if event.type == MOUSEBUTTONDOWN:
                     x, y = pygame.mouse.get_pos()
                     # what happens when you click on the specific button
@@ -413,7 +427,10 @@ class State(object):
             all_event = pygame.event.get()
             for event in all_event:
                 if event.type == pygame.QUIT:
-                    sys.exit()
+                    with open('database.txt', 'w') as data_file:
+                        json.dump(data, data_file)
+                        pygame.quit()
+                        sys.exit()
                 if event.type == MOUSEBUTTONDOWN:
                     x, y = pygame.mouse.get_pos()
                     # clicking buttons
@@ -460,7 +477,10 @@ class State(object):
             all_event = pygame.event.get()
             for event in all_event:
                 if event.type == pygame.QUIT:
-                    sys.exit()
+                    with open('database.txt', 'w') as data_file:
+                        json.dump(data, data_file)
+                        pygame.quit()
+                        sys.exit()
 
             # scrolling screen
             rel_y = self.y_axis % bg.get_rect().height
@@ -557,21 +577,6 @@ class State(object):
             if shootTime == 60:  # 100 - beginning
                 state.shoot()
                 shootTime = 0
-
-            all_event = pygame.event.get()
-            for event in all_event:
-                if event.type == pygame.QUIT:
-                    sys.exit()
-                # if SHOOTEVENT bullet shows up
-
-                if event.type == MOUSEBUTTONDOWN:
-                    x, y = pygame.mouse.get_pos()
-                    if pygame.mouse.get_pressed()[0]:
-                        # clicking pause button
-                        if pause_button.rect.collidepoint(x, y):
-                            click_sound.play()
-                            self.pause = True
-                            state.pause_button_clicked()
 
             # creating multiple enemies'
             for i in range(lvl.enemy_num):
