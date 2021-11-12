@@ -160,8 +160,8 @@ class LevelState:
     def __init__(self):
         self.level = data['level']
         # how many points you have to achieve to score one level up
-        self.achieve_score_for_l1 = 5  # 30
-        self.achieve_score_for_l2 = 7 # 60
+        self.achieve_score_for_l1 = 30  # 30
+        self.achieve_score_for_l2 = 60 # 60
         self.achieve_score_for_l3 = 120
         self.achieve_score_for_l4 = 140
         self.achieve_score_for_l5 = 160
@@ -172,8 +172,8 @@ class LevelState:
         self.shoot_again = 0
         self.station_speed = 0
         # rise_speed_n = confirmed points
-        self.rise_speed_a = 9
-        self.rise_speed_b = 7
+        self.rise_speed_a = 5
+        self.rise_speed_b = 9
         self.rise_speed_c = 15
         self.rise_speed_d = 20
         self.rise_speed_e = 28
@@ -185,35 +185,22 @@ class LevelState:
         self.rise_speed_k = 56
 
     def level_change(self):
+        # scoring level 1
         if lvl.achieve_score_for_l1 == Bullet.score:
             data['level'] +=1
             state.when_completed_level()
             pygame.display.update()
         if data['level'] == 1 and (lvl.achieve_score_for_l1-1) == Bullet.score:
-            lvl.achieve_score_for_l1 +=2 
+            lvl.achieve_score_for_l1 += 30
+        # scoring level 2
         if lvl.achieve_score_for_l2 == Bullet.score:
             data['level'] += 1
             state.when_completed_level()
             pygame.display.update()
-        if data['level'] == 2 and lvl.achieve_score_for_l2 == Bullet.score:
-            lvl.achieve_score_for_l1 = lvl.achieve_score_for_l3
-'''
-        if data['level']==1 and lvl.achieve_score_for_l2 == Bullet.score:
-            data['level'] += 1
-            state.when_completed_level()
-            pygame.display.update()
-        if data['level']==2 and lvl.achieve_score_for_l3 == Bullet.score:
-            data['level'] += 1
-            state.when_completed_level()
-            pygame.display.update()
-        if lvl.achieve_score_for_l4 == Bullet.score:
-            data['level'] += 1
-            state.when_completed_level()
-            pygame.display.update()
-        if lvl.achieve_score_for_l5 == Bullet.score:
-            data['level'] += 1
-            state.when_completed_level()
-            pygame.display.update()'''
+        if data['level'] == 2 and (lvl.achieve_score_for_l2-1) == Bullet.score:
+            lvl.achieve_score_for_l3 += 30
+        # scoring level 3
+        
 
 def show_level(x: int, y: int):
     level_value = mediumtext.render('Level: ' + str(data['level']), True, white)
@@ -288,6 +275,7 @@ class State(object):
                             self.pause = False
                             state.game_loop()
                         if menu_button.rect.collidepoint(x, y):
+                            Bullet.score=0
                             self.issue = True
                             state.update_screen()
                             click_sound.play()
@@ -340,6 +328,7 @@ class State(object):
                     # clicking on the buttons
                     if pygame.mouse.get_pressed()[0]:
                         if menu_button.rect.collidepoint(x, y):
+                            Bullet.score=0
                             self.intro = True
                             self.pause_after_collision = False
                             click_sound.play()
@@ -347,6 +336,7 @@ class State(object):
                             state.intro_loop()
                         # TODO: add retry button
                         if retry_button.rect.collidepoint(x, y):
+                            Bullet.score=0
                             self.game = True
                             self.pause_after_collision = False
                             click_sound.play()
@@ -680,7 +670,6 @@ class State(object):
 
     def update_screen(self):
         """updating screen after player's loss"""
-        Bullet.score=0
 
         # scrolling background
         bg = pygame.image.load("assets/textures/bg.png").convert()
@@ -717,11 +706,7 @@ state = State()
 # main loop
 while True:
     state.intro_loop()
-    all_event = pygame.event.get()
-    for event in all_event:
-        if event.type == pygame.QUIT:
-            print("XD")
-            pygame.exit()
+    all_event = pygame.event.get()    
     pygame.display.update()
 
 # TODO: add other enemies
