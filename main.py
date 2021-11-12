@@ -189,10 +189,14 @@ class LevelState:
             data['level'] +=1
             state.when_completed_level()
             pygame.display.update()
-        elif data['level'] == 1 and lvl.achieve_score_for_l1 == Bullet.score:
-            lvl.achieve_score_for_l1 = lvl.achieve_score_for_l1
-        elif data['level'] == 2 and lvl.achieve_score_for_l2 == Bullet.score:
-            lvl.achieve_score_for_l1 = lvl.achieve_score_for_l2
+        if data['level'] == 1 and (lvl.achieve_score_for_l1-1) == Bullet.score:
+            lvl.achieve_score_for_l1 +=2 
+        if lvl.achieve_score_for_l2 == Bullet.score:
+            data['level'] += 1
+            state.when_completed_level()
+            pygame.display.update()
+        if data['level'] == 2 and lvl.achieve_score_for_l2 == Bullet.score:
+            lvl.achieve_score_for_l1 = lvl.achieve_score_for_l3
 '''
         if data['level']==1 and lvl.achieve_score_for_l2 == Bullet.score:
             data['level'] += 1
@@ -492,16 +496,7 @@ class State(object):
             # displaying scores
             show_score(5, 5)
             # displaying the level
-            if lvl.level == 0:
-                lvl.level_change()
-            if lvl.level == 1:
-                lvl.level_change()
-            if lvl.level == 2:
-                lvl.level_change()
-            if lvl.level == 3:
-                lvl.level_change()
-            if lvl.level == 4:
-                lvl.level_change5
+            lvl.level_change()
 
             show_level(5, 24)
 
