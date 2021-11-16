@@ -196,37 +196,8 @@ class LevelState:
             data['level'] +=1
             state.when_completed_level()
             pygame.display.update()
-        if data['level'] == 1 and (lvl.achieve_score_for_l1-1) == Bullet.score:
-            lvl.achieve_score_for_l1 += 15
-        # scoring level 2
-        if lvl.achieve_score_for_l2 == Bullet.score:
-            data['level'] += 1
-            state.when_completed_level()
-            pygame.display.update()
-        if data['level'] == 2 and (lvl.achieve_score_for_l2-1) == Bullet.score:
-            lvl.achieve_score_for_l2 += 15
-        # scoring level 3
-        if lvl.achieve_score_for_l3 == Bullet.score:
-            data['level'] += 1
-            state.when_completed_level()
-            pygame.display.update()
-        if data['level'] == 3 and (lvl.achieve_score_for_l3-1) == Bullet.score:
-            lvl.achieve_score_for_l3 += 15
-        # scoring level 4
-        if lvl.achieve_score_for_l4 == Bullet.score:
-            data['level'] += 1
-            state.when_completed_level()
-            pygame.display.update()
-        if data['level'] == 4 and (lvl.achieve_score_for_l4-1) == Bullet.score:
-            lvl.achieve_score_for_l4 += 15
-        # scoring level 5
-        if lvl.achieve_score_for_l5 == Bullet.score:
-            data['level'] += 1
-            state.when_completed_level()
-            pygame.display.update()
-        #if data['level'] == 5 and (lvl.achieve_score_for_l2-1) == Bullet.score:
-            #lvl.achieve_score_for_l6 += 15
 
+        
 def show_level(x: int, y: int):
     level_value = mediumtext.render('Level: ' + str(data['level']), True, white)
     screen.blit(level_value, (x, y))
