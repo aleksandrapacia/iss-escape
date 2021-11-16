@@ -156,6 +156,12 @@ def show_score(x: int, y: int):
     score_value = mediumtext.render("Score: " + str(Bullet.score), True, white)
     screen.blit(score_value, (x, y))
 
+col1 = pygame.image.load("assets/textures/exp1.png")
+col2 = pygame.image.load("assets/textures/exp2.png")
+col3 = pygame.image.load("assets/textures/exp3.png")
+col4 = pygame.image.load("assets/textures/exp4.png")
+col5 = pygame.image.load("assets/textures/exp5.png")
+
 class LevelState:
     def __init__(self):
         self.level = data['level']
@@ -513,6 +519,7 @@ class State(object):
                 lvl.shoot_again = 0.5
                 lvl.station_speed = 0.5
             if Bullet.score == lvl.rise_speed_b:
+                print('xdddd')
                 lvl.bullet_speed = 10
                 lvl.enemy_speed = 0.1
                 lvl.enemy_num = 1
@@ -521,7 +528,7 @@ class State(object):
             if Bullet.score == lvl.rise_speed_c:
                 lvl.bullet_speed = 7
                 lvl.enemy_speed = 0.2
-                lvl.enemy_num = 2
+                lvl.enemy_num = 1
                 lvl.shoot_again = 1
                 lvl.station_speed = 0.7
             if Bullet.score == lvl.rise_speed_d:
@@ -616,9 +623,10 @@ class State(object):
                     )
                     result = bullet_texture_mask.overlap(enemy_texture_mask, offset)
                     if result:
-                        Bullet.score += 1
+                        screen.blit(col1, (int(enemy.pos_x), int(enemy.pos_y))
                         bullets.remove(bullet)
                         enemies.remove(enemy)
+                        Bullet.score += 1
 
                 # collision between station and enemies
                 for enemy in enemies:
@@ -726,4 +734,3 @@ while True:
     pygame.display.update()
 
 # TODO: add other enemies
-

@@ -1,6 +1,7 @@
 import pygame
 
 
+
 class Button:
     def __init__(self, x: int, y: int, image: pygame.Surface, scale: float):
         width = image.get_width()
@@ -11,6 +12,7 @@ class Button:
         )
 
         self.rect = self.image.get_rect()
+        self.rect.center = [x, y]
 
         self.rect.topleft = (x, y)
 
