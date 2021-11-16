@@ -523,7 +523,7 @@ class State(object):
                 lvl.bullet_speed = 10
                 lvl.enemy_speed = 0.1
                 lvl.enemy_num = 1
-                lvl.shoot_again = 1
+                lvl.shoot_again = 0.5
                 lvl.station_speed = 0.7
             if Bullet.score == lvl.rise_speed_c:
                 lvl.bullet_speed = 7
@@ -623,7 +623,7 @@ class State(object):
                     )
                     result = bullet_texture_mask.overlap(enemy_texture_mask, offset)
                     if result:
-                        screen.blit(col1, (int(enemy.pos_x), int(enemy.pos_y))
+                        screen.blit(col1, (int(enemy.pos_x), int(enemy.pos_y)))
                         bullets.remove(bullet)
                         enemies.remove(enemy)
                         Bullet.score += 1
