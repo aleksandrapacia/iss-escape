@@ -11,8 +11,6 @@ from enemy import Enemy
 from bullet import Bullet
 from button import Button
 
-
-# initialazing pygame
 pygame.init()
 
 # constants
@@ -144,6 +142,7 @@ score = Bullet.score = 0
 bg = pygame.image.load("assets/textures/bg.png").convert()
 y_axis = 0
 
+# saving levels 
 data = {
     'level': 0
 }
@@ -158,13 +157,15 @@ def show_score(x: int, y: int):
     score_value = mediumtext.render("Score: " + str(Bullet.score), True, white)
     screen.blit(score_value, (x, y))
 
-col1 = pygame.image.load("assets/textures/exp1.png")
-col2 = pygame.image.load("assets/textures/exp2.png")
-col3 = pygame.image.load("assets/textures/exp3.png")
-col4 = pygame.image.load("assets/textures/exp4.png")
-col5 = pygame.image.load("assets/textures/exp5.png")
+# explosion images
+exp1 = pygame.image.load("assets/textures/exp1.png")
+exp2 = pygame.image.load("assets/textures/exp2.png")
+exp3 = pygame.image.load("assets/textures/exp3.png")
+exp4 = pygame.image.load("assets/textures/exp4.png")
+exp5 = pygame.image.load("assets/textures/exp5.png")
 
 class LevelState:
+    '''manage levels change and data'''
     def __init__(self):
         self.level = data['level']
         # how many points you have to achieve to score one level up
@@ -331,7 +332,6 @@ class State(object):
                             click_sound.play()
                             state.update_screen()
                             state.intro_loop()
-                        # TODO: add retry button
                         if retry_button.rect.collidepoint(x, y):
                             Bullet.score=0
                             self.game = True
@@ -360,7 +360,6 @@ class State(object):
                 retry_light.draw(screen)
             pygame.display.update(screen_rect)
 
-    # menu (intro)
     def intro_loop(self):
         '''the game's menu shows up'''
         intro = True
@@ -596,6 +595,7 @@ class State(object):
                     result = bullet_texture_mask.overlap(enemy_texture_mask, offset)
                     if result:
                         screen.blit(col1, (int(enemy.pos_x-17.5), int(enemy.pos_y-17.5)))
+                        screen.blit(col2, (int(enemy.pos_x-17.5), int(enemy.pos_y-17.5)))
                         bullets.remove(bullet)
                         enemies.remove(enemy)
                         Bullet.score += 1
