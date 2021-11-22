@@ -27,9 +27,11 @@ screen = pygame.display.set_mode((width, height))
 screen_rect = screen.get_rect()
 intro_background = pygame.image.load("assets/textures/intro_bg.jpg").convert()
 pygame.display.set_caption("ISS Escape")
+
 # an image of the window after PAUSE BUTTON is clicked or after player's loss
 win_after_pausing = pygame.image.load("assets/textures/window.png")
 
+# MASKS
 # station
 station_file = open("assets/textures/iss.png")
 station_texture = pygame.image.load(station_file)
@@ -166,11 +168,8 @@ class LevelState:
     def __init__(self):
         self.level = data['level']
         # how many points you have to achieve to score one level up
-        self.achieve_score_for_l1 = 15
-        self.achieve_score_for_l2 = 30
-        self.achieve_score_for_l3 = 45
-        self.achieve_score_for_l4 = 60
-        self.achieve_score_for_l5 = 75
+        self.achieve_score_for_l1 = 5
+
         self.window = False
         self.bullet_speed = 0
         self.enemy_speed = 0
@@ -189,13 +188,15 @@ class LevelState:
         self.rise_speed_i = 84
         self.rise_speed_j = 92
         self.rise_speed_k = 106
-
+    #TODO: when achieve_scrore_for_l1 == Bullet score -> if lvl = 8 -> achieve_score_for_l2 = 8 * 5
     def level_change(self):
         # scoring level 1
         if lvl.achieve_score_for_l1 == Bullet.score:
             data['level'] +=1
             state.when_completed_level()
             pygame.display.update()
+        if data['level'] == 1 and (lvl.achieve_score_for_l1-1) == Bullet.score:
+            lvl.achieve_score_for_l1 +=2
 
         
 def show_level(x: int, y: int):
@@ -500,55 +501,55 @@ class State(object):
                 lvl.bullet_speed = 7
                 lvl.enemy_speed = 0.2
                 lvl.enemy_num = 1
-                lvl.shoot_again = 1
+                lvl.shoot_again = 0.5
                 lvl.station_speed = 0.7
             if Bullet.score == lvl.rise_speed_d:
                 lvl.bullet_speed = 6
                 lvl.enemy_speed = 0.3
                 lvl.enemy_num = 2
-                lvl.shoot_again = 1
+                lvl.shoot_again = 0.5
                 lvl.station_speed = 0.8
             if Bullet.score == lvl.rise_speed_e:
                 lvl.bullet_speed = 6
                 lvl.enemy_speed = 0.3
                 lvl.enemy_num = 2
-                lvl.shoot_again = 1
+                lvl.shoot_again = 0.5
                 lvl.station_speed = 0.8
             if Bullet.score == lvl.rise_speed_f:
                 lvl.bullet_speed = 5
                 lvl.enemy_speed = 0.3
                 lvl.enemy_num = 2
-                lvl.shoot_again = 1
+                lvl.shoot_again = 0.5
                 lvl.station_speed = 1
             if Bullet.score == lvl.rise_speed_g:
                 lvl.bullet_speed = 5
                 lvl.enemy_speed = 0.4
                 lvl.enemy_num = 2
-                lvl.shoot_again = 1
-                lvl.station_speed = 1.1
+                lvl.shoot_again = 0.5
+                lvl.station_speed = 1.5
             if Bullet.score == lvl.rise_speed_h:
                 lvl.bullet_speed = 5
                 lvl.enemy_speed = 0.5
                 lvl.enemy_num = 2
-                lvl.shoot_again = 1
+                lvl.shoot_again = 0.5
                 lvl.station_speed = 1.6
             if Bullet.score == lvl.rise_speed_i:
                 lvl.bullet_speed = 5
                 lvl.enemy_speed = 0.7
                 lvl.enemy_num = 4
-                lvl.shoot_again = 1
+                lvl.shoot_again = 0.5
                 lvl.station_speed = 2
             if Bullet.score == lvl.rise_speed_j:
                 lvl.bullet_speed = 4
                 lvl.enemy_speed = 0.8
                 lvl.enemy_num = 4
-                lvl.shoot_again = 1
+                lvl.shoot_again = 0.5
                 lvl.station_speed = 2.1
             if Bullet.score == lvl.rise_speed_k:
                 lvl.bullet_speed = 4
                 lvl.enemy_speed = 0.8
                 lvl.enemy_num = 4
-                lvl.shoot_again = 1
+                lvl.shoot_again = 0.5
                 lvl.station_speed = 2.7
 
             # controlling shooting
