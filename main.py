@@ -594,8 +594,8 @@ class State(object):
                     )
                     result = bullet_texture_mask.overlap(enemy_texture_mask, offset)
                     if result:
-                        screen.blit(exp1, (int(enemy.pos_x-17.5), int(enemy.pos_y-17.5)))
-                        screen.blit(exp2, (int(enemy.pos_x-17.5), int(enemy.pos_y-17.5)))
+                        enemy.start_animation()
+                        enemy.update()
                         bullets.remove(bullet)
                         enemies.remove(enemy)
                         Bullet.score += 1
