@@ -594,11 +594,14 @@ class State(object):
                     )
                     result = bullet_texture_mask.overlap(enemy_texture_mask, offset)
                     if result:
-                        enemy.start_animation()
+                        explo = pygame.image.load("assets/textures/exp2.png")
+                        screen.blit(explo, (bullet.pos_x, bullet.pos_y))
                         enemy.update()
                         bullets.remove(bullet)
                         enemies.remove(enemy)
                         Bullet.score += 1
+    
+                        
 
                 # collision between station and enemies
                 for enemy in enemies:
